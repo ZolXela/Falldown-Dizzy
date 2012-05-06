@@ -1,7 +1,9 @@
 package falldowndizzy.pac;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
+import org.andengine.engine.options.MusicOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.audio.sound.Sound;
@@ -29,6 +31,7 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 	public LevelController levelController;
 
 	private Camera camera;
+	private RatioResolutionPolicy resolution;
 	protected PhysicsWorld mPhysicsWorld;
 
 	public Texture mTexture;
@@ -87,9 +90,10 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 		
 
 		camera = new Camera(0, 0, levelController.mCameraWidth, levelController.mCameraHeight);
-		return new Engine(new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, 
-				new RatioResolutionPolicy(levelController.mCameraWidth, levelController.mCameraHeight),
-				camera));
+		resolution = new RatioResolutionPolicy(levelController.mCameraWidth, levelController.mCameraHeight);
+		return new Engine(new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, resolution, camera));
+		
+		// solve problem with enable audio options !!!!!!!!!! FUCK FUCK FUCK сып
 	}
 	
 	@Override
