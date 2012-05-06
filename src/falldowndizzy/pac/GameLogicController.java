@@ -66,8 +66,9 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 	static GameLogicController gameLogicController;
 	
 	public static GameLogicController getInstance(){return gameLogicController;}
+	
+	int currentPage;
 
-	@Override
 	public Engine onLoadEngine() {
 		
 		
@@ -88,7 +89,7 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 		camera = new Camera(0, 0, levelController.mCameraWidth, levelController.mCameraHeight);
 		return new Engine(new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, 
 				new RatioResolutionPolicy(levelController.mCameraWidth, levelController.mCameraHeight),
-				camera).setNeedsSound(true));
+				camera));
 	}
 	
 	@Override
