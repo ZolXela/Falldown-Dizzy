@@ -87,8 +87,7 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 	int currentPage;
 
 	public Engine onLoadEngine() {
-		
-		
+			
 		currentPage = 0;
 		playerProfileManager = new PlayerProfileManager(this);
 

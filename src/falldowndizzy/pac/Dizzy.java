@@ -8,12 +8,12 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import falldowndizzy.pac.LevelController;
 
-public class Player extends AnimatedSprite   {
+public class Dizzy extends AnimatedSprite   {
 	
 	LevelController levelController;
 	int frameCount;
 	
-	public Player(float pX, float pY, float pWidth, float pHeight,
+	public Dizzy(float pX, float pY, float pWidth, float pHeight,
 			ITiledTextureRegion pTiledTextureRegion,
 			ITiledSpriteVertexBufferObject pTiledSpriteVertexBufferObject) {
 		super(pX, pY, pWidth, pHeight, pTiledTextureRegion,

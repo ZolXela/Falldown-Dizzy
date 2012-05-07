@@ -11,7 +11,7 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 import falldowndizzy.pac.GameLogicController;
-import falldowndizzy.pac.Player;
+import falldowndizzy.pac.Dizzy;
 import falldowndizzy.pac.SoundManager;
 
 public class LevelController {
@@ -26,7 +26,7 @@ public class LevelController {
 		return gameLogicController;
 	}
 
-	Player mPlayer;
+	Dizzy mPlayer;
 	
 	private ArrayList<Shape> enemyList;
 	private ArrayList<Shape> goodsList;
