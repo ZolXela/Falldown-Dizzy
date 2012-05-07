@@ -59,8 +59,7 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 	public Texture mDiamantTexture;
 	public TextureRegion mDiamantTextureRegion;
 	
-	private RepeatingSpriteBackground mMenuBackground;
-	
+	private RepeatingSpriteBackground mMenuBackground;	
 	private RepeatingSpriteBackground mSky; 
 	
 	public Texture mBackgroundTexture;
@@ -94,7 +93,7 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 		gameLogicController = this;
 		levelController = new LevelController(this);
 
-		levelController.mCameraWidth = 460;
+		levelController.mCameraWidth = 640;
 		levelController.mCameraHeight = 320;
 
 		camera = new Camera(0, 0, levelController.mCameraWidth, levelController.mCameraHeight);
