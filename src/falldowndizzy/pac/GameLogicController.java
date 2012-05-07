@@ -1,12 +1,17 @@
 package falldowndizzy.pac;
 
+import java.io.IOException;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.MusicOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.background.RepeatingSpriteBackground;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
@@ -54,15 +59,24 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 	public Texture mDiamantTexture;
 	public TextureRegion mDiamantTextureRegion;
 	
-	private RepeatingSpriteBackground mGrassBackground;
 	private RepeatingSpriteBackground mMenuBackground;
+	
+	private RepeatingSpriteBackground mSky; 
 	
 	public Texture mBackgroundTexture;
 	public TextureRegion mBackgroundTextureRegion;
 
+//  Audio *****************************************	
+
+	private Sound jampingSound; 
+	private Sound getGoodsSound;
 	private Sound mGameOverSound;
-	private Sound mMunchSound;
-	
+	private Music backgroundMenuMusic;
+    private Music backgroundGameMusic;
+    
+//  Audio *****************************************	
+    
+    
 	public Texture mLevelMenuTexture;
 	public TextureRegion mLevelTextureRegion;
 	
@@ -83,18 +97,70 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 
 		levelController.mCameraWidth = 460;
 		levelController.mCameraHeight = 320;
-		
-		//width = 240
-		//height = 320
-		
-		
 
 		camera = new Camera(0, 0, levelController.mCameraWidth, levelController.mCameraHeight);
 		resolution = new RatioResolutionPolicy(levelController.mCameraWidth, levelController.mCameraHeight);
 		return new Engine(new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, resolution, camera));
 		
-		// solve problem with enable audio options !!!!!!!!!! FUCK FUCK FUCK сып
 	}
+	
+	public void onLoadResources(){
+		
+		SoundFactory.setAssetBasePath("mfx/");
+		try {
+			jampingSound = SoundFactory.createSoundFromAsset(
+					mEngine.getSoundManager(), this, "pew_pew_lei.wav");
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		SoundFactory.setAssetBasePath("mfx/");
+		try {
+			getGoodsSound = SoundFactory.createSoundFromAsset(
+					mEngine.getSoundManager(), this, "pew_pew_lei.wav");
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		SoundFactory.setAssetBasePath("mfx/");
+		try {
+			mGameOverSound = SoundFactory.createSoundFromAsset(
+					mEngine.getSoundManager(), this, "pew_pew_lei.wav");
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+
+		MusicFactory.setAssetBasePath("mfx/");
+
+		try {
+			backgroundMenuMusic = MusicFactory.createMusicFromAsset(
+					mEngine.getMusicManager(), this, "background_music.wav");
+			backgroundMenuMusic.setLooping(true);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			backgroundGameMusic = MusicFactory.createMusicFromAsset(
+					mEngine.getMusicManager(), this, "background_music.wav");
+			backgroundGameMusic.setLooping(true);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+		
+	}	
+	
+	
 	
 	@Override
 	public EngineOptions onCreateEngineOptions() {
