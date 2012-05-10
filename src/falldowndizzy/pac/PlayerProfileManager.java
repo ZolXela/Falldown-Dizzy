@@ -29,7 +29,7 @@ public class PlayerProfileManager {
 		return false;
 	}
 	
-	public void incraseUnlockedLevelNumber(int levelId){
+	public void increaseUnlockedLevelNumber(int levelId){
 		if(levelId > unlockedLevelId)
 			unlockedLevelId++;
 		WriteSettings();
@@ -72,7 +72,7 @@ public class PlayerProfileManager {
 		String FILENAME = "settings2";
 		FileInputStream fos = null;
 		DataInputStream dos;
-		dos=new DataInputStream(fos);
+		dos = new DataInputStream(fos);
 		try {
 			fos = gameLogicController.openFileInput(FILENAME);
 		} catch (FileNotFoundException e) {

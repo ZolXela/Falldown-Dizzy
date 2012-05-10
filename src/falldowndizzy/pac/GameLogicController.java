@@ -1,7 +1,11 @@
 package falldowndizzy.pac;
 
 import java.io.IOException;
+import java.util.Date;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.engine.Engine;
 import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
@@ -13,19 +17,33 @@ import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.RepeatingSpriteBackground;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.Texture;
+import org.andengine.opengl.texture.TextureManager;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.util.FPSLogger;
 import org.andengine.input.sensor.acceleration.AccelerationData;
 import org.andengine.input.sensor.acceleration.IAccelerationListener;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import falldowndizzy.pac.GameLogicController;
 import falldowndizzy.pac.LevelController;
 import falldowndizzy.pac.PlayerProfileManager;
+
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -35,39 +53,42 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 	
 	public LevelController levelController;
 
-	private Camera camera;
+	public static Camera camera;
+
 	private RatioResolutionPolicy resolution;
 	protected PhysicsWorld mPhysicsWorld;
-
-	public Texture mTexture;
-	public TextureRegion enemyTextureRegion;
 	
-	public Texture mFinishLineTexture;
-	public TextureRegion mFinishLineTextureRegion;
+	public Texture mCloudTexture;
+	public TextureRegion mCloudTextureRegion;
 	
-	public Texture mBlockTexture;
-	public TextureRegion mBlockTextureRegion;
-	
-	private float mGravityX;
-	private float mGravityY;
-	private final Vector2 mTempVector = new Vector2();
+	public Texture mDizzyTexture;
+	public TextureRegion mDizzyTextureRegion;
 
 	public TiledTextureRegion mCircleFaceTextureRegion;
 	
-	public Texture mEnemyTexture;
+	private MainScene _MainScene;
+	private boolean _GameLoaded;
+	public static Engine curEngine;
 	
+	 /**
+     * Atlas region, where the graphic for sprite is loaded in
+     */
+
+	public Texture mLevelTexture;
+
 	public Texture mDiamantTexture;
 	public TextureRegion mDiamantTextureRegion;
 	
 	private RepeatingSpriteBackground mMenuBackground;	
 	private RepeatingSpriteBackground mSky; 
+
 	
 	public Texture mBackgroundTexture;
 	public TextureRegion mBackgroundTextureRegion;
-
+	
 //  Audio *****************************************	
 
-	private Sound jampingSound; 
+	private Sound jumpingSound; 
 	private Sound getGoodsSound;
 	private Sound mGameOverSound;
 	private Music backgroundMenuMusic;
@@ -80,14 +101,24 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 	public TextureRegion mLevelTextureRegion;
 	
 	static GameLogicController gameLogicController;
-	
-	public static GameLogicController getInstance(){return gameLogicController;}
+	public static VertexBufferObjectManager mVertexBufferObjectManager;
+	public static GameLogicController getInstance(){
+		return gameLogicController;
+	}
 	
 	int currentPage;
 
+	
+/**
+ * Activity methods
+ */	
+	
+	
 	public Engine onLoadEngine() {
 			
 		currentPage = 0;
+		curEngine = this.mEngine;
+		mVertexBufferObjectManager = this.getVertexBufferObjectManager();
 		playerProfileManager = new PlayerProfileManager(this);
 
 		gameLogicController = this;
@@ -102,11 +133,36 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 		
 	}
 	
+//	public Scene newGameLevelScene(int levelId){
+//		
+//		Scene scene = new Scene();
+//		this.mPhysicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, 0), false);
+//		levelController.setScene(scene);
+//		levelController.setmPhysicsWorld(mPhysicsWorld);
+//		levelController.createFrame();
+//		levelController.loadLevel(levelId);
+//		this.enableAccelerationSensor(this);
+//		scene.registerUpdateHandler(this.mPhysicsWorld);
+//		return scene;
+//	}
+
+	
+	public Scene onLoadScene() {
+        /**
+         * Create new scene and save it
+         * in MainScene. 
+         */		
+		_MainScene = new MainScene();
+		_GameLoaded = true;
+        return _MainScene;
+	}
+
+
 	public void onLoadResources(){
-		
+        
 		SoundFactory.setAssetBasePath("mfx/");
 		try {
-			jampingSound = SoundFactory.createSoundFromAsset(
+			jumpingSound = SoundFactory.createSoundFromAsset(
 					mEngine.getSoundManager(), this, "pew_pew_lei.wav");
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
@@ -135,7 +191,6 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 		}		
 
 		MusicFactory.setAssetBasePath("mfx/");
-
 		try {
 			backgroundMenuMusic = MusicFactory.createMusicFromAsset(
 					mEngine.getMusicManager(), this, "background_music.wav");
@@ -156,7 +211,49 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 			e.printStackTrace();
 		}		
 		
+		
 	}	
+	
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+ 
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+    	return super.onTouchEvent(event);
+ 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+    	
+    	if (keyCode == KeyEvent.KEYCODE_BACK){
+    		if(!_GameLoaded) return true;
+    		 if(_MainScene != null && _GameLoaded){
+    			 _MainScene.KeyPressed(keyCode, event);
+    			 return true;
+    		 }
+    		return true; 
+    	}
+    	
+    	return super.onKeyDown(keyCode, event);
+    }
+    
+    
+	@Override
+	protected void onDestroy(){
+		super.onDestroy();
+		android.os.Process.killProcess(android.os.Process.myPid());
+	}
+    
+	
+	
+	
+	
 	
 	
 	
@@ -187,7 +284,9 @@ public class GameLogicController extends BaseGameActivity implements IAccelerati
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	
+	
 	@Override
 	public void onAccelerationAccuracyChanged(AccelerationData pAccelerationData) {
 		// TODO Auto-generated method stub
