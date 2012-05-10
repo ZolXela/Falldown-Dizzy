@@ -6,6 +6,7 @@ import org.andengine.entity.sprite.vbo.ITiledSpriteVertexBufferObject;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
+//import falldowndizzy.pac.LevelController;
 import falldowndizzy.pac.LevelController;
 
 public class Dizzy extends AnimatedSprite   {
