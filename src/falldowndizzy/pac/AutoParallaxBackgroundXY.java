@@ -1,6 +1,5 @@
 package falldowndizzy.pac;
 
-//import java.util.ArrayList;
 import java.util.ArrayList;
 
 import org.andengine.engine.camera.Camera;
