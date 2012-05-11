@@ -7,6 +7,41 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.entity.scene.Scene;
+<<<<<<< HEAD
+import org.andengine.ui.activity.SimpleBaseGameActivity;
+
+import android.view.KeyEvent;
+
+public class GameLogicController extends SimpleBaseGameActivity {
+
+	PlayerProfileManager playerProfileManager;
+
+	public static Camera camera;
+	
+	private MainScene _MainScene;
+	private boolean _GameLoaded = false;
+	public static Engine curEngine;
+	
+	 /**
+     * Atlas region, where the graphic for sprite is loaded in
+     */
+
+	public static GameLogicController gameLogicController;
+	public static VertexBufferObjectManager mVertexBufferObjectManager = new VertexBufferObjectManager();
+	
+/**
+ * Activity methods
+ */	
+	@Override
+	public EngineOptions onCreateEngineOptions() {
+		gameLogicController = this;
+		camera = new Camera(0, 0, 800, 460);
+		final EngineOptions opt = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, 
+				new RatioResolutionPolicy(camera.getWidth(), camera.getHeight()),
+				camera);
+		curEngine = new Engine(opt);
+		return opt;	
+=======
 import org.andengine.ui.activity.BaseGameActivity;
 
 import falldowndizzy.pac.GameLogicController;
@@ -122,20 +157,51 @@ public class GameLogicController extends BaseGameActivity {
 			throws Exception {
 		// TODO Auto-generated method stub
 		
+>>>>>>> 54d7ba15fbb419d583fed1c0d3ec1e4cf43b01a1
+	}
+	
+	@Override
+	public Scene onCreateScene() {
+        /**
+         * Create new scene and save it
+         * in MainScene. 
+         */		
+		
+		_MainScene = new MainScene();
+//		
+		_GameLoaded = true;
+        return _MainScene;
 	}
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+    	
+    	if (keyCode == KeyEvent.KEYCODE_BACK){
+    		if(!_GameLoaded) return true;
+    		 if(_MainScene != null && _GameLoaded){
+    			 _MainScene.KeyPressed(keyCode, event);
+    			 return true;
+    		 }
+    		return true; 
+    	}
+    	
+    	return super.onKeyDown(keyCode, event);
+    }
+    
+    
 	@Override
-	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
-			throws Exception {
-		// TODO Auto-generated method stub
+	protected void onDestroy(){
+		super.onDestroy();
+		android.os.Process.killProcess(android.os.Process.myPid());
+	}
+
+<<<<<<< HEAD
+	@Override
+	protected void onCreateResources() {
 		
 	}
 
-	@Override
-	public void onPopulateScene(Scene pScene,
-			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
+=======
+>>>>>>> 54d7ba15fbb419d583fed1c0d3ec1e4cf43b01a1
 }
