@@ -109,12 +109,6 @@ public class GameLogicController extends BaseGameActivity {
 		super.onDestroy();
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
-	
-	
-	
-	
-	
-
 
 	@Override
 	public void onCreateResources(
