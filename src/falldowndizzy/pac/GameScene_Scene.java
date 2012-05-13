@@ -10,10 +10,10 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 public class GameScene_Scene extends CameraScene {
 	
 	public GameScene_Scene(){
-		super(GameLogicController.camera);
+		super(GameLogicController._Camera);
 		setBackgroundEnabled(false);
 		final Sprite _sprite = new Sprite(
-				0, 0, GameLogicController.camera.getWidth(), GameLogicController.camera.getHeight(), loadBgSprite(), 
+				0, 0, GameLogicController._Camera.getWidth(), GameLogicController._Camera.getHeight(), loadBgSprite(), 
 				GameLogicController.mVertexBufferObjectManager)
 		{
 			@Override
@@ -44,13 +44,13 @@ public class GameScene_Scene extends CameraScene {
          */
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 	    BitmapTextureAtlas Texture1 =  new BitmapTextureAtlas(
-	    		GameLogicController.curEngine.getTextureManager(), 1000, 1000);
+	    		GameLogicController.curEngine.getTextureManager(), 1024, 1024);
 	    /**
 	     * Create the sprite - region in this atlas.
 	     * The main game background - picture is needed
 	     */
 	    return BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-	    		Texture1, GameLogicController.gameLogicController.getAssets(), "game_bg.png", 0, 0);
+	    		Texture1, GameLogicController.gameLogicController.getAssets(), "dizzy_parallax_background_layer_back.png", 0, 0);
 	
 	}
 	

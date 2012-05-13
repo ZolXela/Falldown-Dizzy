@@ -93,12 +93,12 @@ public class AutoParallaxBackgroundXY extends ParallaxBackground {
 	// Methods
 	// ===========================================================
 
-	public void attachParallaxEntity(final ParallaxEntityXY pParallaxEntity) {
+	public void attachParallaxEntityXY(final ParallaxEntityXY pParallaxEntity) {
 		this.mParallaxEntities.add(pParallaxEntity);
 		this.mParallaxEntityCount++;
 	}
 
-	public boolean detachParallaxEntity(final ParallaxEntityXY pParallaxEntity) {
+	public boolean detachParallaxEntityXY(final ParallaxEntityXY pParallaxEntity) {
 		this.mParallaxEntityCount--;
 		final boolean success = this.mParallaxEntities.remove(pParallaxEntity);
 		if(!success) {
@@ -189,3 +189,4 @@ public class AutoParallaxBackgroundXY extends ParallaxBackground {
 		// ===========================================================
 	}
 }
+

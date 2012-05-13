@@ -12,28 +12,28 @@ public class MainScene extends Scene {
 	public static LevelSelect_Scene _LevelSelect_Scene = new LevelSelect_Scene();
 	
 /**
- * Scene identifier - defines the scene is shown now
- */
-	private static int _SceneState;
-	
-/**
  * Scene identifier's possible values
  */
 	private static final int MAIN_MENU_STATE = 0;
 	private static final int LEVEL_SELECT_STATE = 1;
 	private static final int GAME_RUNNING_STATE = 2;
 	
-	
+	/**
+	 * Scene identifier - defines the scene is shown now
+	 */
+		private static int _SceneState;	
 	
 	public MainScene(){
 		
 		attachChild(_MainMenu_Scene);
 		attachChild(_GameScene_Scene);
+		_GameScene_Scene.Hide();
+		_LevelSelect_Scene.Hide();
 		_MainMenu_Scene.Show();
+		_SceneState = MAIN_MENU_STATE;
 		
 	}
-	
-	
+
 	public static void ShowGameScene(int levelID){
 		_MainMenu_Scene.Hide();
 		_GameScene_Scene.Show(levelID);
