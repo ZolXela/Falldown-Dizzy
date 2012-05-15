@@ -31,11 +31,9 @@ public class Game_Scene extends CameraScene {
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerBack, vertexBufferObjectManager)));
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, vertexBufferObjectManager)));	
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, vertexBufferObjectManager)));
-		
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(10.0f, 0.0f, this.CreateDizzy(30, 30)));
-		
+				
 		setBackground(autoParallaxBackgroundXY);
-
+		
 		final Rectangle _sprite = new Rectangle(20, 350, 280, 50,
 				GameActivity.mVertexBufferObjectManager)
 		{
@@ -48,7 +46,7 @@ public class Game_Scene extends CameraScene {
 		};
 		
 		attachChild(_sprite);
-	//	attachChild(this.CreateDizzy(30, 30));
+		attachChild(this.CreateDizzy(0, 0));
 		_sprite.setColor(Color.GREEN);
 		registerTouchArea(_sprite);
 	}
@@ -66,7 +64,7 @@ public class Game_Scene extends CameraScene {
 	public Dizzy CreateDizzy(float pX, float pY){
 		
 		mPhysicsWorld = new PhysicsWorld(
-				new Vector2(0, SensorManager.GRAVITY_EARTH), false);
+				new Vector2(0, SensorManager.GRAVITY_EARTH/10), false);
 		this.registerUpdateHandler(mPhysicsWorld);
 		
 		final FixtureDef MyFixtureDef = PhysicsFactory.createFixtureDef(0.0f, 0.1f, 0.2f, true);

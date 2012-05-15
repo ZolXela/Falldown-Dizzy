@@ -28,7 +28,7 @@ public class GfxAssets {
 		
 		
 //		mAnimatedSpriteTexture = new BuildableBitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 1024);
-		mPlayer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "player.png", 321, 481, 100, 100);
+		mPlayer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "player.png", 321, 481, 3, 5);
 //		mAnimatedSpriteTexture.load();
 		mAutoParallaxBackgroundTexture.load();
 	}
