@@ -60,17 +60,22 @@ public class Game_Scene extends CameraScene {
 		setIgnoreUpdate(true);
 	}
 	
-	public Dizzy CreateDizzy(float pX, float pY){
-		
+	private void setPhysicsWorld(){
 		mPhysicsWorld = new PhysicsWorld(
 				new Vector2(0, SensorManager.GRAVITY_EARTH/10), false);
 		this.registerUpdateHandler(mPhysicsWorld);
+	}
+	
+	public Dizzy CreateDizzy(float pX, float pY){
 		
-		final FixtureDef MyFixtureDef = PhysicsFactory.createFixtureDef(0.0f, 0.1f, 0.2f, true);
+		this.setPhysicsWorld();
+		final FixtureDef MyFixtureDef = PhysicsFactory.createFixtureDef(0.5f, 0.1f, 0.2f, false);
 		final Dizzy Player = new Dizzy(pX, pY, GfxAssets.mPlayer, GameActivity.mVertexBufferObjectManager);
-		Body DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, Player, BodyType.DynamicBody, MyFixtureDef);
+		Body DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, Player, BodyType.KinematicBody, MyFixtureDef);
 		mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(Player, DizzyBody));
-		//		this.attachChild(Player);
+//		Player.setScaleCenterY(GfxAssets.mPlayer.getHeight());
+//        Player.setScale(2);
+//        Player.animate(new long[]{200, 200, 200}, 3, 5, true);     
 		GameActivity._main.enableAccelerationSensor(GameActivity._main);		
 		this.registerUpdateHandler(mPhysicsWorld);
 		return Player;
