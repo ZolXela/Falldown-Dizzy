@@ -19,7 +19,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class Game_Scene extends CameraScene {
 	
-	long lDateTime = -1;
 	AutoParallaxBackgroundXY autoParallaxBackgroundXY;
 	public static PhysicsWorld mPhysicsWorld;
 	

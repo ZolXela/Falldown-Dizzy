@@ -13,7 +13,7 @@ public class Dizzy extends AnimatedSprite{
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
         this.setScaleCenterY(pTiledTextureRegion.getHeight());
 //     this.setScale(2);
-        this.animate(new long[]{200, 200, 200}, 4, 5, true);     
+        this.animate(new long[]{200, 200, 200}, 3, 5, true);     
 //        player.registerEntityModifier(new JumpModifier(50, playerX, playerX+30, playerY, playerY, 50, 50));
 	}
 	
