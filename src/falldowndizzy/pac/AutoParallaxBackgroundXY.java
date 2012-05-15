@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.background.ParallaxBackground;
-import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.opengl.util.GLState;
 

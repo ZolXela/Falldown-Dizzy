@@ -11,20 +11,20 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 public class LevelSelect_Scene extends CameraScene {
 
 	public static int levelID = 1;
-	Camera levelCamera = GameLogicController._Camera;
+	Camera levelCamera = GameActivity._Camera;
 	
 	public LevelSelect_Scene(){
-		super(GameLogicController._Camera);
+		super(GameActivity._Camera);
 		setBackgroundEnabled(false);
 		final Sprite _sprite = new Sprite(
-				0, 0, GameLogicController._Camera.getWidth(), GameLogicController._Camera.getHeight(), 
+				0, 0, GameActivity._Camera.getWidth(), GameActivity._Camera.getHeight(), 
 				loadLevelBgSprite(), 
-				GameLogicController.mVertexBufferObjectManager)
+				GameActivity.mVertexBufferObjectManager)
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					float pTouchAreaLocalX, float pTouchAreaLocalY){
-				MainScene.ShowGameScene(levelID);
+				MainState.ShowGameScene();
 				return true;
 			}
 		};
@@ -49,11 +49,13 @@ public class LevelSelect_Scene extends CameraScene {
          */
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 	    BitmapTextureAtlas Texture1 =  new BitmapTextureAtlas(
-	    		GameLogicController.curEngine.getTextureManager(), 1024, 1024);
+	    		GameActivity._Engine.getTextureManager(), 1024, 1024);
+
 	    /**
 	     * Create the sprite - region in this atlas.
 	     * The level's background - picture is needed
 	     */
+
 //	    final AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5); 
 //	    for(int level = 1; level <= 2; level++){
 //			autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(
@@ -64,8 +66,8 @@ public class LevelSelect_Scene extends CameraScene {
 //										GameLogicController.mVertexBufferObjectManager))); 
 //			this.setBackground(autoParallaxBackground); 
 //	    }
-	    return BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-	    		Texture1, GameLogicController.gameLogicController.getAssets(), "dizzy_parallax_background_layer_back.png", 0, 0);
+	    return BitmapTextureAtlasTextureRegionFactory.createFromAsset(	
+	    		Texture1, GameActivity._main.getAssets(), "dizzy_parallax_background_layer_back.png", 0, 0);
 	
 	}
 	
@@ -98,4 +100,5 @@ public class LevelSelect_Scene extends CameraScene {
 //		
 //	}
 //	
+
 }

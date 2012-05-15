@@ -6,12 +6,14 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
+import org.andengine.input.sensor.acceleration.AccelerationData;
+import org.andengine.input.sensor.acceleration.IAccelerationListener;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import android.view.KeyEvent;
 
-public class GameActivity extends SimpleBaseGameActivity {
+public class GameActivity extends SimpleBaseGameActivity implements IAccelerationListener{
 	
 	// ===========================================================
 	// Constants
@@ -74,4 +76,22 @@ public class GameActivity extends SimpleBaseGameActivity {
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}	
 
-}
+	@Override
+	public boolean enableAccelerationSensor(final IAccelerationListener pAccelerationListener) {
+		return super.enableAccelerationSensor(this);
+	}
+
+	@Override
+	public void onAccelerationAccuracyChanged(AccelerationData pAccelerationData) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAccelerationChanged(AccelerationData pAccelerationData) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	}
