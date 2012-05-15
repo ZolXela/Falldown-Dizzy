@@ -8,13 +8,17 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 public class MainMenu_Scene extends CameraScene {
-	
-	AutoParallaxBackgroundXY autoParallaxBackgroundXY;
 
 	public MainMenu_Scene() {
 		super(GameActivity._Camera);
 				
-		setBackground(parallaxBG());
+		final AutoParallaxBackgroundXY autoParallaxBackgroundXY = new AutoParallaxBackgroundXY(0, 0, 0, 5);
+		final VertexBufferObjectManager vertexBufferObjectManager = GameActivity._Engine.getVertexBufferObjectManager();
+		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerBack, vertexBufferObjectManager)));
+		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(-5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, vertexBufferObjectManager)));	
+		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, vertexBufferObjectManager)));
+		
+		setBackground(autoParallaxBackgroundXY);
 	
 		final Rectangle _sprite = new Rectangle(20, 300, 280, 50,
 				GameActivity.mVertexBufferObjectManager) {
@@ -39,16 +43,5 @@ public class MainMenu_Scene extends CameraScene {
 	public void Hide() {
 		setVisible(false);
 		setIgnoreUpdate(true);
-	}
-	
-	private AutoParallaxBackgroundXY parallaxBG(){
-		
-		autoParallaxBackgroundXY = new AutoParallaxBackgroundXY(0, 0, 0, 5);
-		final VertexBufferObjectManager vertexBufferObjectManager = GameActivity._Engine.getVertexBufferObjectManager();
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerBack, vertexBufferObjectManager)));
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(-5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, vertexBufferObjectManager)));	
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, vertexBufferObjectManager)));
-		
-		return autoParallaxBackgroundXY;
 	}
 }
