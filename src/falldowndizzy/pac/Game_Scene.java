@@ -25,13 +25,9 @@ public class Game_Scene extends CameraScene {
 	public Game_Scene(){
 		super(GameActivity._Camera);
 		
-		autoParallaxBackgroundXY = new AutoParallaxBackgroundXY(0, 0, 0, 5);
-		final VertexBufferObjectManager vertexBufferObjectManager = GameActivity._Engine.getVertexBufferObjectManager();
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerBack, vertexBufferObjectManager)));
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, vertexBufferObjectManager)));	
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, vertexBufferObjectManager)));
-				
-		setBackground(autoParallaxBackgroundXY);
+		this.setPhysicsWorld();
+					
+		setBackground(parallaxBG());
 		
 		final Rectangle _sprite = new Rectangle(20, 350, 280, 50,
 				GameActivity.mVertexBufferObjectManager)
@@ -60,6 +56,17 @@ public class Game_Scene extends CameraScene {
 		setIgnoreUpdate(true);
 	}
 	
+	private AutoParallaxBackgroundXY parallaxBG(){
+		
+		autoParallaxBackgroundXY = new AutoParallaxBackgroundXY(0, 0, 0, 5);
+		final VertexBufferObjectManager vertexBufferObjectManager = GameActivity._Engine.getVertexBufferObjectManager();
+		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerBack, vertexBufferObjectManager)));
+		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, vertexBufferObjectManager)));	
+		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, vertexBufferObjectManager)));
+		
+		return autoParallaxBackgroundXY;
+	}
+	
 	private void setPhysicsWorld(){
 		mPhysicsWorld = new PhysicsWorld(
 				new Vector2(0, SensorManager.GRAVITY_EARTH/10), false);
@@ -68,10 +75,9 @@ public class Game_Scene extends CameraScene {
 	
 	public Dizzy CreateDizzy(float pX, float pY){
 		
-		this.setPhysicsWorld();
 		final FixtureDef MyFixtureDef = PhysicsFactory.createFixtureDef(0.5f, 0.1f, 0.2f, false);
 		final Dizzy Player = new Dizzy(pX, pY, GfxAssets.mPlayer, GameActivity.mVertexBufferObjectManager);
-		Body DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, Player, BodyType.KinematicBody, MyFixtureDef);
+		Body DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, Player, BodyType.DynamicBody, MyFixtureDef);
 		mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(Player, DizzyBody));
 //		Player.setScaleCenterY(GfxAssets.mPlayer.getHeight());
 //        Player.setScale(2);
