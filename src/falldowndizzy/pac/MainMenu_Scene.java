@@ -8,13 +8,10 @@ public class MainMenu_Scene extends CameraScene {
 
 	public MainMenu_Scene() {
 		super(GameActivity._Camera);
-				
-		final AutoParallaxBackgroundXY autoParallaxBackgroundXY = new AutoParallaxBackgroundXY(0, 0, 0, 5);
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerBack, GameActivity.mVertexBufferObjectManager)));
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(-5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, GameActivity.mVertexBufferObjectManager)));	
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, GameActivity.mVertexBufferObjectManager)));
 		
-		setBackground(autoParallaxBackgroundXY);
+		GfxAssets.mMusic.play();
+		
+		setBackground(LoadAutoParalaxBg());
 
 		final Sprite _sprite = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mPlayGame.getWidth()) / 2, 
 				(GameActivity.CAMERA_HEIGHT- GfxAssets.mPlayGame.getHeight()) / 2,
@@ -29,6 +26,16 @@ public class MainMenu_Scene extends CameraScene {
 		
 		attachChild(_sprite);
 		registerTouchArea(_sprite);
+	}
+	
+	public AutoParallaxBackgroundXY LoadAutoParalaxBg(){
+		
+		final AutoParallaxBackgroundXY autoParallaxBackgroundXY = new AutoParallaxBackgroundXY(0, 0, 0, 5);
+		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerBack, GameActivity.mVertexBufferObjectManager)));
+		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(-5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, GameActivity.mVertexBufferObjectManager)));	
+		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, GameActivity.mVertexBufferObjectManager)));
+		
+		return autoParallaxBackgroundXY;	
 	}
 
 	public void Show() {

@@ -1,10 +1,17 @@
 package falldowndizzy.pac;
 
+import java.io.IOException;
+
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
+import org.andengine.audio.sound.Sound;
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.util.debug.Debug;
 
 public class GfxAssets {
 	
@@ -18,6 +25,10 @@ public class GfxAssets {
 	public static ITextureRegion mOnScreenControlKnobTextureRegion;
 	public static ITextureRegion mPlayGame;
 	public static TiledTextureRegion mPlayer;	
+	
+	public static Music mMusic;
+	
+	public static Sound mJump, mGameOver, mGetGoods, mNightmare;
 
 	public static void LoadGFX() {
 		
@@ -36,5 +47,30 @@ public class GfxAssets {
 		mPlayer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "player.png", 321, 221, 3, 4);
 		mAutoParallaxBackgroundTexture.load();
 	}
+	
+	public static void LoadMFX(){
+		
+		MusicFactory.setAssetBasePath("mfx/");
+		  try {
+		       mMusic = MusicFactory.createMusicFromAsset(GameActivity._Engine.getMusicManager(), GameActivity._main,
+		        "music.ogg");
+		        mMusic.setLooping(true);
+		     } catch (final IOException e) {
+		        Debug.e(e);
+		}
+	
+		  
+		  SoundFactory.setAssetBasePath("mfx/");
+		  try {
+   			   mJump = SoundFactory.createSoundFromAsset(GameActivity._Engine.getSoundManager(), GameActivity._main, "jump.ogg");
+			   mGameOver = SoundFactory.createSoundFromAsset(GameActivity._Engine.getSoundManager(), GameActivity._main, "gameOver.ogg");
+			   mGetGoods = SoundFactory.createSoundFromAsset(GameActivity._Engine.getSoundManager(), GameActivity._main, "getGoods.ogg");
+			   mNightmare = SoundFactory.createSoundFromAsset(GameActivity._Engine.getSoundManager(), GameActivity._main, "nightmare.ogg");
+		     } catch (final IOException e) {
+		          Debug.e(e);
+		  }
+		  
+	}
+	
 
 }
