@@ -46,6 +46,7 @@ public class GameActivity extends SimpleBaseGameActivity implements IAcceleratio
 		_Engine = this.mEngine;
 		
 		GfxAssets.LoadGFX();
+		GfxAssets.LoadMFX();
 	}
 
 	@Override
