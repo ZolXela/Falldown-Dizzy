@@ -163,7 +163,7 @@ public class AutoParallaxBackgroundXY extends ParallaxBackground {
 
 				pGLState.translateModelViewGLMatrixf(baseOffsetX, baseOffsetY, 0);
 
-				System.out.println(baseOffsetX + ":" + baseOffsetY); 
+				//System.out.println(baseOffsetX + ":" + baseOffsetY); 
 
 				float currentMaxX = baseOffsetX;
 				float currentMaxY = baseOffsetY;
