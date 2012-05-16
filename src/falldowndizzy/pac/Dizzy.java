@@ -23,40 +23,38 @@ public class Dizzy extends AnimatedSprite{
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
 		this.setSettings();
 		pPhysicsWorld = mPhysicsWorld;
-		this.setCurrentTileIndex(6);
 		MyFixtureDef = PhysicsFactory.createFixtureDef(1.0f, 0.1f, 0.9f, true);
 		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, MyFixtureDef);
+		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
+		this.registerUpdateHandler(pPhysicsWorld);
 	}
 	
 	public void Stay(){
-		this.DizzyBody.setLinearVelocity(Vector2Pool.obtain(0, 0));
+		this.DizzyBody.setLinearVelocity(0, 0);
+		this.setCurrentTileIndex(6);
 		this.registerUpdateHandler(pPhysicsWorld);
 	}
 	
 	public void FallDown(PhysicsWorld pPhysicsWorld){
 		
 		setAnimation(6, 8);
-		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));
 		GameActivity._main.enableAccelerationSensor(GameActivity._main);		
-		this.registerUpdateHandler(pPhysicsWorld);
 		
 	}
 	
 	public void GoLeft(Vector2 velocity, PhysicsWorld pPhysicsWorld){
 		
-		this.DizzyBody.setLinearVelocity(velocity);
 		setAnimation(9, 11);
-		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));
-		this.registerUpdateHandler(pPhysicsWorld);
+		this.setCurrentTileIndex(9);
+		this.DizzyBody.setLinearVelocity(velocity);
 		
 	}
 	
 	public void GoRight(Vector2 velocity, PhysicsWorld pPhysicsWorld){
 		
-		this.DizzyBody.setLinearVelocity(velocity);
 		setAnimation(3, 5);
-		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
-		this.registerUpdateHandler(pPhysicsWorld);
+		this.setCurrentTileIndex(3);
+		this.DizzyBody.setLinearVelocity(velocity);
 		
 	}
 	
@@ -92,30 +90,8 @@ public class Dizzy extends AnimatedSprite{
 		onBeforePositionChanged();
 	}
 	
-	public void callbackCollisionGoods(int i){
-//		Shape goodShape = goodsList.get(i);
-//		Game_Scene.removeEntity(goodShape);
-//		goodsList.remove(i);
-	}
-	
 	public void callbackCollisionBorder(){
 		this.Stay();
-	}
-	
-	public void callbackCollisionWithEndPoint(){
-
-//		if(goodsList.size()==0)
-//		{
-//			if(!isGameFinished)
-//			{
-//				isGameFinished = true;
-//				showSignCompleted();
-//				soundManager.playGameOver();
-//			}
-//			
-//			
-//		}
-
 	}
 	
 }

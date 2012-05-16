@@ -41,11 +41,11 @@ public class Game_Scene extends CameraScene {
 				
 		setBackground(this.LoadAutoParalaxBg());
 		
+		this.initBorders();
 		this.CreateDizzy(50, 30);
 		attachChild(myPlayer);
 		myPlayer.Stay();
 		this.initOnScreenControls();
-		this.initBorders();
 //		myPlayer.FallDown(fallPhysicsWorld);
 
 	}
@@ -75,7 +75,7 @@ public class Game_Scene extends CameraScene {
 		
 		final AutoParallaxBackgroundXY autoParallaxBackgroundXY = new AutoParallaxBackgroundXY(0, 0, 0, 5);
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerBack, GameActivity.mVertexBufferObjectManager)));
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, GameActivity.mVertexBufferObjectManager)));	
+//		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, GameActivity.mVertexBufferObjectManager)));	
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, GameActivity.mVertexBufferObjectManager)));
 		
 		return autoParallaxBackgroundXY;	
@@ -98,7 +98,7 @@ public class Game_Scene extends CameraScene {
 			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, 
 											final float pValueX, 
 												final float pValueY) {
-				final Vector2 velocity = Vector2Pool.obtain(pValueX / 10, 0);
+				final Vector2 velocity = Vector2Pool.obtain(pValueX / 20, 0);
 				if (pValueX < oldX && pValueX / 10 > 0) {
 						myPlayer.GoLeft(velocity, goPhysicsWorld);		
 						Vector2Pool.recycle(velocity);
@@ -136,10 +136,10 @@ public class Game_Scene extends CameraScene {
 		PhysicsFactory.createBoxBody(this.goPhysicsWorld, leftOuter, BodyType.StaticBody, wallFixtureDef);
 		PhysicsFactory.createBoxBody(this.goPhysicsWorld, rightOuter, BodyType.StaticBody, wallFixtureDef);
 
-		bottomOuter.setColor(Color.BLACK);
-		topOuter.setColor(Color.BLACK);
-		leftOuter.setColor(Color.BLACK);
-		rightOuter.setColor(Color.BLACK);
+//		bottomOuter.setColor(Color.BLACK);
+//		topOuter.setColor(Color.BLACK);
+//		leftOuter.setColor(Color.BLACK);
+//		rightOuter.setColor(Color.BLACK);
 		
 		this.attachChild(bottomOuter);
 		this.attachChild(topOuter);

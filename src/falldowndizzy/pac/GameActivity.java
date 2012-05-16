@@ -44,7 +44,7 @@ public class GameActivity extends SimpleBaseGameActivity implements IAcceleratio
 	@Override
 	protected void onCreateResources() {
 		_Engine = this.mEngine;
-		
+		GfxAssets.LoadMFX();
 		GfxAssets.LoadGFX();
 	}
 
