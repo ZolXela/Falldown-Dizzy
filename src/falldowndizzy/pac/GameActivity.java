@@ -46,6 +46,7 @@ public class GameActivity extends SimpleBaseGameActivity{
 		_Engine = this.mEngine;
 		GfxAssets.LoadMFX();
 		GfxAssets.LoadGFX();
+		GfxAssets.LoadMFX();
 	}
 
 	@Override
