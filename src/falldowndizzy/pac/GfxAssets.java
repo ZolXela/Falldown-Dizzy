@@ -25,11 +25,11 @@ public class GfxAssets {
 	public static ITextureRegion mOnScreenControlKnobTextureRegion;
 	public static ITextureRegion mPlayGame;
 	public static TiledTextureRegion mPlayer;	
-	
-	public static Music mMusic;
-	
-	public static Sound mJump, mGameOver, mGetGoods, mNightmare;
 
+	public static Music mMusic;	
+	public static Sound mJump, mGameOver, mGetGoods, mNightmare;
+	
+	
 	public static void LoadGFX() {
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -47,14 +47,13 @@ public class GfxAssets {
 		mPlayer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "player.png", 321, 221, 3, 4);
 		mAutoParallaxBackgroundTexture.load();
 	}
-	
+
 	public static void LoadMFX(){
 		
 		MusicFactory.setAssetBasePath("mfx/");
 		  try {
-		       mMusic = MusicFactory.createMusicFromAsset(GameActivity._Engine.getMusicManager(), GameActivity._main,
-		        "music.ogg");
-		        mMusic.setLooping(true);
+		       mMusic = MusicFactory.createMusicFromAsset(GameActivity._Engine.getMusicManager(), GameActivity._main, "music.ogg");
+		       mMusic.setLooping(true);
 		     } catch (final IOException e) {
 		        Debug.e(e);
 		}
@@ -72,5 +71,4 @@ public class GfxAssets {
 		  
 	}
 	
-
 }
