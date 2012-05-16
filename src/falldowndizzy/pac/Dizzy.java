@@ -4,7 +4,6 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -35,14 +34,11 @@ public class Dizzy extends AnimatedSprite{
 		this.registerUpdateHandler(pPhysicsWorld);
 	}
 	
-	public void FallDown(PhysicsWorld pPhysicsWorld){
-		
-		setAnimation(6, 8);
-		GameActivity._main.enableAccelerationSensor(GameActivity._main);		
-		
+	public void FallDown(){	
+		setAnimation(6, 8);			
 	}
 	
-	public void GoLeft(Vector2 velocity, PhysicsWorld pPhysicsWorld){
+	public void GoLeft(Vector2 velocity){
 		
 		setAnimation(9, 11);
 		this.setCurrentTileIndex(9);
@@ -50,7 +46,7 @@ public class Dizzy extends AnimatedSprite{
 		
 	}
 	
-	public void GoRight(Vector2 velocity, PhysicsWorld pPhysicsWorld){
+	public void GoRight(Vector2 velocity){
 		
 		setAnimation(3, 5);
 		this.setCurrentTileIndex(3);

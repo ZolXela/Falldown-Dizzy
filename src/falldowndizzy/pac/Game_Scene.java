@@ -10,7 +10,6 @@ import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
-import org.andengine.util.color.Color;
 
 import android.hardware.SensorManager;
 import android.opengl.GLES20;
@@ -100,11 +99,11 @@ public class Game_Scene extends CameraScene {
 												final float pValueY) {
 				final Vector2 velocity = Vector2Pool.obtain(pValueX / 20, 0);
 				if (pValueX < oldX && pValueX / 10 > 0) {
-						myPlayer.GoLeft(velocity, goPhysicsWorld);		
+						myPlayer.GoLeft(velocity);		
 						Vector2Pool.recycle(velocity);
 				}				
 				else if(pValueX > oldX && pValueX / 10 < GameActivity.CAMERA_WIDTH) {
-					myPlayer.GoRight(velocity, goPhysicsWorld);					
+					myPlayer.GoRight(velocity);					
 					Vector2Pool.recycle(velocity);
 				}
 						else myPlayer.Stay();

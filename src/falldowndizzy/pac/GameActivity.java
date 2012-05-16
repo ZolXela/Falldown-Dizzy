@@ -13,7 +13,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import android.view.KeyEvent;
 
-public class GameActivity extends SimpleBaseGameActivity implements IAccelerationListener{
+public class GameActivity extends SimpleBaseGameActivity{
 	
 	// ===========================================================
 	// Constants
@@ -75,23 +75,5 @@ public class GameActivity extends SimpleBaseGameActivity implements IAcceleratio
 		super.onDestroy();
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}	
-
-	@Override
-	public boolean enableAccelerationSensor(final IAccelerationListener pAccelerationListener) {
-		return super.enableAccelerationSensor(this);
-	}
-
-	@Override
-	public void onAccelerationAccuracyChanged(AccelerationData pAccelerationData) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onAccelerationChanged(AccelerationData pAccelerationData) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	
 	}
