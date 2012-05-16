@@ -19,8 +19,8 @@ public class GameActivity extends SimpleBaseGameActivity implements IAcceleratio
 	// Constants
 	// ===========================================================
 
-	private static final int CAMERA_WIDTH = 320;
-	private static final int CAMERA_HEIGHT = 480;
+	public static final int CAMERA_WIDTH = 320;
+	public static final int CAMERA_HEIGHT = 480;
 	
 	
 	public static MainState _MainState;

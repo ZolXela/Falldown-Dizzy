@@ -14,6 +14,9 @@ public class GfxAssets {
 	public static ITextureRegion mParallaxLayerBack;
 	public static ITextureRegion mParallaxLayerTrees;
 	public static ITextureRegion mParallaxLayerCloud;	
+	public static ITextureRegion mOnScreenControlBaseTextureRegion;
+	public static ITextureRegion mOnScreenControlKnobTextureRegion;
+	public static ITextureRegion mPlayGame;
 	public static TiledTextureRegion mPlayer;	
 
 	public static void LoadGFX() {
@@ -25,7 +28,12 @@ public class GfxAssets {
 		mParallaxLayerCloud = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "clouds_bg.png", 320, 0);
 		mParallaxLayerTrees = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "dizzy_parallax_background_layer_trees.png", 0, 480);
 
-		mPlayer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "player.png", 321, 481, 3, 4);
+		mOnScreenControlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "onscreen_control_base.png", 392, 221);
+		mOnScreenControlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "onscreen_control_knob.png", 960, 0);
+		
+		mPlayGame = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "play_game_bt.png", 520, 221);
+		
+		mPlayer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "player.png", 321, 221, 3, 4);
 		mAutoParallaxBackgroundTexture.load();
 	}
 
