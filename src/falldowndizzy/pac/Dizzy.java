@@ -72,7 +72,7 @@ public class Dizzy extends AnimatedSprite{
 		
 	}
 	
-	public void Jump(){
+	public void GoJump(){
 		
 	}
 	
