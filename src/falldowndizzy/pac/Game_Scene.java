@@ -19,6 +19,7 @@ import android.hardware.SensorManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class Game_Scene extends CameraScene {
@@ -40,8 +41,8 @@ public class Game_Scene extends CameraScene {
 	public PhysicsWorld goPhysicsWorld;
 	private Dizzy myPlayer;
 	Vector2 velocity;
-	
-	
+	float oldX;
+
 	public static Rectangle bottomOuter;
 	public static Rectangle topOuter;
 	public static Rectangle leftOuter;
@@ -50,7 +51,7 @@ public class Game_Scene extends CameraScene {
 	public static Rectangle plato1;
 
 	public short jedyForce = 2;
-	private Body palato1Body;
+
 	
 	
 	public Game_Scene(){
@@ -95,7 +96,18 @@ public class Game_Scene extends CameraScene {
 	
 	public void CreateDizzy(float pX, float pY){
 		myPlayer = new Dizzy(pX, pY, 
-				GfxAssets.mPlayer, GameActivity.mVertexBufferObjectManager, this.goPhysicsWorld);
+				GfxAssets.mPlayer, GameActivity.mVertexBufferObjectManager, this.goPhysicsWorld){
+			
+			@Override
+			public void beginContact(Contact contact) {
+			    jumping = false; //you touched ground so you aren't jumping anymore	
+			}
+			
+			@Override
+			public void endContact(Contact contact) {
+				jumping = true; //you leave ground so you're jumping
+			}
+		};
 	}
 	
 	private void initOnScreenControls() {
@@ -111,24 +123,28 @@ public class Game_Scene extends CameraScene {
 											final float pValueX, 
 												final float pValueY) {
 				
-				if (pValueY == -1.0f){
-					 velocity = Vector2Pool.obtain(pValueX * jedyForce, pValueY * jedyForce);
-					 if (pValueX < 0) myPlayer.GoLeft(velocity);
-					 else myPlayer.GoRight(velocity);
-					}
-				
-				if (pValueX < 0) {
-					velocity = Vector2Pool.obtain(pValueX, pValueY);
-					myPlayer.GoLeft(velocity);		
-				}				
-				else if (pValueX > 0){
-					velocity = Vector2Pool.obtain(pValueX, pValueY);
-
-					myPlayer.GoRight(velocity);		
+				if (pValueY == -1.0f && !isJumping(myPlayer)){
+					velocity = Vector2Pool.obtain(oldX * 2, pValueY * 2);
+					if (oldX < 0)
+						myPlayer.JumpLeft(velocity);
+					else myPlayer.JumpRight(velocity);
+					
 				}
-				else myPlayer.Stay();
+				else {
+					if (pValueX < 0) {
+					velocity = Vector2Pool.obtain(pValueX, 0);
+					myPlayer.GoLeft(velocity);		
+					oldX = pValueX;
+					}				
+					else if (pValueX > 0){
+						velocity = Vector2Pool.obtain(pValueX, 0);
+						myPlayer.GoRight(velocity);		
+						oldX = pValueX;
+					}
+					else myPlayer.Stay();
+				}	
 			}
-
+			
 			@Override
 			public void onControlClick(
 					AnalogOnScreenControl pAnalogOnScreenControl) {
@@ -142,6 +158,10 @@ public class Game_Scene extends CameraScene {
 		this.setChildScene(analogOnScreenControl);
 	}
 		
+	private boolean isJumping(Dizzy player){	
+		return player.jumping;	
+	}
+	
 	private void initBorders() {
 
 		bottomOuter = new Rectangle(0, GameActivity.CAMERA_HEIGHT - 2, GameActivity.CAMERA_WIDTH, 2, GameActivity.mVertexBufferObjectManager);

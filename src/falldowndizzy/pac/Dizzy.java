@@ -10,9 +10,13 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
 
-public class Dizzy extends AnimatedSprite{
+public class Dizzy extends AnimatedSprite implements ContactListener{
 	
 	/* The categories. */
 	public static final short CATEGORYBIT_WALL = 1;
@@ -31,7 +35,8 @@ public class Dizzy extends AnimatedSprite{
 	
 	//final private FixtureDef MyFixtureDef;
 	PhysicsWorld pPhysicsWorld;
-	public Body DizzyBody;
+	private Body DizzyBody;
+	public boolean jumping;
 	
 	public Dizzy(final float pX, final float pY, final ITiledTextureRegion pTiledTextureRegion, final VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld mPhysicsWorld) {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
@@ -39,7 +44,8 @@ public class Dizzy extends AnimatedSprite{
 		pPhysicsWorld = mPhysicsWorld;
 		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, CIRCLE_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
-//		this.registerUpdateHandler(pPhysicsWorld);
+		this.registerUpdateHandler(pPhysicsWorld);
+//		contact = new Contact(pPhysicsWorld, DizzyBody);
 	}
 	
 	public void Stay(){
@@ -47,11 +53,6 @@ public class Dizzy extends AnimatedSprite{
 		this.DizzyBody.setLinearVelocity(0, 0);
 		stopAnimation(6);
 		
-	}
-	
-	public void FallDown(){	
-
-		setAnimation(6, 8);			
 	}
 	
 	public void GoLeft(Vector2 velocity){
@@ -70,15 +71,18 @@ public class Dizzy extends AnimatedSprite{
 	
 	public void JumpLeft(Vector2 velocity){
 		setAnimation(9, 11);
-		Vector2 currentPosition = DizzyBody.getPosition();
-		Vector2 newPosition = new Vector2(currentPosition.x - 0.1f, currentPosition.y);
-		DizzyBody.applyForce(velocity, newPosition);
+//		Vector2 currentPosition = DizzyBody.getPosition();
+//		Vector2 newPosition = new Vector2(currentPosition.x - 0.1f, currentPosition.y);
+//		DizzyBody.applyForce(velocity, newPosition);
+		DizzyBody.applyLinearImpulse(velocity, DizzyBody.getPosition());
+		jumping = true;
 	}
 	
-//	public void JumpRight(Vector2 velocity){
-//		setAnimation(3, 5);
-//		DizzyBody.applyForce(velocity, DizzyBody.getPosition());
-//	}
+	public void JumpRight(Vector2 velocity){
+		setAnimation(3, 5);
+		DizzyBody.applyForce(velocity, DizzyBody.getPosition());
+		jumping = true;
+	}
 	
 	public void setSettings(){
 		
@@ -92,7 +96,28 @@ public class Dizzy extends AnimatedSprite{
 		this.animate(new long[]{150, 150, 150}, begNum, endNum, true);    
 
 	}
-	
+
+	@Override
+	public void beginContact(Contact contact) {
+	    jumping = false; //you touched ground so you aren't jumping anymore	
+	}
+
+	@Override
+	public void endContact(Contact contact) {
+		jumping = true; //you leave ground so you're jumping
+	}
+
+	@Override
+	public void preSolve(Contact contact, Manifold oldManifold) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void postSolve(Contact contact, ContactImpulse impulse) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 
