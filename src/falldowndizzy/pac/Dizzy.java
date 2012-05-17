@@ -46,7 +46,6 @@ public class Dizzy extends AnimatedSprite{
 		
 		this.DizzyBody.setLinearVelocity(0, 0);
 		setAnimation(6, 8);
-		this.setCurrentTileIndex(6);
 		this.registerUpdateHandler(pPhysicsWorld);
 		
 	}
@@ -59,7 +58,6 @@ public class Dizzy extends AnimatedSprite{
 	public void GoLeft(Vector2 velocity){
 		
 		setAnimation(9, 11);
-		this.setCurrentTileIndex(9);
 		this.DizzyBody.setLinearVelocity(velocity);
 		
 	}
@@ -67,7 +65,6 @@ public class Dizzy extends AnimatedSprite{
 	public void GoRight(Vector2 velocity){
 		
 		setAnimation(3, 5);
-		this.setCurrentTileIndex(3);
 		this.DizzyBody.setLinearVelocity(velocity);
 		
 	}
@@ -86,30 +83,7 @@ public class Dizzy extends AnimatedSprite{
 	public void setAnimation(int begNum, int endNum){
 		this.animate(new long[]{200, 200, 200}, begNum, endNum, true);    
 	}
-		
-	private boolean onBeforePositionChanged(){
-		
-		if(this.collidesWith(Game_Scene.bottomOuter) || 
-				this.collidesWith(Game_Scene.leftOuter) ||
-					this.collidesWith(Game_Scene.rightOuter) ||
-						this.collidesWith(Game_Scene.topOuter))
-		{
-			this.callbackCollisionBorder();
-			return false;
-		}
-		
-		return true;
-	}
-
-	@Override
-	protected void onManagedUpdate(final float pSecondsElapsed) {
-		super.onManagedUpdate(pSecondsElapsed);
-		onBeforePositionChanged();
-	}
 	
-	public void callbackCollisionBorder(){
-		this.Stay();
-	}
 	
 }
 

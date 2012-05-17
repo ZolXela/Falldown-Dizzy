@@ -38,6 +38,7 @@ public class Game_Scene extends CameraScene {
 	
 	public PhysicsWorld goPhysicsWorld;
 	private Dizzy myPlayer;
+	Vector2 velocity;
 	
 	
 	public static Rectangle bottomOuter;
@@ -51,14 +52,12 @@ public class Game_Scene extends CameraScene {
 		super(GameActivity._Camera);
 		this.setGoPhysicsWorld();
 				
-		setBackground(this.LoadAutoParalaxBg());
+		setBackground(this.LoadAutoParallaxBg());
 		
 		this.initBorders();
-		this.CreateDizzy(100, 100);
+		this.CreateDizzy(30, 50);
 		attachChild(myPlayer);
-		myPlayer.Stay();
 		this.initOnScreenControls();
-//		myPlayer.FallDown();
 
 	}
 
@@ -73,11 +72,11 @@ public class Game_Scene extends CameraScene {
 	}
 	
 	private void setGoPhysicsWorld(){
-		goPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, SensorManager.GRAVITY_EARTH / 10), false, 8, 1);
+		goPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, SensorManager.GRAVITY_EARTH / 10), true, 8, 1);
 		this.registerUpdateHandler(goPhysicsWorld);
 	}
 	
-	public AutoParallaxBackgroundXY LoadAutoParalaxBg(){
+	public AutoParallaxBackgroundXY LoadAutoParallaxBg(){
 		
 		final AutoParallaxBackgroundXY autoParallaxBackgroundXY = new AutoParallaxBackgroundXY(0, 0, 0, 5);
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerBack, GameActivity.mVertexBufferObjectManager)));
@@ -104,12 +103,12 @@ public class Game_Scene extends CameraScene {
 			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, 
 											final float pValueX, 
 												final float pValueY) {
-				final Vector2 velocity = Vector2Pool.obtain(pValueX, pValueY);
+				velocity = Vector2Pool.obtain(pValueX / 2, pValueY);
 				if (pValueX < 0) {
-						myPlayer.GoLeft(velocity);		
+					myPlayer.GoLeft(velocity);		
 				}				
 				else if (pValueX > 0){
-					myPlayer.GoRight(velocity);					
+					myPlayer.GoRight(velocity);		
 				}
 				else myPlayer.Stay();
 			}
@@ -135,7 +134,7 @@ public class Game_Scene extends CameraScene {
 		leftOuter = new Rectangle(0, 0, 2, GameActivity.CAMERA_HEIGHT, GameActivity.mVertexBufferObjectManager);
 		rightOuter = new Rectangle(GameActivity.CAMERA_WIDTH - 2, 0, 2, GameActivity.CAMERA_HEIGHT, GameActivity.mVertexBufferObjectManager);
 		
-		plato1 = new Rectangle(0, GameActivity.CAMERA_HEIGHT / 2, GameActivity.CAMERA_WIDTH - 100, 2, GameActivity.mVertexBufferObjectManager);
+		plato1 = new Rectangle(0, GameActivity.CAMERA_HEIGHT / 2, GameActivity.CAMERA_WIDTH - 150, 5, GameActivity.mVertexBufferObjectManager);
 		
 		PhysicsFactory.createBoxBody(this.goPhysicsWorld, bottomOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
 		PhysicsFactory.createBoxBody(this.goPhysicsWorld, topOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
