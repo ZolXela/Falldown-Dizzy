@@ -1,7 +1,6 @@
 package falldowndizzy.pac;
 
 import java.util.ArrayList;
-
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.shape.IAreaShape;
@@ -164,7 +163,7 @@ public class AutoParallaxBackgroundXY extends ParallaxBackground {
 
 				pGLState.translateModelViewGLMatrixf(baseOffsetX, baseOffsetY, 0);
 
-				System.out.println(baseOffsetX + ":" + baseOffsetY); 
+				//System.out.println(baseOffsetX + ":" + baseOffsetY); 
 
 				float currentMaxX = baseOffsetX;
 				float currentMaxY = baseOffsetY;
