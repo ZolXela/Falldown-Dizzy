@@ -47,6 +47,9 @@ public class Game_Scene extends CameraScene {
 	public static Rectangle rightOuter;
 	
 	public static Rectangle plato1;
+
+	public short jedyForce = 0;
+	
 	
 	public Game_Scene(){
 		super(GameActivity._Camera);
@@ -72,7 +75,7 @@ public class Game_Scene extends CameraScene {
 	}
 	
 	private void setGoPhysicsWorld(){
-		goPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, SensorManager.GRAVITY_EARTH / 10), true, 8, 1);
+		goPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 1), true, 8, 1);
 		this.registerUpdateHandler(goPhysicsWorld);
 	}
 	
@@ -103,11 +106,13 @@ public class Game_Scene extends CameraScene {
 			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, 
 											final float pValueX, 
 												final float pValueY) {
-				velocity = Vector2Pool.obtain(pValueX / 2, pValueY);
+				if(pValueY == -1) jedyForce = 10; else jedyForce = 0;
 				if (pValueX < 0) {
+					velocity = Vector2Pool.obtain((pValueX / 2) + jedyForce, pValueY + jedyForce);
 					myPlayer.GoLeft(velocity);		
 				}				
 				else if (pValueX > 0){
+					velocity = Vector2Pool.obtain((pValueX / 2) + jedyForce, pValueY + jedyForce);
 					myPlayer.GoRight(velocity);		
 				}
 				else myPlayer.Stay();

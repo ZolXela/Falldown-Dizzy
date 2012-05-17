@@ -45,7 +45,7 @@ public class Dizzy extends AnimatedSprite{
 	public void Stay(){
 		
 		this.DizzyBody.setLinearVelocity(0, 0);
-		setAnimation(6, 8);
+		stopAnimation(6);
 		this.registerUpdateHandler(pPhysicsWorld);
 		
 	}
@@ -69,10 +69,6 @@ public class Dizzy extends AnimatedSprite{
 		
 	}
 	
-	public void GoJump(){
-		
-	}
-	
 	public void setSettings(){
 		
 		this.setScaleCenterY(GfxAssets.mPlayer.getHeight());
@@ -81,7 +77,7 @@ public class Dizzy extends AnimatedSprite{
 	}
 	
 	public void setAnimation(int begNum, int endNum){
-		this.animate(new long[]{200, 200, 200}, begNum, endNum, true);    
+		this.animate(new long[]{50, 50, 50}, begNum, endNum, true);    
 	}
 	
 	
