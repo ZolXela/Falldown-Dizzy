@@ -11,7 +11,6 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 
-import android.hardware.SensorManager;
 import android.opengl.GLES20;
 
 import com.badlogic.gdx.math.Vector2;
@@ -20,7 +19,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class Game_Scene extends CameraScene {
 	
-	public static PhysicsWorld fallPhysicsWorld;
 	public PhysicsWorld goPhysicsWorld;
 	private Dizzy myPlayer;
 	
@@ -35,7 +33,6 @@ public class Game_Scene extends CameraScene {
 	
 	public Game_Scene(){
 		super(GameActivity._Camera);
-		this.setFallPhysicsWorld();
 		this.setGoPhysicsWorld();
 				
 		setBackground(this.LoadAutoParalaxBg());
@@ -45,7 +42,7 @@ public class Game_Scene extends CameraScene {
 		attachChild(myPlayer);
 		myPlayer.Stay();
 		this.initOnScreenControls();
-//		myPlayer.FallDown(fallPhysicsWorld);
+//		myPlayer.FallDown();
 
 	}
 
@@ -57,12 +54,6 @@ public class Game_Scene extends CameraScene {
 	public void Hide(){
 		setVisible(false);
 		setIgnoreUpdate(true);
-	}
-	
-	private void setFallPhysicsWorld(){
-		fallPhysicsWorld = new PhysicsWorld(
-				new Vector2(0, SensorManager.GRAVITY_EARTH/20), false);
-		this.registerUpdateHandler(fallPhysicsWorld);
 	}
 	
 	private void setGoPhysicsWorld(){
@@ -97,7 +88,7 @@ public class Game_Scene extends CameraScene {
 			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, 
 											final float pValueX, 
 												final float pValueY) {
-				final Vector2 velocity = Vector2Pool.obtain(pValueX / 20, 0);
+				final Vector2 velocity = Vector2Pool.obtain(pValueX / 20, pValueY);
 				if (pValueX < oldX && pValueX / 10 > 0) {
 						myPlayer.GoLeft(velocity);		
 						Vector2Pool.recycle(velocity);
