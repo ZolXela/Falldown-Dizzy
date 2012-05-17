@@ -39,14 +39,13 @@ public class Dizzy extends AnimatedSprite{
 		pPhysicsWorld = mPhysicsWorld;
 		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, CIRCLE_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
-		this.registerUpdateHandler(pPhysicsWorld);
+//		this.registerUpdateHandler(pPhysicsWorld);
 	}
 	
 	public void Stay(){
 		
 		this.DizzyBody.setLinearVelocity(0, 0);
 		stopAnimation(6);
-		this.registerUpdateHandler(pPhysicsWorld);
 		
 	}
 	
@@ -69,6 +68,18 @@ public class Dizzy extends AnimatedSprite{
 		
 	}
 	
+	public void JumpLeft(Vector2 velocity){
+		setAnimation(9, 11);
+		Vector2 currentPosition = DizzyBody.getPosition();
+		Vector2 newPosition = new Vector2(currentPosition.x - 0.1f, currentPosition.y);
+		DizzyBody.applyForce(velocity, newPosition);
+	}
+	
+//	public void JumpRight(Vector2 velocity){
+//		setAnimation(3, 5);
+//		DizzyBody.applyForce(velocity, DizzyBody.getPosition());
+//	}
+	
 	public void setSettings(){
 		
 		this.setScaleCenterY(GfxAssets.mPlayer.getHeight());
@@ -77,7 +88,9 @@ public class Dizzy extends AnimatedSprite{
 	}
 	
 	public void setAnimation(int begNum, int endNum){
-		this.animate(new long[]{50, 50, 50}, begNum, endNum, true);    
+
+		this.animate(new long[]{150, 150, 150}, begNum, endNum, true);    
+
 	}
 	
 	

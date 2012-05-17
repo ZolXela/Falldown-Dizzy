@@ -8,15 +8,16 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.util.color.Color;
 
 import android.hardware.SensorManager;
-import android.opengl.GLES20;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
@@ -48,7 +49,8 @@ public class Game_Scene extends CameraScene {
 	
 	public static Rectangle plato1;
 
-	public short jedyForce = 0;
+	public short jedyForce = 2;
+	private Body palato1Body;
 	
 	
 	public Game_Scene(){
@@ -75,7 +77,9 @@ public class Game_Scene extends CameraScene {
 	}
 	
 	private void setGoPhysicsWorld(){
-		goPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 1), true, 8, 1);
+
+		goPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, SensorManager.GRAVITY_EARTH), true, 8, 1);
+		
 		this.registerUpdateHandler(goPhysicsWorld);
 	}
 	
@@ -106,13 +110,20 @@ public class Game_Scene extends CameraScene {
 			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, 
 											final float pValueX, 
 												final float pValueY) {
-				if(pValueY == -1) jedyForce = 10; else jedyForce = 0;
+				
+				if (pValueY == -1.0f){
+					 velocity = Vector2Pool.obtain(pValueX * jedyForce, pValueY * jedyForce);
+					 if (pValueX < 0) myPlayer.GoLeft(velocity);
+					 else myPlayer.GoRight(velocity);
+					}
+				
 				if (pValueX < 0) {
-					velocity = Vector2Pool.obtain((pValueX / 2) + jedyForce, pValueY + jedyForce);
+					velocity = Vector2Pool.obtain(pValueX, pValueY);
 					myPlayer.GoLeft(velocity);		
 				}				
 				else if (pValueX > 0){
-					velocity = Vector2Pool.obtain((pValueX / 2) + jedyForce, pValueY + jedyForce);
+					velocity = Vector2Pool.obtain(pValueX, pValueY);
+
 					myPlayer.GoRight(velocity);		
 				}
 				else myPlayer.Stay();
@@ -125,7 +136,6 @@ public class Game_Scene extends CameraScene {
 				
 			}
 		});
-		analogOnScreenControl.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		analogOnScreenControl.getControlBase().setAlpha(0.5f);
 		analogOnScreenControl.refreshControlKnobPosition();
 
@@ -138,15 +148,12 @@ public class Game_Scene extends CameraScene {
 		topOuter = new Rectangle(0, 0, GameActivity.CAMERA_WIDTH, 2, GameActivity.mVertexBufferObjectManager);
 		leftOuter = new Rectangle(0, 0, 2, GameActivity.CAMERA_HEIGHT, GameActivity.mVertexBufferObjectManager);
 		rightOuter = new Rectangle(GameActivity.CAMERA_WIDTH - 2, 0, 2, GameActivity.CAMERA_HEIGHT, GameActivity.mVertexBufferObjectManager);
-		
-		plato1 = new Rectangle(0, GameActivity.CAMERA_HEIGHT / 2, GameActivity.CAMERA_WIDTH - 150, 5, GameActivity.mVertexBufferObjectManager);
-		
+				
 		PhysicsFactory.createBoxBody(this.goPhysicsWorld, bottomOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
 		PhysicsFactory.createBoxBody(this.goPhysicsWorld, topOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
 		PhysicsFactory.createBoxBody(this.goPhysicsWorld, leftOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
 		PhysicsFactory.createBoxBody(this.goPhysicsWorld, rightOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
-		
-		PhysicsFactory.createBoxBody(this.goPhysicsWorld, plato1, BodyType.StaticBody, WALL_FIXTURE_DEF);
+			
 
 		bottomOuter.setColor(Color.BLACK);
 		topOuter.setColor(Color.BLACK);
@@ -157,8 +164,22 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(topOuter);
 		this.attachChild(leftOuter);
 		this.attachChild(rightOuter);
-		this.attachChild(plato1);
+		
+		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2);
+		
 
+	}
+	
+	private void addObstacle(final float pX, final float pY) {
+		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity._main.getVertexBufferObjectManager());
+
+		final Body boxBody = PhysicsFactory.createBoxBody(this.goPhysicsWorld, platform, BodyType.StaticBody, WALL_FIXTURE_DEF);
+//		boxBody.setLinearDamping(10);
+//		boxBody.setAngularDamping(10);
+
+		this.goPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
+
+		this.attachChild(platform);
 	}
 	
 }
