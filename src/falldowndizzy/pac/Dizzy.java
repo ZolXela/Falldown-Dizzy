@@ -14,7 +14,22 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class Dizzy extends AnimatedSprite{
 	
-	final private FixtureDef MyFixtureDef;
+	/* The categories. */
+	public static final short CATEGORYBIT_WALL = 1;
+	public static final short CATEGORYBIT_BOX = 2;
+	public static final short CATEGORYBIT_CIRCLE = 4;
+
+	/* And what should collide with what. */
+	public static final short MASKBITS_WALL = CATEGORYBIT_WALL + CATEGORYBIT_BOX + CATEGORYBIT_CIRCLE;
+	public static final short MASKBITS_BOX = CATEGORYBIT_WALL + CATEGORYBIT_BOX; // Missing: CATEGORYBIT_CIRCLE
+	public static final short MASKBITS_CIRCLE = CATEGORYBIT_WALL + CATEGORYBIT_CIRCLE; // Missing: CATEGORYBIT_BOX
+
+	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.5f, 0.5f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
+	public static final FixtureDef BOX_FIXTURE_DEF = PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f, false, CATEGORYBIT_BOX, MASKBITS_BOX, (short)0);
+	public static final FixtureDef CIRCLE_FIXTURE_DEF = PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f, false, CATEGORYBIT_CIRCLE, MASKBITS_CIRCLE, (short)0);
+
+	
+	//final private FixtureDef MyFixtureDef;
 	PhysicsWorld pPhysicsWorld;
 	public Body DizzyBody;
 	
@@ -22,8 +37,9 @@ public class Dizzy extends AnimatedSprite{
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
 		this.setSettings();
 		pPhysicsWorld = mPhysicsWorld;
-		MyFixtureDef = PhysicsFactory.createFixtureDef(1.0f, 0.1f, 0.9f, true);
-		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, MyFixtureDef);
+	//	MyFixtureDef = PhysicsFactory.createFixtureDef(1.0f, 0.5f, 0.5f, true);
+		//DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, MyFixtureDef);
+		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, CIRCLE_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
 		this.registerUpdateHandler(pPhysicsWorld);
 	}
