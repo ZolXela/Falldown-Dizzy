@@ -25,8 +25,8 @@ public class Dizzy extends AnimatedSprite{
 	public static final short MASKBITS_CIRCLE = CATEGORYBIT_WALL + CATEGORYBIT_CIRCLE; // Missing: CATEGORYBIT_BOX
 
 	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.5f, 0.5f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
-	public static final FixtureDef BOX_FIXTURE_DEF = PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f, false, CATEGORYBIT_BOX, MASKBITS_BOX, (short)0);
-	public static final FixtureDef CIRCLE_FIXTURE_DEF = PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f, false, CATEGORYBIT_CIRCLE, MASKBITS_CIRCLE, (short)0);
+	public static final FixtureDef BOX_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.5f, 0.5f, false, CATEGORYBIT_BOX, MASKBITS_BOX, (short)0);
+	public static final FixtureDef CIRCLE_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.5f, 0.5f, false, CATEGORYBIT_CIRCLE, MASKBITS_CIRCLE, (short)0);
 
 	
 	//final private FixtureDef MyFixtureDef;
@@ -37,20 +37,22 @@ public class Dizzy extends AnimatedSprite{
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
 		this.setSettings();
 		pPhysicsWorld = mPhysicsWorld;
-	//	MyFixtureDef = PhysicsFactory.createFixtureDef(1.0f, 0.5f, 0.5f, true);
-		//DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, MyFixtureDef);
 		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, CIRCLE_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
 		this.registerUpdateHandler(pPhysicsWorld);
 	}
 	
 	public void Stay(){
+		
 		this.DizzyBody.setLinearVelocity(0, 0);
+		setAnimation(6, 8);
 		this.setCurrentTileIndex(6);
 		this.registerUpdateHandler(pPhysicsWorld);
+		
 	}
 	
 	public void FallDown(){	
+
 		setAnimation(6, 8);			
 	}
 	
@@ -70,6 +72,10 @@ public class Dizzy extends AnimatedSprite{
 		
 	}
 	
+	public void Jump(){
+		
+	}
+	
 	public void setSettings(){
 		
 		this.setScaleCenterY(GfxAssets.mPlayer.getHeight());
@@ -80,8 +86,7 @@ public class Dizzy extends AnimatedSprite{
 	public void setAnimation(int begNum, int endNum){
 		this.animate(new long[]{200, 200, 200}, begNum, endNum, true);    
 	}
-	
-	
+		
 	private boolean onBeforePositionChanged(){
 		
 		if(this.collidesWith(Game_Scene.bottomOuter) || 
