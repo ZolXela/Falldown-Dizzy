@@ -135,7 +135,7 @@ public class Game_Scene extends CameraScene {
 		leftOuter = new Rectangle(0, 0, 2, GameActivity.CAMERA_HEIGHT, GameActivity.mVertexBufferObjectManager);
 		rightOuter = new Rectangle(GameActivity.CAMERA_WIDTH - 2, 0, 2, GameActivity.CAMERA_HEIGHT, GameActivity.mVertexBufferObjectManager);
 		
-		plato1 = new Rectangle(0, GameActivity.CAMERA_HEIGHT / 2, GameActivity.CAMERA_WIDTH - 100, 2, GameActivity.mVertexBufferObjectManager);
+		plato1 = new Rectangle(0, GameActivity.CAMERA_HEIGHT, GameActivity.CAMERA_WIDTH - 100, 2, GameActivity.mVertexBufferObjectManager);
 		
 
 //		final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
