@@ -14,7 +14,6 @@ import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.util.color.Color;
 
 import android.hardware.SensorManager;
-import android.opengl.GLES20;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -72,7 +71,7 @@ public class Game_Scene extends CameraScene {
 	}
 	
 	private void setGoPhysicsWorld(){
-		goPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, SensorManager.GRAVITY_EARTH / 10), true, 8, 1);
+		goPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, SensorManager.GRAVITY_EARTH), true, 8, 1);
 		this.registerUpdateHandler(goPhysicsWorld);
 	}
 	
@@ -103,11 +102,17 @@ public class Game_Scene extends CameraScene {
 			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, 
 											final float pValueX, 
 												final float pValueY) {
-				velocity = Vector2Pool.obtain(pValueX / 2, pValueY);
-				if (pValueX < 0) {
+//				System.out.println(">>>>>>> pValueY " + pValueY);
+				if (pValueY == -1.0f){
+					velocity = Vector2Pool.obtain(pValueX / 2, pValueY - 1);
+					myPlayer.GoLeft(velocity);
+				}
+				else if (pValueX < 0) {
+					velocity = Vector2Pool.obtain(pValueX / 2, pValueY);
 					myPlayer.GoLeft(velocity);		
 				}				
 				else if (pValueX > 0){
+					velocity = Vector2Pool.obtain(pValueX / 2, pValueY);
 					myPlayer.GoRight(velocity);		
 				}
 				else myPlayer.Stay();
@@ -120,7 +125,6 @@ public class Game_Scene extends CameraScene {
 				
 			}
 		});
-		analogOnScreenControl.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		analogOnScreenControl.getControlBase().setAlpha(0.5f);
 		analogOnScreenControl.refreshControlKnobPosition();
 
