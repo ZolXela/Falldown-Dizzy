@@ -6,8 +6,6 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
-import org.andengine.input.sensor.acceleration.AccelerationData;
-import org.andengine.input.sensor.acceleration.IAccelerationListener;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
@@ -45,7 +43,6 @@ public class GameActivity extends SimpleBaseGameActivity{
 	protected void onCreateResources() {
 		_Engine = this.mEngine;
 		GfxAssets.LoadGFX();
-		GfxAssets.LoadMFX();
 	}
 
 	@Override
