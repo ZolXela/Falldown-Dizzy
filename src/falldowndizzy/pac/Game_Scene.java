@@ -19,7 +19,6 @@ import android.hardware.SensorManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class Game_Scene extends CameraScene {
@@ -30,16 +29,20 @@ public class Game_Scene extends CameraScene {
 
 	/* The categories. */
 	public static final short CATEGORYBIT_WALL = 1;
-	public static final short CATEGORYBIT_BOX = 2;
-	public static final short CATEGORYBIT_CIRCLE = 4;
+	public static final short CATEGORYBIT_PLATO = 2;
+	public static final short CATEGORYBIT_PLAYER = 4;
 
 	/* And what should collide with what. */
-	public static final short MASKBITS_WALL = CATEGORYBIT_WALL + CATEGORYBIT_BOX + CATEGORYBIT_CIRCLE;
+	public static final short MASKBITS_WALL = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO  |  CATEGORYBIT_PLAYER;
+	public static final short MASKBITS_PLATO = CATEGORYBIT_WALL  |  CATEGORYBIT_PLAYER;  // Missing: CATEGORYBIT_CIRCLE
+	public static final short MASKBITS_PLAYER = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO;// Missing: CATEGORYBIT_BOX
 
-	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.5f, 0.5f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
+	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.5f, 0.1f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
+	public static final FixtureDef PLATO_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.5f, 0.1f, false, CATEGORYBIT_PLATO, MASKBITS_PLATO, (short)0);
+	public static final FixtureDef PLAYER_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.0f, 0.5f, 0.8f, false, CATEGORYBIT_PLAYER, MASKBITS_PLAYER, (short)0);
 	
-	public PhysicsWorld goPhysicsWorld;
-	private Dizzy myPlayer;
+	public PhysicsWorld gamePhysicsWorld;
+	private Dizzy gamePlayer;
 	Vector2 velocity;
 	float oldX;
 
@@ -56,13 +59,13 @@ public class Game_Scene extends CameraScene {
 	
 	public Game_Scene(){
 		super(GameActivity._Camera);
-		this.setGoPhysicsWorld();
+		this.setGamePhysicsWorld();
 				
 		setBackground(this.LoadAutoParallaxBg());
 		
 		this.initBorders();
 		this.CreateDizzy(30, 50);
-		attachChild(myPlayer);
+		attachChild(gamePlayer);
 		this.initOnScreenControls();
 
 	}
@@ -77,11 +80,11 @@ public class Game_Scene extends CameraScene {
 		setIgnoreUpdate(true);
 	}
 	
-	private void setGoPhysicsWorld(){
+	private void setGamePhysicsWorld(){
 
-		goPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, SensorManager.GRAVITY_EARTH), true, 8, 1);
+		gamePhysicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, SensorManager.GRAVITY_EARTH * 8), true, 10, 1);	
+		this.registerUpdateHandler(gamePhysicsWorld);
 		
-		this.registerUpdateHandler(goPhysicsWorld);
 	}
 	
 	public AutoParallaxBackgroundXY LoadAutoParallaxBg(){
@@ -95,19 +98,8 @@ public class Game_Scene extends CameraScene {
 	}
 	
 	public void CreateDizzy(float pX, float pY){
-		myPlayer = new Dizzy(pX, pY, 
-				GfxAssets.mPlayer, GameActivity.mVertexBufferObjectManager, this.goPhysicsWorld){
-			
-			@Override
-			public void beginContact(Contact contact) {
-			    jumping = false; //you touched ground so you aren't jumping anymore	
-			}
-			
-			@Override
-			public void endContact(Contact contact) {
-				jumping = true; //you leave ground so you're jumping
-			}
-		};
+		gamePlayer = new Dizzy(pX, pY, 
+				GfxAssets.mPlayer, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 	}
 	
 	private void initOnScreenControls() {
@@ -115,7 +107,7 @@ public class Game_Scene extends CameraScene {
 				(GameActivity.CAMERA_WIDTH - GfxAssets.mOnScreenControlBaseTextureRegion.getWidth())/2, 
 					GameActivity.CAMERA_HEIGHT - GfxAssets.mOnScreenControlBaseTextureRegion.getHeight(), 
 					this.mCamera, GfxAssets.mOnScreenControlBaseTextureRegion, 
-						GfxAssets.mOnScreenControlKnobTextureRegion, 0.1f,
+						GfxAssets.mOnScreenControlKnobTextureRegion, 0.2f,
 							GameActivity.mVertexBufferObjectManager, 
 								new IAnalogOnScreenControlListener() {
 			@Override
@@ -123,25 +115,25 @@ public class Game_Scene extends CameraScene {
 											final float pValueX, 
 												final float pValueY) {
 				
-				if (pValueY == -1.0f && !isJumping(myPlayer)){
+				if (pValueY == -1.0f && !isJumping(gamePlayer)){
 					velocity = Vector2Pool.obtain(oldX * 2, pValueY * 2);
 					if (oldX < 0)
-						myPlayer.JumpLeft(velocity);
-					else myPlayer.JumpRight(velocity);
-					
+						gamePlayer.JumpLeft(velocity);
+					else gamePlayer.JumpRight(velocity);
+					Vector2Pool.recycle(velocity);
 				}
 				else {
 					if (pValueX < 0) {
-					velocity = Vector2Pool.obtain(pValueX, 0);
-					myPlayer.GoLeft(velocity);		
+					velocity = Vector2Pool.obtain(pValueX * 4, 0);
+					gamePlayer.GoLeft(velocity);		
 					oldX = pValueX;
 					}				
 					else if (pValueX > 0){
-						velocity = Vector2Pool.obtain(pValueX, 0);
-						myPlayer.GoRight(velocity);		
+						velocity = Vector2Pool.obtain(pValueX * 4, 0);
+						gamePlayer.GoRight(velocity);		
 						oldX = pValueX;
 					}
-					else myPlayer.Stay();
+					else gamePlayer.Stay();
 				}	
 			}
 			
@@ -169,12 +161,11 @@ public class Game_Scene extends CameraScene {
 		leftOuter = new Rectangle(0, 0, 2, GameActivity.CAMERA_HEIGHT, GameActivity.mVertexBufferObjectManager);
 		rightOuter = new Rectangle(GameActivity.CAMERA_WIDTH - 2, 0, 2, GameActivity.CAMERA_HEIGHT, GameActivity.mVertexBufferObjectManager);
 				
-		PhysicsFactory.createBoxBody(this.goPhysicsWorld, bottomOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
-		PhysicsFactory.createBoxBody(this.goPhysicsWorld, topOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
-		PhysicsFactory.createBoxBody(this.goPhysicsWorld, leftOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
-		PhysicsFactory.createBoxBody(this.goPhysicsWorld, rightOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
+		PhysicsFactory.createBoxBody(this.gamePhysicsWorld, bottomOuter, BodyType.StaticBody, PLATO_FIXTURE_DEF);
+		PhysicsFactory.createBoxBody(this.gamePhysicsWorld, topOuter, BodyType.StaticBody, PLATO_FIXTURE_DEF);
+		PhysicsFactory.createBoxBody(this.gamePhysicsWorld, leftOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
+		PhysicsFactory.createBoxBody(this.gamePhysicsWorld, rightOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
 			
-
 		bottomOuter.setColor(Color.BLACK);
 		topOuter.setColor(Color.BLACK);
 		leftOuter.setColor(Color.BLACK);
@@ -191,13 +182,10 @@ public class Game_Scene extends CameraScene {
 	}
 	
 	private void addObstacle(final float pX, final float pY) {
-		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity._main.getVertexBufferObjectManager());
-
-		final Body boxBody = PhysicsFactory.createBoxBody(this.goPhysicsWorld, platform, BodyType.StaticBody, WALL_FIXTURE_DEF);
-//		boxBody.setLinearDamping(10);
-//		boxBody.setAngularDamping(10);
-
-		this.goPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
+		
+		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity.mVertexBufferObjectManager);
+		final Body boxBody = PhysicsFactory.createBoxBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, PLATO_FIXTURE_DEF);
+		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
 
 		this.attachChild(platform);
 	}
