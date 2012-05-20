@@ -24,7 +24,9 @@ public class GfxAssets {
 	public static ITextureRegion mOnScreenControlBaseTextureRegion;
 	public static ITextureRegion mOnScreenControlKnobTextureRegion;
 	public static ITextureRegion mPlayGame;
-	public static TiledTextureRegion mPlayer;	
+	public static TiledTextureRegion mPlayer;
+	public static TiledTextureRegion mFlare;
+	
 	public static ITextureRegion mPlatform1;
 	
 	
@@ -48,6 +50,8 @@ public class GfxAssets {
 		
 		mPlayer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "player.png", 321, 221, 3, 4);
 	
+	    mFlare = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "flare.png", 469, 349, 4, 1);
+		
 		mPlatform1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "plat1.png", 321, 349);
 		
 		mAutoParallaxBackgroundTexture.load();

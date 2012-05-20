@@ -42,9 +42,9 @@ public class Dizzy extends AnimatedSprite implements ContactListener{
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
 		this.setSettings();
 		pPhysicsWorld = mPhysicsWorld;
-		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, CIRCLE_FIXTURE_DEF);
-		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
-		this.registerUpdateHandler(pPhysicsWorld);
+//		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, CIRCLE_FIXTURE_DEF);
+//		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
+//		this.registerUpdateHandler(pPhysicsWorld);
 //		contact = new Contact(pPhysicsWorld, DizzyBody);
 	}
 	
