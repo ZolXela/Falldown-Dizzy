@@ -1,7 +1,5 @@
 package falldowndizzy.pac;
 
-import java.io.IOException;
-
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -34,25 +32,8 @@ public class Dizzy extends AnimatedSprite {
 //		this.registerUpdateHandler(pPhysicsWorld);
 //		contact = new Contact(pPhysicsWorld, DizzyBody);
 
-//		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
-//		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
-	
-		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
-		// set base path
-		loader.setAssetBasePath("xml/");
-		
-//		loader.reset();
-		
-		try {
-		     loader.load(GameActivity._main, pPhysicsWorld, "dizzy.xml", this,
-					true, false);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		DizzyBody = pPhysicsWorld.getPhysicsConnectorManager().findBodyByShape(this);
-		
-		
+		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
 		pPhysicsWorld.setContactListener(new ContactListener(){
 			@Override
 			public void beginContact(Contact contact) {
@@ -78,10 +59,8 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public void Stay(){		
-//		setCurrentTileIndex(6);
 		setAnimation(6, 8);
-		this.DizzyBody.setLinearVelocity(0, 0);
-//		stopAnimation(6);	
+		this.DizzyBody.setLinearVelocity(0, 0);	
 	}
 	
 	public void GoLeft(Vector2 velocity){		
@@ -113,7 +92,7 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public Vector2 setImpulse(Vector2 velocity){	
-		return new Vector2(velocity.x * 16, velocity.y * 20);
+		return new Vector2(velocity.x * 2, velocity.y * 2);
 	}
 	
 	public void setSettings(){	

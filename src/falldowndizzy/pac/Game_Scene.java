@@ -6,6 +6,7 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
@@ -15,6 +16,7 @@ import org.andengine.util.color.Color;
 import android.hardware.SensorManager;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
@@ -70,8 +72,8 @@ public class Game_Scene extends CameraScene {
 
 		attachChild(gamePlayer);
 		gamePlayer.Stay();
+		
 		this.initPlayerController();
-//		this.initOnScreenControls();
 
 	}
 
@@ -87,7 +89,7 @@ public class Game_Scene extends CameraScene {
 	
 	private void setGamePhysicsWorld(){
 
-		gamePhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, SensorManager.GRAVITY_EARTH * 8), true, 10, 1);	
+		gamePhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, SensorManager.GRAVITY_EARTH), true, 8, 1);	
 		this.registerUpdateHandler(gamePhysicsWorld);
 		
 	}
@@ -106,55 +108,6 @@ public class Game_Scene extends CameraScene {
 		gamePlayer = new Dizzy(pX, pY, 
 				GfxAssets.mPlayer, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 	}
-	
-//	private void initOnScreenControls() {
-//		final DigitalOnScreenControl analogOnScreenControl = new DigitalOnScreenControl(
-//				(GameActivity.CAMERA_WIDTH - GfxAssets.mOnScreenControlBaseTextureRegion.getWidth())/2, 
-//					GameActivity.CAMERA_HEIGHT - GfxAssets.mOnScreenControlBaseTextureRegion.getHeight(), 
-//					this.mCamera, GfxAssets.mOnScreenControlBaseTextureRegion, 
-//						GfxAssets.mOnScreenControlKnobTextureRegion, 0.2f,
-//							GameActivity.mVertexBufferObjectManager, 
-//								new IAnalogOnScreenControlListener() {
-//			@Override
-//			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, 
-//											final float pValueX, 
-//												final float pValueY) {
-//				
-//				if (pValueY == -1.0f && !isJumping(gamePlayer)){
-//
-//					velocity = Vector2Pool.obtain(oldX * 2, pValueY * 2);
-//					if (oldX < 0)
-//						gamePlayer.JumpLeft(velocity);
-//					else gamePlayer.JumpRight(velocity);
-//					Vector2Pool.recycle(velocity);
-//				}
-//				else {
-//					if (pValueX < 0) {
-//					velocity = Vector2Pool.obtain(pValueX * 4, 0);
-//					gamePlayer.GoLeft(velocity);		
-//					oldX = pValueX;
-//					}				
-//					else if (pValueX > 0){
-//						velocity = Vector2Pool.obtain(pValueX * 4, 0);
-//						gamePlayer.GoRight(velocity);		
-//						oldX = pValueX;
-//					}
-//					else gamePlayer.Stay();
-//				}	
-//			}
-//			
-//			@Override
-//			public void onControlClick(
-//					AnalogOnScreenControl pAnalogOnScreenControl) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		});
-//		analogOnScreenControl.getControlBase().setAlpha(0.5f);
-//		analogOnScreenControl.refreshControlKnobPosition();
-//
-//		this.setChildScene(analogOnScreenControl);
-//	}
 		
 	private boolean isJumping(Dizzy player){	
 		return player.jumping;	
@@ -211,7 +164,7 @@ public class Game_Scene extends CameraScene {
 					gamePlayer.GoLeft(velocity);
 				}
 				Vector2Pool.recycle(velocity);
-				gamePlayer.Stay();
+			//	gamePlayer.Stay();
 				return true;
 				
 			}
@@ -236,7 +189,7 @@ public class Game_Scene extends CameraScene {
 					gamePlayer.GoRight(velocity);
 				}
 				Vector2Pool.recycle(velocity);
-				gamePlayer.Stay();
+			//	gamePlayer.Stay();
 				return true;			
 			}
 		};
@@ -267,25 +220,29 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(RightArrow);
 		this.attachChild(CentralArrow);
 		
+		this.registerTouchArea(LeftArrow);
+		this.registerTouchArea(RightArrow);
+		this.registerTouchArea(CentralArrow);
+		
 	}
 	
 	
 	private void addObstacle(final float pX, final float pY) {
 
-		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity._main.getVertexBufferObjectManager());
-
-		this.attachChild(platform);
-		
-		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
-		// set base path
-		loader.setAssetBasePath("xml/");
-		
-		try {
-		     loader.load(GameActivity._main, this.gamePhysicsWorld, "plat1.xml", platform,
-					false, false);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity._main.getVertexBufferObjectManager());
+//
+//		this.attachChild(platform);
+//		
+//		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
+//		// set base path
+//		loader.setAssetBasePath("xml/");
+//		
+//		try {
+//		     loader.load(GameActivity._main, this.gamePhysicsWorld, "plat1.xml", platform,
+//					false, false);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
 		
 		
@@ -293,13 +250,14 @@ public class Game_Scene extends CameraScene {
 //		boxBody.setLinearDamping(10);
 //		boxBody.setAngularDamping(10);
 
-//		this.goPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
-
-//		
-//		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity.mVertexBufferObjectManager);
-//		final Body boxBody = PhysicsFactory.createBoxBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, PLATO_FIXTURE_DEF);
 //		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
 
+		
+		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity.mVertexBufferObjectManager);
+		final Body boxBody = PhysicsFactory.createBoxBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, PLATO_FIXTURE_DEF);
+		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
+
+		this.attachChild(platform);
 
 		
 	}
