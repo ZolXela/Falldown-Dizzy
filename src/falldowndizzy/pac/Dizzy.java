@@ -59,19 +59,19 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public void Stay(){		
-		setCurrentTileIndex(6);
-//		setAnimation(6, 8);
+//		setCurrentTileIndex(6);
+		setAnimation(6, 8);
 		this.DizzyBody.setLinearVelocity(0, 0);
 //		stopAnimation(6);	
 	}
 	
 	public void GoLeft(Vector2 velocity){		
-//		setAnimation(9, 11);
+		setAnimation(9, 11);
 		this.DizzyBody.setLinearVelocity(velocity);	
 	}
 	
 	public void GoRight(Vector2 velocity){	
-//		setAnimation(3, 5);
+		setAnimation(3, 5);
 		this.DizzyBody.setLinearVelocity(velocity);		
 	}
 	

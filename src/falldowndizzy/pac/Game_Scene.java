@@ -1,30 +1,20 @@
 package falldowndizzy.pac;
 
 import java.io.IOException;
-import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
 
-import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
-import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnScreenControlListener;
-import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
-import org.andengine.engine.camera.hud.controls.DigitalOnScreenControl;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
-import org.andengine.entity.shape.IAreaShape;
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
-import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.color.Color;
-
-import falldowndizzy.pac.PhysicsEditorLoader;
 
 import android.hardware.SensorManager;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
@@ -51,7 +41,7 @@ public class Game_Scene extends CameraScene {
 	public PhysicsWorld gamePhysicsWorld;
 	private Dizzy gamePlayer;
 	Vector2 velocity;
-	float oldX;
+	int oldX = 1;
 
 	public static Rectangle bottomOuter;
 	public static Rectangle topOuter;
@@ -61,7 +51,13 @@ public class Game_Scene extends CameraScene {
 	public static Rectangle plato1;
 
 	public short jedyForce = 2;
-
+	
+	/**  
+	 * Arrows to control gamer's moving
+	 */
+	public boolean leftArrowTouched = false;
+	public boolean rightArrowTouched = false;
+	public boolean centralArrowTouched = false;
 	
 	
 	public Game_Scene(){
@@ -74,8 +70,9 @@ public class Game_Scene extends CameraScene {
 		this.CreateDizzy(30, 50);
 
 		attachChild(gamePlayer);
-
-		this.initOnScreenControls();
+		gamePlayer.Stay();
+		this.initPlayerController();
+//		this.initOnScreenControls();
 
 	}
 
@@ -91,7 +88,7 @@ public class Game_Scene extends CameraScene {
 	
 	private void setGamePhysicsWorld(){
 
-		gamePhysicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, SensorManager.GRAVITY_EARTH * 8), true, 10, 1);	
+		gamePhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, SensorManager.GRAVITY_EARTH * 8), true, 10, 1);	
 		this.registerUpdateHandler(gamePhysicsWorld);
 		
 	}
@@ -111,54 +108,54 @@ public class Game_Scene extends CameraScene {
 				GfxAssets.mPlayer, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 	}
 	
-	private void initOnScreenControls() {
-		final DigitalOnScreenControl analogOnScreenControl = new DigitalOnScreenControl(
-				(GameActivity.CAMERA_WIDTH - GfxAssets.mOnScreenControlBaseTextureRegion.getWidth())/2, 
-					GameActivity.CAMERA_HEIGHT - GfxAssets.mOnScreenControlBaseTextureRegion.getHeight(), 
-					this.mCamera, GfxAssets.mOnScreenControlBaseTextureRegion, 
-						GfxAssets.mOnScreenControlKnobTextureRegion, 0.2f,
-							GameActivity.mVertexBufferObjectManager, 
-								new IAnalogOnScreenControlListener() {
-			@Override
-			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, 
-											final float pValueX, 
-												final float pValueY) {
-				
-				if (pValueY == -1.0f && !isJumping(gamePlayer)){
-
-					velocity = Vector2Pool.obtain(oldX * 2, pValueY * 2);
-					if (oldX < 0)
-						gamePlayer.JumpLeft(velocity);
-					else gamePlayer.JumpRight(velocity);
-					Vector2Pool.recycle(velocity);
-				}
-				else {
-					if (pValueX < 0) {
-					velocity = Vector2Pool.obtain(pValueX * 4, 0);
-					gamePlayer.GoLeft(velocity);		
-					oldX = pValueX;
-					}				
-					else if (pValueX > 0){
-						velocity = Vector2Pool.obtain(pValueX * 4, 0);
-						gamePlayer.GoRight(velocity);		
-						oldX = pValueX;
-					}
-					else gamePlayer.Stay();
-				}	
-			}
-			
-			@Override
-			public void onControlClick(
-					AnalogOnScreenControl pAnalogOnScreenControl) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		analogOnScreenControl.getControlBase().setAlpha(0.5f);
-		analogOnScreenControl.refreshControlKnobPosition();
-
-		this.setChildScene(analogOnScreenControl);
-	}
+//	private void initOnScreenControls() {
+//		final DigitalOnScreenControl analogOnScreenControl = new DigitalOnScreenControl(
+//				(GameActivity.CAMERA_WIDTH - GfxAssets.mOnScreenControlBaseTextureRegion.getWidth())/2, 
+//					GameActivity.CAMERA_HEIGHT - GfxAssets.mOnScreenControlBaseTextureRegion.getHeight(), 
+//					this.mCamera, GfxAssets.mOnScreenControlBaseTextureRegion, 
+//						GfxAssets.mOnScreenControlKnobTextureRegion, 0.2f,
+//							GameActivity.mVertexBufferObjectManager, 
+//								new IAnalogOnScreenControlListener() {
+//			@Override
+//			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, 
+//											final float pValueX, 
+//												final float pValueY) {
+//				
+//				if (pValueY == -1.0f && !isJumping(gamePlayer)){
+//
+//					velocity = Vector2Pool.obtain(oldX * 2, pValueY * 2);
+//					if (oldX < 0)
+//						gamePlayer.JumpLeft(velocity);
+//					else gamePlayer.JumpRight(velocity);
+//					Vector2Pool.recycle(velocity);
+//				}
+//				else {
+//					if (pValueX < 0) {
+//					velocity = Vector2Pool.obtain(pValueX * 4, 0);
+//					gamePlayer.GoLeft(velocity);		
+//					oldX = pValueX;
+//					}				
+//					else if (pValueX > 0){
+//						velocity = Vector2Pool.obtain(pValueX * 4, 0);
+//						gamePlayer.GoRight(velocity);		
+//						oldX = pValueX;
+//					}
+//					else gamePlayer.Stay();
+//				}	
+//			}
+//			
+//			@Override
+//			public void onControlClick(
+//					AnalogOnScreenControl pAnalogOnScreenControl) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
+//		analogOnScreenControl.getControlBase().setAlpha(0.5f);
+//		analogOnScreenControl.refreshControlKnobPosition();
+//
+//		this.setChildScene(analogOnScreenControl);
+//	}
 		
 	private boolean isJumping(Dizzy player){	
 		return player.jumping;	
@@ -193,8 +190,88 @@ public class Game_Scene extends CameraScene {
 
 	}
 	
+	
+	private void initPlayerController() {
+		
+		final Sprite LeftArrow = new Sprite(
+				0, GameActivity.CAMERA_HEIGHT - GfxAssets.mPlayGame.getHeight(), 
+				GfxAssets.mPlayGame, GameActivity.mVertexBufferObjectManager){
+			
+			@Override
+			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
+				leftArrowTouched = true;
+				rightArrowTouched = false;
+				System.out.println(">>>>>>> is left touched? " + leftArrowTouched);
+				if (centralArrowTouched == true && !isJumping(gamePlayer)){
+					velocity = Vector2Pool.obtain(-2, -8);
+					gamePlayer.JumpLeft(velocity);		
+					centralArrowTouched = false;
+				}
+				else {
+					velocity = Vector2Pool.obtain(-4, 0);
+					gamePlayer.GoLeft(velocity);
+				}
+				Vector2Pool.recycle(velocity);
+				gamePlayer.Stay();
+				return true;
+				
+			}
+		};
+		
+		final Sprite RightArrow = new Sprite(
+				GameActivity.CAMERA_WIDTH - GfxAssets.mPlayGame.getWidth(), GameActivity.CAMERA_HEIGHT - GfxAssets.mPlayGame.getHeight(), 
+				GfxAssets.mPlayGame, GameActivity.mVertexBufferObjectManager){
+			
+			@Override
+			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
+				rightArrowTouched = true;
+				leftArrowTouched = false;
+				System.out.println(">>>>>>> is right touched? " + rightArrowTouched);
+				if (centralArrowTouched == true && !isJumping(gamePlayer)){
+					gamePlayer.JumpRight(velocity);
+					velocity = Vector2Pool.obtain(2, -8);
+					centralArrowTouched = false;
+				}
+				else {
+					velocity = Vector2Pool.obtain(4, 0);
+					gamePlayer.GoRight(velocity);
+				}
+				Vector2Pool.recycle(velocity);
+				gamePlayer.Stay();
+				return true;			
+			}
+		};
+		
+		final Sprite CentralArrow = new Sprite(
+				(GameActivity.CAMERA_WIDTH - GfxAssets.mPlayGame.getWidth()) / 2,
+				GameActivity.CAMERA_HEIGHT - GfxAssets.mPlayGame.getHeight(), 
+				GfxAssets.mPlayGame, GameActivity.mVertexBufferObjectManager) {
+			
+			@Override
+			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
+				centralArrowTouched = true;
+				if (leftArrowTouched == false && rightArrowTouched == false) {
+					velocity = Vector2Pool.obtain(0, -8);
+					gamePlayer.JumpRight(velocity);
+				}
+				else {
+					leftArrowTouched = false;
+					rightArrowTouched = false;
+				}
+				gamePlayer.Stay();
+				System.out.println(">>>>>>> is central touched? " + centralArrowTouched);
+				return true;
+			}	
+		};
+			
+		this.attachChild(LeftArrow);
+		this.attachChild(RightArrow);
+		this.attachChild(CentralArrow);
+		
+	}
+	
+	
 	private void addObstacle(final float pX, final float pY) {
-
 
 		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity._main.getVertexBufferObjectManager());
 
@@ -279,6 +356,8 @@ public class Game_Scene extends CameraScene {
 //
 //		this.attachChild(flare);
 //	}
+	
+	
 	
 }
 
