@@ -68,8 +68,7 @@ public class Game_Scene extends CameraScene {
 		super(GameActivity._Camera);
 		this.setGamePhysicsWorld();
 				
-		setBackground(this.LoadAutoParallaxBg());
-		
+		setBackground(this.LoadAutoParallaxBg());		
 		this.initBorders();
 		this.CreateDizzy(30, 50);
 
@@ -199,16 +198,18 @@ public class Game_Scene extends CameraScene {
 		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity._main.getVertexBufferObjectManager());
 
 		this.attachChild(platform);
+		
 		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
 		// set base path
 		loader.setAssetBasePath("xml/");
 		
 		try {
-			loader.load(GameActivity._main, this.gamePhysicsWorld, "plat1.xml", platform,
+		     loader.load(GameActivity._main, this.gamePhysicsWorld, "plat1.xml", platform,
 					false, false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		
 		
 //		final Body boxBody = Game_Scene.createObstacleBody(this.goPhysicsWorld, platform, BodyType.StaticBody, WALL_FIXTURE_DEF);
@@ -226,51 +227,6 @@ public class Game_Scene extends CameraScene {
 		
 	}
 		
-//    public static Body createObstacleBody(final PhysicsWorld pPhysicsWorld, final IAreaShape pAreaShape, final BodyType pBodyType, final FixtureDef pFixtureDef) {
-//                
-//        final float point1x = 66 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        final float point1y = -10 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        
-//        final float point2x = 24 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        final float point2y = -10 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        
-//        final float point3x = -37 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        final float point3y = -6 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        
-//        final float point4x = -67 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        final float point4y = -4 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        
-//        final float point5x = -71 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        final float point5y = 0 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        
-//        final float point6x = -72 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        final float point6y = 11 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        
-//        final float point7x = 0 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        final float point7y = 7 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        
-//        final float point8x = 73 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        final float point8y = 2 / PIXEL_TO_METER_RATIO_DEFAULT;
-//        
-//        
-//        /* Remember that the vertices are relative to the center-coordinates of the Shape. */
-//        final float halfWidth = pAreaShape.getWidthScaled() * 0.5f / PIXEL_TO_METER_RATIO_DEFAULT;
-//        final float halfHeight = pAreaShape.getHeightScaled() * 0.5f / PIXEL_TO_METER_RATIO_DEFAULT;        
-//        
-//        
-//        final Vector2[] vertices = {
-//                        new Vector2(point1x, point1y),
-//                        new Vector2(point2x, point2y),
-//                        new Vector2(point3x, point3y),
-//                        new Vector2(point4x, point4y),
-//                        new Vector2(point5x, point5y),
-//                        new Vector2(point6x, point6y),
-//                        new Vector2(point7x, point7y),
-//                        new Vector2(point8x, point8y)
-//        };
-//
-//        return PhysicsFactory.createPolygonBody(pPhysicsWorld, pAreaShape, vertices, pBodyType, pFixtureDef);
-//}
     
 //	private void addFlare(final float pX, final float pY) {
 //		final AnimatedSprite flare = new AnimatedSprite(pX, pY, GfxAssets.mFlare, GameActivity._main.getVertexBufferObjectManager());

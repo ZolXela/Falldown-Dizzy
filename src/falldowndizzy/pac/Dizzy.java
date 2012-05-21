@@ -1,5 +1,7 @@
 package falldowndizzy.pac;
 
+import java.io.IOException;
+
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -32,8 +34,25 @@ public class Dizzy extends AnimatedSprite {
 //		this.registerUpdateHandler(pPhysicsWorld);
 //		contact = new Contact(pPhysicsWorld, DizzyBody);
 
-		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
-		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
+//		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
+//		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
+	
+		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
+		// set base path
+		loader.setAssetBasePath("xml/");
+		
+//		loader.reset();
+		
+		try {
+		     loader.load(GameActivity._main, pPhysicsWorld, "dizzy.xml", this,
+					true, false);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		DizzyBody = pPhysicsWorld.getPhysicsConnectorManager().findBodyByShape(this);
+		
+		
 		pPhysicsWorld.setContactListener(new ContactListener(){
 			@Override
 			public void beginContact(Contact contact) {
