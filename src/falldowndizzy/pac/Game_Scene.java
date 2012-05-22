@@ -41,7 +41,7 @@ public class Game_Scene extends CameraScene {
 	public PhysicsWorld gamePhysicsWorld;
 	private Dizzy gamePlayer;
 	Vector2 velocity;
-	int oldX = 1;
+	float oldX = 30;
 
 	public static Rectangle bottomOuter;
 	public static Rectangle topOuter;
@@ -148,10 +148,11 @@ public class Game_Scene extends CameraScene {
 			
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
+				this.clearUpdateHandlers();
 				if(pSceneTouchEvent.isActionDown() && !isJumping(gamePlayer)) { 			
 					leftArrowTouched = true;
 					System.out.println(">>>>>>> is left touched? " + leftArrowTouched);
-					velocity = (centralArrowTouched == true && !isJumping(gamePlayer)) ? Vector2Pool.obtain(-2, -8) : Vector2Pool.obtain(-4, 0);	
+					velocity = (centralArrowTouched == true) ? Vector2Pool.obtain(pTouchAreaLocalX - oldX, -8) : Vector2Pool.obtain(-4, 0);	
 					gamePlayer.GoLeft(velocity);
 					return false;
 				}
@@ -170,11 +171,13 @@ public class Game_Scene extends CameraScene {
 			
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
+				this.clearUpdateHandlers();
 				if(pSceneTouchEvent.isActionDown() && !isJumping(gamePlayer)) { 	
 					rightArrowTouched = true;
 					System.out.println(">>>>>>> is right touched? " + rightArrowTouched);
-					velocity = (centralArrowTouched == true && !isJumping(gamePlayer)) ? Vector2Pool.obtain(2, -8) : Vector2Pool.obtain(4, 0);
-					gamePlayer.GoRight(velocity);			
+					velocity = (centralArrowTouched == true) ? Vector2Pool.obtain(pTouchAreaLocalX - oldX, -8) : Vector2Pool.obtain(4, 0);
+					gamePlayer.GoRight(velocity);		
+					oldX = pTouchAreaLocalX;
 					return false;
 				}
 				else if(pSceneTouchEvent.isActionUp() && rightArrowTouched == true) {
@@ -193,9 +196,10 @@ public class Game_Scene extends CameraScene {
 			
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
-				if(pSceneTouchEvent.isActionDown()) { 
+				this.clearUpdateHandlers();
+				if(pSceneTouchEvent.isActionDown() && !isJumping(gamePlayer)) { 
 					centralArrowTouched = true;
-					if (leftArrowTouched == false && rightArrowTouched == false && !isJumping(gamePlayer)) {
+					if (leftArrowTouched == false && rightArrowTouched == false) {
 						velocity = Vector2Pool.obtain(0, -8);
 						gamePlayer.Jump(velocity);
 					}

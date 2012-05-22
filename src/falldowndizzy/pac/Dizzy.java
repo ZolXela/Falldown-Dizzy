@@ -74,8 +74,8 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public void Jump(Vector2 velocity){
-		this.DizzyBody.setLinearVelocity(velocity);	
 		setAnimation(6, 8);
+		this.DizzyBody.setLinearVelocity(velocity);	
 	}
 	
 	public void JumpLeft(Vector2 velocity){
