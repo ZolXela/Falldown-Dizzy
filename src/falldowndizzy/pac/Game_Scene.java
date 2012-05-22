@@ -1,7 +1,5 @@
 package falldowndizzy.pac;
 
-import java.io.IOException;
-
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
@@ -36,9 +34,9 @@ public class Game_Scene extends CameraScene {
 	public static final short MASKBITS_PLATO = CATEGORYBIT_WALL  |  CATEGORYBIT_PLAYER;  // Missing: CATEGORYBIT_CIRCLE
 	public static final short MASKBITS_PLAYER = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO;// Missing: CATEGORYBIT_BOX
 
-	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.5f, 0.1f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
-	public static final FixtureDef PLATO_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.5f, 0.1f, false, CATEGORYBIT_PLATO, MASKBITS_PLATO, (short)0);
-	public static final FixtureDef PLAYER_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.0f, 0.5f, 0.8f, false, CATEGORYBIT_PLAYER, MASKBITS_PLAYER, (short)0);
+	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.0f, 1.0f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
+	public static final FixtureDef PLATO_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.0f, 1.0f, false, CATEGORYBIT_PLATO, MASKBITS_PLATO, (short)0);
+	public static final FixtureDef PLAYER_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.0f, 0.8f, false, CATEGORYBIT_PLAYER, MASKBITS_PLAYER, (short)0);
 	
 	public PhysicsWorld gamePhysicsWorld;
 	private Dizzy gamePlayer;
@@ -72,7 +70,6 @@ public class Game_Scene extends CameraScene {
 
 		attachChild(gamePlayer);
 		gamePlayer.Stay();
-		
 		this.initPlayerController();
 
 	}
@@ -151,22 +148,27 @@ public class Game_Scene extends CameraScene {
 			
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
-				leftArrowTouched = true;
-				rightArrowTouched = false;
-				System.out.println(">>>>>>> is left touched? " + leftArrowTouched);
-				if (centralArrowTouched == true && !isJumping(gamePlayer)){
-					velocity = Vector2Pool.obtain(-2, -8);
-					gamePlayer.JumpLeft(velocity);		
+				if(pSceneTouchEvent.isActionDown()) { 			
+					leftArrowTouched = true;
+					System.out.println(">>>>>>> is left touched? " + leftArrowTouched);
+					if (centralArrowTouched == true && !isJumping(gamePlayer)){
+						velocity = Vector2Pool.obtain(-2, -8);	
+						gamePlayer.GoLeft(velocity);
+					}
+					else {
+						velocity = Vector2Pool.obtain(-4, 0);
+						gamePlayer.GoLeft(velocity);
+					}
+					Vector2Pool.recycle(velocity);
+					return true;
+				}
+				if(pSceneTouchEvent.isActionUp() && leftArrowTouched == true) {
+					leftArrowTouched = false;
 					centralArrowTouched = false;
-				}
-				else {
-					velocity = Vector2Pool.obtain(-4, 0);
-					gamePlayer.GoLeft(velocity);
-				}
-				Vector2Pool.recycle(velocity);
-			//	gamePlayer.Stay();
-				return true;
-				
+					System.out.println(">>>>>>> is left action up? " + leftArrowTouched);
+					return true;
+				}		
+			return false;			
 			}
 		};
 		
@@ -176,21 +178,27 @@ public class Game_Scene extends CameraScene {
 			
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
-				rightArrowTouched = true;
-				leftArrowTouched = false;
-				System.out.println(">>>>>>> is right touched? " + rightArrowTouched);
-				if (centralArrowTouched == true && !isJumping(gamePlayer)){
-					gamePlayer.JumpRight(velocity);
-					velocity = Vector2Pool.obtain(2, -8);
+				if(pSceneTouchEvent.isActionDown()) { 	
+					rightArrowTouched = true;
+					System.out.println(">>>>>>> is right touched? " + rightArrowTouched);
+					if (centralArrowTouched == true && !isJumping(gamePlayer)){
+						velocity = Vector2Pool.obtain(2, -8);
+						gamePlayer.GoRight(velocity);
+					}
+					else {
+						velocity = Vector2Pool.obtain(4, 0);	
+						gamePlayer.GoRight(velocity);
+					}				
+					Vector2Pool.recycle(velocity);
+					return true;
+				}
+				if(pSceneTouchEvent.isActionUp() && rightArrowTouched == true) {
+					rightArrowTouched = false;
 					centralArrowTouched = false;
+					System.out.println(">>>>>>> is right action up? " + rightArrowTouched);
+					return true;
 				}
-				else {
-					velocity = Vector2Pool.obtain(4, 0);
-					gamePlayer.GoRight(velocity);
-				}
-				Vector2Pool.recycle(velocity);
-			//	gamePlayer.Stay();
-				return true;			
+				return false;	
 			}
 		};
 		
@@ -201,18 +209,21 @@ public class Game_Scene extends CameraScene {
 			
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
-				centralArrowTouched = true;
-				if (leftArrowTouched == false && rightArrowTouched == false) {
-					velocity = Vector2Pool.obtain(0, -8);
-					gamePlayer.JumpRight(velocity);
+				if(pSceneTouchEvent.isActionDown()) { 
+					centralArrowTouched = true;
+					if (leftArrowTouched == false && rightArrowTouched == false && !isJumping(gamePlayer)) {
+						velocity = Vector2Pool.obtain(0, -8);
+						gamePlayer.Jump(velocity);
+					}
+					System.out.println(">>>>>>> is central touched? " + centralArrowTouched);					
+					return true;
 				}
-				else {
-					leftArrowTouched = false;
-					rightArrowTouched = false;
-				}
-				gamePlayer.Stay();
-				System.out.println(">>>>>>> is central touched? " + centralArrowTouched);
-				return true;
+				if(pSceneTouchEvent.isActionUp() && centralArrowTouched == true) {
+					centralArrowTouched = false;
+					System.out.println(">>>>>>> is central action up? " + centralArrowTouched);
+					return true;
+				}			
+				return false;
 			}	
 		};
 			
@@ -226,6 +237,19 @@ public class Game_Scene extends CameraScene {
 		
 	}
 	
+//	@Override
+//	public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
+//	    if (pSceneTouchEvent.isActionUp())
+//	    {
+//	        /**
+//	         * Сбрасываем нажатия кнопок
+//	         */
+//	    	leftArrowTouched = false;
+//	    	rightArrowTouched = false;
+//	    	centralArrowTouched = false;
+//	    }
+//	    return super.onSceneTouchEvent(pSceneTouchEvent);
+//	}    
 	
 	private void addObstacle(final float pX, final float pY) {
 
