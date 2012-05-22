@@ -6,10 +6,12 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
+import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 public class GameActivity extends SimpleBaseGameActivity{
 	
@@ -36,6 +38,18 @@ public class GameActivity extends SimpleBaseGameActivity{
 		final EngineOptions opt = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED,
 				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), _Camera);
 	    opt.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
+		opt.getTouchOptions().setNeedsMultiTouch(true);
+
+		if(MultiTouch.isSupported(this)) {
+			if(MultiTouch.isSupportedDistinct(this)) {
+				Toast.makeText(this, "MultiTouch detected --> Both controls will work properly!", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(this, "MultiTouch detected, but your device has problems distinguishing between fingers.\n\nControls are placed at different vertical locations.", Toast.LENGTH_LONG).show();
+			}
+		} else {
+			Toast.makeText(this, "Sorry your device does NOT support MultiTouch!\n\n(Falling back to SingleTouch.)\n\nControls are placed at different vertical locations.", Toast.LENGTH_LONG).show();
+		}
+
 		return opt;
 	}
 
