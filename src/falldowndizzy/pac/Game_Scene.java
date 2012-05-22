@@ -148,27 +148,19 @@ public class Game_Scene extends CameraScene {
 			
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
-				if(pSceneTouchEvent.isActionDown()) { 			
+				if(pSceneTouchEvent.isActionDown() && !isJumping(gamePlayer)) { 			
 					leftArrowTouched = true;
 					System.out.println(">>>>>>> is left touched? " + leftArrowTouched);
-					if (centralArrowTouched == true && !isJumping(gamePlayer)){
-						velocity = Vector2Pool.obtain(-2, -8);	
-						gamePlayer.GoLeft(velocity);
-					}
-					else {
-						velocity = Vector2Pool.obtain(-4, 0);
-						gamePlayer.GoLeft(velocity);
-					}
-					Vector2Pool.recycle(velocity);
-					return true;
+					velocity = (centralArrowTouched == true && !isJumping(gamePlayer)) ? Vector2Pool.obtain(-2, -8) : Vector2Pool.obtain(-4, 0);	
+					gamePlayer.GoLeft(velocity);
+					return false;
 				}
-				if(pSceneTouchEvent.isActionUp() && leftArrowTouched == true) {
+				else if(pSceneTouchEvent.isActionUp() && leftArrowTouched == true) {
 					leftArrowTouched = false;
-					centralArrowTouched = false;
 					System.out.println(">>>>>>> is left action up? " + leftArrowTouched);
-					return true;
+					return false;
 				}		
-			return false;			
+				else return true;			
 			}
 		};
 		
@@ -178,27 +170,19 @@ public class Game_Scene extends CameraScene {
 			
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
-				if(pSceneTouchEvent.isActionDown()) { 	
+				if(pSceneTouchEvent.isActionDown() && !isJumping(gamePlayer)) { 	
 					rightArrowTouched = true;
 					System.out.println(">>>>>>> is right touched? " + rightArrowTouched);
-					if (centralArrowTouched == true && !isJumping(gamePlayer)){
-						velocity = Vector2Pool.obtain(2, -8);
-						gamePlayer.GoRight(velocity);
-					}
-					else {
-						velocity = Vector2Pool.obtain(4, 0);	
-						gamePlayer.GoRight(velocity);
-					}				
-					Vector2Pool.recycle(velocity);
-					return true;
+					velocity = (centralArrowTouched == true && !isJumping(gamePlayer)) ? Vector2Pool.obtain(2, -8) : Vector2Pool.obtain(4, 0);
+					gamePlayer.GoRight(velocity);			
+					return false;
 				}
-				if(pSceneTouchEvent.isActionUp() && rightArrowTouched == true) {
+				else if(pSceneTouchEvent.isActionUp() && rightArrowTouched == true) {
 					rightArrowTouched = false;
-					centralArrowTouched = false;
 					System.out.println(">>>>>>> is right action up? " + rightArrowTouched);
-					return true;
+					return false;
 				}
-				return false;	
+				else return true;	
 			}
 		};
 		
@@ -216,14 +200,14 @@ public class Game_Scene extends CameraScene {
 						gamePlayer.Jump(velocity);
 					}
 					System.out.println(">>>>>>> is central touched? " + centralArrowTouched);					
-					return true;
+					return false;
 				}
-				if(pSceneTouchEvent.isActionUp() && centralArrowTouched == true) {
+				else if(pSceneTouchEvent.isActionUp() && centralArrowTouched == true) {
 					centralArrowTouched = false;
 					System.out.println(">>>>>>> is central action up? " + centralArrowTouched);
-					return true;
+					return false;
 				}			
-				return false;
+				else return true;
 			}	
 		};
 			
@@ -234,12 +218,29 @@ public class Game_Scene extends CameraScene {
 		this.registerTouchArea(LeftArrow);
 		this.registerTouchArea(RightArrow);
 		this.registerTouchArea(CentralArrow);
-		
+
 	}
 	
 //	@Override
 //	public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
-//	    if (pSceneTouchEvent.isActionUp())
+//		if (pSceneTouchEvent.isActionDown()){
+//			if(rightArrowTouched && !leftArrowTouched){
+//				System.out.println(">>>>>>> right arrow is touched! It's value is " + rightArrowTouched);
+//				velocity = centralArrowTouched ? Vector2Pool.obtain(2, -8) : Vector2Pool.obtain(4, 0);
+//				gamePlayer.GoRight(velocity);
+//			}
+//			else if(leftArrowTouched && !rightArrowTouched){
+//				System.out.println(">>>>>>> right arrow is touched! It's value is " + leftArrowTouched);
+//				velocity = centralArrowTouched ? Vector2Pool.obtain(2, -8) : Vector2Pool.obtain(4, 0);
+//				gamePlayer.GoLeft(velocity);
+//			}
+//			else if(centralArrowTouched){
+//				velocity = Vector2Pool.obtain(0, -8);
+//				gamePlayer.Jump(velocity);
+//			}
+//			Vector2Pool.recycle(velocity);
+//	    }
+//	    else if (pSceneTouchEvent.isActionUp())
 //	    {
 //	        /**
 //	         * Сбрасываем нажатия кнопок
