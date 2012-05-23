@@ -4,6 +4,7 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -26,11 +27,6 @@ public class Dizzy extends AnimatedSprite {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
 		this.setSettings();
 		pPhysicsWorld = mPhysicsWorld;
-
-//		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, CIRCLE_FIXTURE_DEF);
-//		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
-//		this.registerUpdateHandler(pPhysicsWorld);
-//		contact = new Contact(pPhysicsWorld, DizzyBody);
 
 		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
@@ -66,16 +62,20 @@ public class Dizzy extends AnimatedSprite {
 	public void GoLeft(Vector2 velocity){		
 		setAnimation(9, 11);
 		this.DizzyBody.setLinearVelocity(velocity);	
+		Vector2Pool.recycle(velocity);
 	}
 	
 	public void GoRight(Vector2 velocity){	
 		setAnimation(3, 5);
-		this.DizzyBody.setLinearVelocity(velocity);		
+		this.DizzyBody.setLinearVelocity(velocity);	
+		Vector2Pool.recycle(velocity);
+//		this.setPosition(velocity.x, velocity.y);
 	}
 	
 	public void Jump(Vector2 velocity){
 		setAnimation(6, 8);
 		this.DizzyBody.setLinearVelocity(velocity);	
+		Vector2Pool.recycle(velocity);
 	}
 	
 	public void JumpLeft(Vector2 velocity){
