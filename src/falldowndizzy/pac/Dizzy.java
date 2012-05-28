@@ -18,8 +18,8 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class Dizzy extends AnimatedSprite {
 	
-	private Body DizzyBody;
-	public boolean jumping;
+	public Body DizzyBody;
+	public boolean jumping = false;
 	
 	PhysicsWorld pPhysicsWorld;
 	
@@ -42,13 +42,12 @@ public class Dizzy extends AnimatedSprite {
 			}
 			@Override
 			public void preSolve(Contact contact, Manifold oldManifold) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 			@Override
 			public void postSolve(Contact contact, ContactImpulse impulse) {
-				// TODO Auto-generated method stub
-				
+				jumping = contact.isEnabled() ? false : true;				
 			}
 		});
 
@@ -69,35 +68,12 @@ public class Dizzy extends AnimatedSprite {
 		setAnimation(3, 5);
 		this.DizzyBody.setLinearVelocity(velocity);	
 		Vector2Pool.recycle(velocity);
-//		this.setPosition(velocity.x, velocity.y);
 	}
 	
 	public void Jump(Vector2 velocity){
 		setAnimation(6, 8);
 		this.DizzyBody.setLinearVelocity(velocity);	
 		Vector2Pool.recycle(velocity);
-	}
-	
-	public void JumpLeft(Vector2 velocity){
-		setCurrentTileIndex(9);
-//		setAnimation(9, 11);
-		DizzyBody.applyLinearImpulse(this.setImpulse(velocity), DizzyBody.getWorldCenter());	
-		DizzyBody.setAngularDamping(1.5f);
-		DizzyBody.setLinearDamping(1.5f); //to decrease velocity slowly. no linear no floaty 
-		jumping = true;
-	}
-	
-	public void JumpRight(Vector2 velocity){
-		setCurrentTileIndex(3);
-//		setAnimation(3, 5);
-		DizzyBody.applyLinearImpulse(this.setImpulse(velocity), DizzyBody.getWorldCenter());	
-		DizzyBody.setAngularDamping(2.5f);
-		DizzyBody.setLinearDamping(2.5f); //to decrease velocity slowly. no linear no floaty 
-		jumping = true;
-	}
-	
-	public Vector2 setImpulse(Vector2 velocity){	
-		return new Vector2(velocity.x * 2, velocity.y * 2);
 	}
 	
 	public void setSettings(){	
