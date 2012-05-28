@@ -56,6 +56,22 @@ public class GfxAssets {
 		
 		mAutoParallaxBackgroundTexture.load();
 	}
+	
+	public static void LoadGFX800_600() {
+		
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/800_600/");
+		
+		mAutoParallaxBackgroundTexture = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 1024);
+		mParallaxLayerBack = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "dizzy_parallax_background_layer_back.png", 0, 0);
+		mParallaxLayerCloud = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "dizzy_parallax_background_layer_clouds.png", 320, 0);
+		mParallaxLayerTrees = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "dizzy_parallax_background_layer_trees.png", 0, 480);
+		
+		mAutoParallaxBackgroundTexture.load();
+	}	
+	
 
 	public static void LoadMFX(){
 		

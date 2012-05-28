@@ -71,7 +71,13 @@ public class Game_Scene extends CameraScene {
 
 		attachChild(gamePlayer);
 		gamePlayer.Stay();
+		
+		
+		this.setOnAreaTouchTraversalFrontToBack();
+		
 		this.initPlayerController();
+		
+		this.setTouchAreaBindingOnActionDownEnabled(true);
 
 	}
 
@@ -144,27 +150,27 @@ public class Game_Scene extends CameraScene {
 	private void initPlayerController() {
 		
 		
-		final Sprite LeftArrow = new Sprite(
-				0, GameActivity.CAMERA_HEIGHT - GfxAssets.mPlayGame.getHeight(), 
-				GfxAssets.mPlayGame, GameActivity.mVertexBufferObjectManager){
-			
-			@Override
-			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
-				if(pSceneTouchEvent.isActionDown() && !isJumping(gamePlayer)) { 			
-					leftArrowTouched = true;
-					System.out.println(">>>>>>> is left touched? " + leftArrowTouched);
-					velocity = (centralArrowTouched == true && !isJumping(gamePlayer)) ? Vector2Pool.obtain(-2, -8) : Vector2Pool.obtain(-4, 0);	
-					gamePlayer.GoLeft(velocity);
-					return false;
-				}
-				else if(pSceneTouchEvent.isActionUp() && leftArrowTouched == true) {
-					leftArrowTouched = false;
-					System.out.println(">>>>>>> is left action up? " + leftArrowTouched);
-					return false;
-				}		
-				else return true;			
-			}
-		};
+//		final Sprite LeftArrow = new Sprite(
+//				0, GameActivity.CAMERA_HEIGHT - GfxAssets.mPlayGame.getHeight(), 
+//				GfxAssets.mPlayGame, GameActivity.mVertexBufferObjectManager){
+//			
+//			@Override
+//			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
+//				if(pSceneTouchEvent.isActionDown() && !isJumping(gamePlayer)) { 			
+//					leftArrowTouched = true;
+//					System.out.println(">>>>>>> is left touched? " + leftArrowTouched);
+//					velocity = (centralArrowTouched == true && !isJumping(gamePlayer)) ? Vector2Pool.obtain(-2, -8) : Vector2Pool.obtain(-4, 0);	
+//					gamePlayer.GoLeft(velocity);
+//					return false;
+//				}
+//				else if(pSceneTouchEvent.isActionUp() && leftArrowTouched == true) {
+//					leftArrowTouched = false;
+//					System.out.println(">>>>>>> is left action up? " + leftArrowTouched);
+//					return false;
+//				}		
+//				else return true;			
+//			}
+//		};
 		
 		final Sprite RightArrow = new Sprite(
 				GameActivity.CAMERA_WIDTH - GfxAssets.mPlayGame.getWidth(), GameActivity.CAMERA_HEIGHT - GfxAssets.mPlayGame.getHeight(), 
@@ -180,7 +186,7 @@ public class Game_Scene extends CameraScene {
 					return false;
 				}
 				else if(pSceneTouchEvent.isActionUp() && rightArrowTouched == true) {
-					rightArrowTouched = false;
+					rightArrowTouched = false; 
 					System.out.println(">>>>>>> is right action up? " + rightArrowTouched);
 					return false;
 				}
@@ -188,38 +194,38 @@ public class Game_Scene extends CameraScene {
 			}
 		};
 		
-		final Sprite CentralArrow = new Sprite(
-				(GameActivity.CAMERA_WIDTH - GfxAssets.mPlayGame.getWidth()) / 2,
-				GameActivity.CAMERA_HEIGHT - GfxAssets.mPlayGame.getHeight(), 
-				GfxAssets.mPlayGame, GameActivity.mVertexBufferObjectManager) {
+//		final Sprite CentralArrow = new Sprite(
+//				(GameActivity.CAMERA_WIDTH - GfxAssets.mPlayGame.getWidth()) / 2,
+//				GameActivity.CAMERA_HEIGHT - GfxAssets.mPlayGame.getHeight(), 
+//				GfxAssets.mPlayGame, GameActivity.mVertexBufferObjectManager) {
+//			
+//			@Override
+//			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
+//				if(pSceneTouchEvent.isActionDown()) { 
+//					centralArrowTouched = true;
+//					if (leftArrowTouched == false && rightArrowTouched == false && !isJumping(gamePlayer)) {
+//						velocity = Vector2Pool.obtain(0, -8);
+//						gamePlayer.Jump(velocity);
+//					}
+//					System.out.println(">>>>>>> is central touched? " + centralArrowTouched);					
+//					return false;
+//				}
+//				else if(pSceneTouchEvent.isActionUp() && centralArrowTouched == true) {
+//					centralArrowTouched = false;
+//					System.out.println(">>>>>>> is central action up? " + centralArrowTouched);
+//					return false;
+//				}			
+//				else return true;
+//			}	
+//		};
 			
-			@Override
-			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
-				if(pSceneTouchEvent.isActionDown()) { 
-					centralArrowTouched = true;
-					if (leftArrowTouched == false && rightArrowTouched == false && !isJumping(gamePlayer)) {
-						velocity = Vector2Pool.obtain(0, -8);
-						gamePlayer.Jump(velocity);
-					}
-					System.out.println(">>>>>>> is central touched? " + centralArrowTouched);					
-					return false;
-				}
-				else if(pSceneTouchEvent.isActionUp() && centralArrowTouched == true) {
-					centralArrowTouched = false;
-					System.out.println(">>>>>>> is central action up? " + centralArrowTouched);
-					return false;
-				}			
-				else return true;
-			}	
-		};
-			
-		this.attachChild(LeftArrow);
+//		this.attachChild(LeftArrow);
 		this.attachChild(RightArrow);
-		this.attachChild(CentralArrow);
+//		this.attachChild(CentralArrow);
 		
-		this.registerTouchArea(LeftArrow);
+//		this.registerTouchArea(LeftArrow);
 		this.registerTouchArea(RightArrow);
-		this.registerTouchArea(CentralArrow);
+//		this.registerTouchArea(CentralArrow);
 
 	}
 	
