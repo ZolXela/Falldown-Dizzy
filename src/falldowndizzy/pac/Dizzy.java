@@ -33,7 +33,10 @@ public class Dizzy extends AnimatedSprite {
 		pPhysicsWorld.setContactListener(new ContactListener(){
 			@Override
 			public void beginContact(Contact contact) {
-				jumping = false;
+//				System.out.println("************** what is the body 1??? " + contact.getFixtureA().getBody());
+//				System.out.println("************** what is the body 2??? " + contact.getFixtureB().getBody());
+//				if(contact.getFixtureA().getBody())
+					jumping = false;
 			}
 			@Override
 			public void endContact(Contact contact)
@@ -71,8 +74,11 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public void Jump(Vector2 velocity){
-		setAnimation(6, 8);
+		if(velocity.x > 0) setAnimation(3, 5);
+		else if(velocity.x < 0) setAnimation(9, 11);
+		else setAnimation(6, 8);
 		this.DizzyBody.setLinearVelocity(velocity);	
+		this.DizzyBody.setLinearDamping(2.5f);
 		Vector2Pool.recycle(velocity);
 	}
 	

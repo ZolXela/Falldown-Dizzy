@@ -31,31 +31,33 @@ public class Game_Scene extends CameraScene {
 	public static final short CATEGORYBIT_PLAYER = 4;
 
 	/* And what should collide with what. */
-	public static final short MASKBITS_WALL = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO  |  CATEGORYBIT_PLAYER;
-	public static final short MASKBITS_PLATO = CATEGORYBIT_WALL  |  CATEGORYBIT_PLAYER;  // Missing: CATEGORYBIT_CIRCLE
-	public static final short MASKBITS_PLAYER = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO;// Missing: CATEGORYBIT_BOX
+	public static final short MASKBITS_WALL = CATEGORYBIT_WALL |  CATEGORYBIT_PLAYER;
+	public static final short MASKBITS_PLATO = CATEGORYBIT_PLAYER;  // Missing: CATEGORYBIT_PLAYER
+	public static final short MASKBITS_PLAYER = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO;// Missing: CATEGORYBIT_PLATO
 
-	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.0f, 1.0f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
-	public static final FixtureDef PLATO_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.0f, 1.0f, false, CATEGORYBIT_PLATO, MASKBITS_PLATO, (short)0);
-	public static final FixtureDef PLAYER_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.0f, 0.8f, false, CATEGORYBIT_PLAYER, MASKBITS_PLAYER, (short)0);
+	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.1f, 0.0f, 1.0f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
+	public static final FixtureDef PLATO_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.2f, 0.0f, 1.0f, false, CATEGORYBIT_PLATO, MASKBITS_PLATO, (short)0);
+	public static final FixtureDef PLAYER_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.8f, false, CATEGORYBIT_PLAYER, MASKBITS_PLAYER, (short)0);
 	
 	public PhysicsWorld gamePhysicsWorld;
 	private Dizzy gamePlayer;
 	Vector2 velocity;
 	float currentX = 0;
-
+	private boolean gameLoaded = false;
+	
 	public static Rectangle bottomOuter;
 	public static Rectangle topOuter;
 	public static Rectangle leftOuter;
 	public static Rectangle rightOuter;
 	
-	public float touchX;
-	public float touchY;
-	public float GlobalX;
+//	public float touchX;
+//	public float touchY;
+	public float GlobalX = 30;
 	public float GlobalY;
 	
-	public short jedyForce = 2;
-	
+	private int finger = 0;
+	private float jumpHeight = -16;
+	private float goStep = 4;
 	
 	public Game_Scene(){
 		super(GameActivity._Camera);
@@ -69,7 +71,7 @@ public class Game_Scene extends CameraScene {
 		gamePlayer.Stay();
 		
 		this.setTouchAreaBindingOnActionMoveEnabled(true);
-		
+		gameLoaded = true;
 	}
 
 	public void Show(){
@@ -175,57 +177,62 @@ public class Game_Scene extends CameraScene {
 //		this.registerTouchArea(JumpBtn);
 //	}	
 	
-	private void playerController(float pX, float pY) {	
-		if(pY >= (GameActivity.CAMERA_HEIGHT / 2 + 100)) {
-			if(gamePlayer.getX()> GlobalX) {			
-				System.out.println("********* should move to the left");
-				velocity = Vector2Pool.obtain(-4, 0);
-				gamePlayer.GoLeft(velocity);
-			}
-			else if(gamePlayer.getX()< GlobalX){
-				velocity = Vector2Pool.obtain(4, 0);
-				System.out.println("********* should move to the right");
-				gamePlayer.GoRight(velocity);
-			}
-			currentX = velocity.x;
-//			velocity = Vector2Pool.obtain(currentX, 0);
-//			gamePlayer.DizzyBody.setLinearVelocity(velocity);
-//			MultitouchSecondProjectActivity.HeroBody.setLinearDamping(0.5f);
-			Vector2Pool.recycle(velocity);
-			}	
-		else {
-			velocity = Vector2Pool.obtain(currentX, -16);
-			gamePlayer.Jump(velocity);
-			gamePlayer.DizzyBody.setLinearDamping(2.5f);
-			Vector2Pool.recycle(velocity);
+	private void playerController() {	
+
+		float currentPosY = gamePlayer.getY();
+		if(GlobalY >= (currentPosY - jumpHeight * 15) && finger == 1) {
+				if((GameActivity.CAMERA_WIDTH / 2) > GlobalX) {			
+					System.out.println("********* should move to the left");
+						velocity = Vector2Pool.obtain((-1) * goStep, 0);
+							currentX = velocity.x;
+								gamePlayer.GoLeft(velocity);
+				}
+				else if((GameActivity.CAMERA_WIDTH / 2) < GlobalX){
+					velocity = Vector2Pool.obtain(goStep, 0);
+						System.out.println("********* should move to the right");
+							currentX = velocity.x;
+								gamePlayer.GoRight(velocity);
+				}
+		} else if((GlobalY < (currentPosY - jumpHeight * 15)) && (GlobalY > (currentPosY - jumpHeight * 30))) {
+			velocity = Vector2Pool.obtain(currentX, jumpHeight);
+				gamePlayer.Jump(velocity);
+					GlobalY = GameActivity.CAMERA_HEIGHT;
 		}
+		else gamePlayer.Stay();
 	}	
 			
 	@Override
 	public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
 		final TouchEvent curTouchEvent = pSceneTouchEvent;
-		switch(pSceneTouchEvent.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				touchX = GlobalX = curTouchEvent.getX();
-				touchY = GlobalY = curTouchEvent.getY();
-				if(!isJumping(gamePlayer))
-					this.playerController(touchX, touchY);
-				break;
-			case MotionEvent.ACTION_UP:
-			case MotionEvent.ACTION_CANCEL:	
-				if(!isJumping(gamePlayer)){
-					currentX = 0;
-					velocity = Vector2Pool.obtain(0, 0);
-					gamePlayer.DizzyBody.setLinearVelocity(velocity);
-					Vector2Pool.recycle(velocity);
-				}
-				break;
-			default:
-				if(!isJumping(gamePlayer))
-					this.playerController(touchX, touchY);
-				break;
-		}
-		return true;
+		if(gameLoaded && finger <= 2){
+			switch(pSceneTouchEvent.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					if(finger == 0) 
+						GlobalX = curTouchEvent.getX();
+					GlobalY = curTouchEvent.getY();
+						finger++;
+							if(!isJumping(gamePlayer)){
+								this.playerController();
+							}
+					break;
+				case MotionEvent.ACTION_UP:
+					finger = (finger > 0) ? finger-1 : 0;
+					if(!isJumping(gamePlayer)){
+						if (finger == 1) {
+							currentX = 0;
+							this.playerController();						
+						}
+						else gamePlayer.Stay();	
+					}
+					break;
+				default:
+					if(!isJumping(gamePlayer) && finger > 0)
+							this.playerController();
+					break;
+			}
+			return true;
+			}
+		return false;
 	}
 	
 	
@@ -258,8 +265,7 @@ public class Game_Scene extends CameraScene {
 		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
 
 		this.attachChild(platform);
-
-		
+	
 	}
 		
     
