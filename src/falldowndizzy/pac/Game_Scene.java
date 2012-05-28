@@ -13,6 +13,7 @@ import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.util.color.Color;
 
 import android.hardware.SensorManager;
+import android.view.MotionEvent;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -31,35 +32,33 @@ public class Game_Scene extends CameraScene {
 	public static final short CATEGORYBIT_PLAYER = 4;
 
 	/* And what should collide with what. */
-	public static final short MASKBITS_WALL = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO  |  CATEGORYBIT_PLAYER;
-	public static final short MASKBITS_PLATO = CATEGORYBIT_WALL  |  CATEGORYBIT_PLAYER;  // Missing: CATEGORYBIT_CIRCLE
-	public static final short MASKBITS_PLAYER = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO;// Missing: CATEGORYBIT_BOX
+	public static final short MASKBITS_WALL = CATEGORYBIT_WALL |  CATEGORYBIT_PLAYER;
+	public static final short MASKBITS_PLATO = CATEGORYBIT_PLAYER;  // Missing: CATEGORYBIT_PLAYER
+	public static final short MASKBITS_PLAYER = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO;// Missing: CATEGORYBIT_PLATO
 
-	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.0f, 1.0f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
-	public static final FixtureDef PLATO_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.0f, 1.0f, false, CATEGORYBIT_PLATO, MASKBITS_PLATO, (short)0);
-	public static final FixtureDef PLAYER_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.0f, 0.8f, false, CATEGORYBIT_PLAYER, MASKBITS_PLAYER, (short)0);
+	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.1f, 0.0f, 1.0f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
+	public static final FixtureDef PLATO_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.2f, 0.0f, 1.0f, false, CATEGORYBIT_PLATO, MASKBITS_PLATO, (short)0);
+	public static final FixtureDef PLAYER_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.8f, false, CATEGORYBIT_PLAYER, MASKBITS_PLAYER, (short)0);
 	
 	public PhysicsWorld gamePhysicsWorld;
 	private Dizzy gamePlayer;
 	Vector2 velocity;
-	int oldX = 1;
-
+	float currentX = 0;
+	private boolean gameLoaded = false;
+	
 	public static Rectangle bottomOuter;
 	public static Rectangle topOuter;
 	public static Rectangle leftOuter;
 	public static Rectangle rightOuter;
 	
-	public static Rectangle plato1;
-
-	public short jedyForce = 2;
+//	public float touchX;
+//	public float touchY;
+	public float GlobalX = 30;
+	public float GlobalY;
 	
-	/**  
-	 * Arrows to control gamer's moving
-	 */
-	public boolean leftArrowTouched = false;
-	public boolean rightArrowTouched = false;
-	public boolean centralArrowTouched = false;
-	
+	private int finger = 0;
+	private float jumpHeight = -16;
+	private float goStep = 4;
 	
 	public Game_Scene(){
 		super(GameActivity._Camera);
@@ -72,13 +71,8 @@ public class Game_Scene extends CameraScene {
 		attachChild(gamePlayer);
 		gamePlayer.Stay();
 		
-		
-		this.setOnAreaTouchTraversalFrontToBack();
-		
-		this.initPlayerController();
-		
-		this.setTouchAreaBindingOnActionDownEnabled(true);
-
+		this.setTouchAreaBindingOnActionMoveEnabled(true);
+		gameLoaded = true;
 	}
 
 	public void Show(){
@@ -93,7 +87,7 @@ public class Game_Scene extends CameraScene {
 	
 	private void setGamePhysicsWorld(){
 
-		gamePhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, SensorManager.GRAVITY_EARTH), true, 8, 1);	
+		gamePhysicsWorld = new FixedStepPhysicsWorld(100, new Vector2(0, SensorManager.GRAVITY_EARTH * 5), true, 8, 1);	
 		this.registerUpdateHandler(gamePhysicsWorld);
 		
 	}
@@ -119,7 +113,7 @@ public class Game_Scene extends CameraScene {
 	
 	private void initBorders() {
 
-		bottomOuter = new Rectangle(0, GameActivity.CAMERA_HEIGHT - 2, GameActivity.CAMERA_WIDTH, 2, GameActivity.mVertexBufferObjectManager);
+		bottomOuter = new Rectangle(0, GameActivity.CAMERA_HEIGHT, GameActivity.CAMERA_WIDTH, 2, GameActivity.mVertexBufferObjectManager);
 		topOuter = new Rectangle(0, 0, GameActivity.CAMERA_WIDTH, 2, GameActivity.mVertexBufferObjectManager);
 		leftOuter = new Rectangle(0, 0, 2, GameActivity.CAMERA_HEIGHT, GameActivity.mVertexBufferObjectManager);
 		rightOuter = new Rectangle(GameActivity.CAMERA_WIDTH - 2, 0, 2, GameActivity.CAMERA_HEIGHT, GameActivity.mVertexBufferObjectManager);
@@ -140,125 +134,109 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(rightOuter);
 				
 		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2);
-//		
+		
 //		this.addFlare(GameActivity.CAMERA_WIDTH - 57, GameActivity.CAMERA_HEIGHT / 3);
 		
 
 	}
 	
-	
-	private void initPlayerController() {
-		
-		
-//		final Sprite LeftArrow = new Sprite(
-//				0, GameActivity.CAMERA_HEIGHT - GfxAssets.mPlayGame.getHeight(), 
-//				GfxAssets.mPlayGame, GameActivity.mVertexBufferObjectManager){
-//			
+//	private void initPlayerController() {		
+//		
+//		final DigitalOnScreenControl digitalOnScreenControl = new DigitalOnScreenControl(170, GameActivity.CAMERA_HEIGHT - GfxAssets.mOnScreenControlBaseTextureRegion.getHeight(), this.mCamera, GfxAssets.mOnScreenControlBaseTextureRegion, GfxAssets.mOnScreenControlKnobTextureRegion, 0.1f, GameActivity.mVertexBufferObjectManager, new IOnScreenControlListener() {
 //			@Override
-//			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
-//				if(pSceneTouchEvent.isActionDown() && !isJumping(gamePlayer)) { 			
-//					leftArrowTouched = true;
-//					System.out.println(">>>>>>> is left touched? " + leftArrowTouched);
-//					velocity = (centralArrowTouched == true && !isJumping(gamePlayer)) ? Vector2Pool.obtain(-2, -8) : Vector2Pool.obtain(-4, 0);	
-//					gamePlayer.GoLeft(velocity);
-//					return false;
+//			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, final float pValueX, final float pValueY) {
+//				if(!isJumping(gamePlayer) && pValueX != 0){
+//					velocity = Vector2Pool.obtain(4 * Math.signum(pValueX), 0); 	
+//					if(pValueX > 0) gamePlayer.GoRight(velocity);
+//						else if(pValueX < 0) gamePlayer.GoLeft(velocity);
+//				}				
+//				else gamePlayer.Stay();
+//				currentX = pValueX;
+//			}
+//
+//		});
+//
+//		digitalOnScreenControl.refreshControlKnobPosition();
+//		this.setChildScene(digitalOnScreenControl);
+//		
+//		
+//		final Sprite JumpBtn = new Sprite(30, GameActivity.CAMERA_HEIGHT - GfxAssets.mOnScreenControlBaseTextureRegion.getHeight(), 50, 50, GfxAssets.mPlayGame, 
+//														GameActivity.mVertexBufferObjectManager){
+//			@Override
+//			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pLocalAreaTouchX, final float pLocalAreaTouchY){
+//				if(pSceneTouchEvent.isActionDown() && !isJumping(gamePlayer)) { 
+//					System.out.println("************** currentX is " + currentX);
+//					velocity = Vector2Pool.obtain(6 * Math.signum(currentX), -12);
+//					gamePlayer.Jump(velocity);
+//					return true;
 //				}
-//				else if(pSceneTouchEvent.isActionUp() && leftArrowTouched == true) {
-//					leftArrowTouched = false;
-//					System.out.println(">>>>>>> is left action up? " + leftArrowTouched);
-//					return false;
-//				}		
-//				else return true;			
+//				else return false;
 //			}
 //		};
-		
-		final Sprite RightArrow = new Sprite(
-				GameActivity.CAMERA_WIDTH - GfxAssets.mPlayGame.getWidth(), GameActivity.CAMERA_HEIGHT - GfxAssets.mPlayGame.getHeight(), 
-				GfxAssets.mPlayGame, GameActivity.mVertexBufferObjectManager){
+//		
+//		this.attachChild(JumpBtn);
+//		this.registerTouchArea(JumpBtn);
+//	}	
+	
+	private void playerController() {	
+
+		float currentPosY = gamePlayer.getY();
+		if(GlobalY >= (currentPosY - jumpHeight * 15) && finger == 1) {
+				if((GameActivity.CAMERA_WIDTH / 2) > GlobalX) {			
+					System.out.println("********* should move to the left");
+						velocity = Vector2Pool.obtain((-1) * goStep, 0);
+							currentX = velocity.x;
+								gamePlayer.GoLeft(velocity);
+				}
+				else if((GameActivity.CAMERA_WIDTH / 2) < GlobalX){
+					velocity = Vector2Pool.obtain(goStep, 0);
+						System.out.println("********* should move to the right");
+							currentX = velocity.x;
+								gamePlayer.GoRight(velocity);
+				}
+		} else if((GlobalY < (currentPosY - jumpHeight * 15)) && (GlobalY > (currentPosY - jumpHeight * 30))) {
+			velocity = Vector2Pool.obtain(currentX, jumpHeight);
+				gamePlayer.Jump(velocity);
+					GlobalY = GameActivity.CAMERA_HEIGHT;
+		}
+		else gamePlayer.Stay();
+	}	
 			
-			@Override
-			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
-				if(pSceneTouchEvent.isActionDown() && !isJumping(gamePlayer)) { 	
-					rightArrowTouched = true;
-					System.out.println(">>>>>>> is right touched? " + rightArrowTouched);
-					velocity = (centralArrowTouched == true && !isJumping(gamePlayer)) ? Vector2Pool.obtain(2, -8) : Vector2Pool.obtain(4, 0);
-					gamePlayer.GoRight(velocity);			
-					return false;
-				}
-				else if(pSceneTouchEvent.isActionUp() && rightArrowTouched == true) {
-					rightArrowTouched = false; 
-					System.out.println(">>>>>>> is right action up? " + rightArrowTouched);
-					return false;
-				}
-				else return true;	
+	@Override
+	public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
+		final TouchEvent curTouchEvent = pSceneTouchEvent;
+		if(gameLoaded && finger <= 2){
+			switch(pSceneTouchEvent.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					if(finger == 0) 
+						GlobalX = curTouchEvent.getX();
+					GlobalY = curTouchEvent.getY();
+						finger++;
+							if(!isJumping(gamePlayer)){
+								this.playerController();
+							}
+					break;
+				case MotionEvent.ACTION_UP:
+					finger = (finger > 0) ? finger-1 : 0;
+					if(!isJumping(gamePlayer)){
+						if (finger == 1) {
+							currentX = 0;
+							this.playerController();						
+						}
+						else gamePlayer.Stay();	
+					}
+					break;
+				default:
+					if(!isJumping(gamePlayer) && finger > 0)
+							this.playerController();
+					break;
 			}
-		};
-		
-//		final Sprite CentralArrow = new Sprite(
-//				(GameActivity.CAMERA_WIDTH - GfxAssets.mPlayGame.getWidth()) / 2,
-//				GameActivity.CAMERA_HEIGHT - GfxAssets.mPlayGame.getHeight(), 
-//				GfxAssets.mPlayGame, GameActivity.mVertexBufferObjectManager) {
-//			
-//			@Override
-//			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY){
-//				if(pSceneTouchEvent.isActionDown()) { 
-//					centralArrowTouched = true;
-//					if (leftArrowTouched == false && rightArrowTouched == false && !isJumping(gamePlayer)) {
-//						velocity = Vector2Pool.obtain(0, -8);
-//						gamePlayer.Jump(velocity);
-//					}
-//					System.out.println(">>>>>>> is central touched? " + centralArrowTouched);					
-//					return false;
-//				}
-//				else if(pSceneTouchEvent.isActionUp() && centralArrowTouched == true) {
-//					centralArrowTouched = false;
-//					System.out.println(">>>>>>> is central action up? " + centralArrowTouched);
-//					return false;
-//				}			
-//				else return true;
-//			}	
-//		};
-			
-//		this.attachChild(LeftArrow);
-		this.attachChild(RightArrow);
-//		this.attachChild(CentralArrow);
-		
-//		this.registerTouchArea(LeftArrow);
-		this.registerTouchArea(RightArrow);
-//		this.registerTouchArea(CentralArrow);
+			return true;
+			}
+		return false;
 
 	}
 	
-//	@Override
-//	public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
-//		if (pSceneTouchEvent.isActionDown()){
-//			if(rightArrowTouched && !leftArrowTouched){
-//				System.out.println(">>>>>>> right arrow is touched! It's value is " + rightArrowTouched);
-//				velocity = centralArrowTouched ? Vector2Pool.obtain(2, -8) : Vector2Pool.obtain(4, 0);
-//				gamePlayer.GoRight(velocity);
-//			}
-//			else if(leftArrowTouched && !rightArrowTouched){
-//				System.out.println(">>>>>>> right arrow is touched! It's value is " + leftArrowTouched);
-//				velocity = centralArrowTouched ? Vector2Pool.obtain(2, -8) : Vector2Pool.obtain(4, 0);
-//				gamePlayer.GoLeft(velocity);
-//			}
-//			else if(centralArrowTouched){
-//				velocity = Vector2Pool.obtain(0, -8);
-//				gamePlayer.Jump(velocity);
-//			}
-//			Vector2Pool.recycle(velocity);
-//	    }
-//	    else if (pSceneTouchEvent.isActionUp())
-//	    {
-//	        /**
-//	         * Сбрасываем нажатия кнопок
-//	         */
-//	    	leftArrowTouched = false;
-//	    	rightArrowTouched = false;
-//	    	centralArrowTouched = false;
-//	    }
-//	    return super.onSceneTouchEvent(pSceneTouchEvent);
-//	}    
 	
 	private void addObstacle(final float pX, final float pY) {
 
@@ -276,8 +254,6 @@ public class Game_Scene extends CameraScene {
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
-
-		
 		
 //		final Body boxBody = Game_Scene.createObstacleBody(this.goPhysicsWorld, platform, BodyType.StaticBody, WALL_FIXTURE_DEF);
 //		boxBody.setLinearDamping(10);
@@ -291,8 +267,7 @@ public class Game_Scene extends CameraScene {
 		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
 
 		this.attachChild(platform);
-
-		
+	
 	}
 		
     
@@ -303,8 +278,6 @@ public class Game_Scene extends CameraScene {
 //
 //		this.attachChild(flare);
 //	}
-	
-	
 	
 }
 

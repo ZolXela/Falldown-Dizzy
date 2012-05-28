@@ -39,6 +39,7 @@ public class GameActivity extends SimpleBaseGameActivity{
 				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), _Camera);
 	    opt.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 		opt.getTouchOptions().setNeedsMultiTouch(true);
+		opt.getTouchOptions().setTouchEventIntervalMilliseconds(100);
 
 		if(MultiTouch.isSupported(this)) {
 			if(MultiTouch.isSupportedDistinct(this)) {
@@ -87,4 +88,4 @@ public class GameActivity extends SimpleBaseGameActivity{
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}	
 	
-	}
+}

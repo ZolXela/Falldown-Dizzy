@@ -4,6 +4,7 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -17,8 +18,8 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class Dizzy extends AnimatedSprite {
 	
-	private Body DizzyBody;
-	public boolean jumping;
+	public Body DizzyBody;
+	public boolean jumping = false;
 	
 	PhysicsWorld pPhysicsWorld;
 	
@@ -27,17 +28,15 @@ public class Dizzy extends AnimatedSprite {
 		this.setSettings();
 		pPhysicsWorld = mPhysicsWorld;
 
-//		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, CIRCLE_FIXTURE_DEF);
-//		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
-//		this.registerUpdateHandler(pPhysicsWorld);
-//		contact = new Contact(pPhysicsWorld, DizzyBody);
-
 		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
 		pPhysicsWorld.setContactListener(new ContactListener(){
 			@Override
 			public void beginContact(Contact contact) {
-				jumping = false;
+//				System.out.println("************** what is the body 1??? " + contact.getFixtureA().getBody());
+//				System.out.println("************** what is the body 2??? " + contact.getFixtureB().getBody());
+//				if(contact.getFixtureA().getBody())
+					jumping = false;
 			}
 			@Override
 			public void endContact(Contact contact)
@@ -46,13 +45,12 @@ public class Dizzy extends AnimatedSprite {
 			}
 			@Override
 			public void preSolve(Contact contact, Manifold oldManifold) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 			@Override
 			public void postSolve(Contact contact, ContactImpulse impulse) {
-				// TODO Auto-generated method stub
-				
+				jumping = contact.isEnabled() ? false : true;				
 			}
 		});
 
@@ -66,38 +64,22 @@ public class Dizzy extends AnimatedSprite {
 	public void GoLeft(Vector2 velocity){		
 		setAnimation(9, 11);
 		this.DizzyBody.setLinearVelocity(velocity);	
+		Vector2Pool.recycle(velocity);
 	}
 	
 	public void GoRight(Vector2 velocity){	
 		setAnimation(3, 5);
-		this.DizzyBody.setLinearVelocity(velocity);		
+		this.DizzyBody.setLinearVelocity(velocity);	
+		Vector2Pool.recycle(velocity);
 	}
 	
 	public void Jump(Vector2 velocity){
+		if(velocity.x > 0) setAnimation(3, 5);
+		else if(velocity.x < 0) setAnimation(9, 11);
+		else setAnimation(6, 8);
 		this.DizzyBody.setLinearVelocity(velocity);	
-		setAnimation(6, 8);
-	}
-	
-	public void JumpLeft(Vector2 velocity){
-		setCurrentTileIndex(9);
-//		setAnimation(9, 11);
-		DizzyBody.applyLinearImpulse(this.setImpulse(velocity), DizzyBody.getWorldCenter());	
-		DizzyBody.setAngularDamping(1.5f);
-		DizzyBody.setLinearDamping(1.5f); //to decrease velocity slowly. no linear no floaty 
-		jumping = true;
-	}
-	
-	public void JumpRight(Vector2 velocity){
-		setCurrentTileIndex(3);
-//		setAnimation(3, 5);
-		DizzyBody.applyLinearImpulse(this.setImpulse(velocity), DizzyBody.getWorldCenter());	
-		DizzyBody.setAngularDamping(2.5f);
-		DizzyBody.setLinearDamping(2.5f); //to decrease velocity slowly. no linear no floaty 
-		jumping = true;
-	}
-	
-	public Vector2 setImpulse(Vector2 velocity){	
-		return new Vector2(velocity.x * 2, velocity.y * 2);
+		this.DizzyBody.setLinearDamping(2.5f);
+		Vector2Pool.recycle(velocity);
 	}
 	
 	public void setSettings(){	
