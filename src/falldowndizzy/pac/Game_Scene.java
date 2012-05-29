@@ -212,8 +212,8 @@ public class Game_Scene extends CameraScene {
 		}
 
 	}
-		
-    
+	
+	    
 //	private void addFlare(final float pX, final float pY) {
 //		final AnimatedSprite flare = new AnimatedSprite(pX, pY, GfxAssets.mFlare, GameActivity._main.getVertexBufferObjectManager());
 //		
