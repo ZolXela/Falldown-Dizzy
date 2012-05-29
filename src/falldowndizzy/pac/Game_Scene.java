@@ -43,7 +43,7 @@ public class Game_Scene extends CameraScene {
 	public PhysicsWorld gamePhysicsWorld;
 	private Dizzy gamePlayer;
 	Vector2 velocity;
-	float currentX = 0;
+	
 	private boolean gameLoaded = false;
 	
 	public static Rectangle bottomOuter;
@@ -55,6 +55,7 @@ public class Game_Scene extends CameraScene {
 	public float GlobalY;
 	
 	private int finger = 0;
+	float currentX = 0;
 	private float jumpHeight = -16;
 	private float goStep = 4;
 	
@@ -132,7 +133,7 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(leftOuter);
 		this.attachChild(rightOuter);
 				
-		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, 147, 24, GfxAssets.mPlatform1, this.gamePhysicsWorld, "plat1.xml");
+		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatform1, this.gamePhysicsWorld, "plat1.xml");
 		
 	}
 	
@@ -140,12 +141,13 @@ public class Game_Scene extends CameraScene {
 
 		float currentPosY = gamePlayer.getY();
 		if(GlobalY >= (currentPosY + jumpHeight * 5) && finger == 1) {
-				if((GameActivity.CAMERA_WIDTH / 2) > GlobalX) {			
+			float currentPosX = gamePlayer.getX();
+				if((currentPosX) > GlobalX) {			
 						velocity = Vector2Pool.obtain((-1) * goStep, 0);
 							currentX = velocity.x;
 								gamePlayer.GoLeft(velocity);
 				}
-				else if((GameActivity.CAMERA_WIDTH / 2) < GlobalX){
+				else if((currentPosX + gamePlayer.getWidth()) < GlobalX){
 					velocity = Vector2Pool.obtain(goStep, 0);
 							currentX = velocity.x;
 								gamePlayer.GoRight(velocity);
@@ -192,9 +194,9 @@ public class Game_Scene extends CameraScene {
 
 	}
 
-	private void addObstacle(final float pX, final float pY, float pWidth, float pHeight, ITextureRegion pTextureRegion, PhysicsWorld pPhysicsWorld, String xmlFile ) {
+	private void addObstacle(final float pX, final float pY, ITextureRegion pTextureRegion, PhysicsWorld pPhysicsWorld, String xmlFile ) {
 
-		final Sprite obstacle = new Sprite(pX, pY, pWidth, pHeight, pTextureRegion, GameActivity._main.getVertexBufferObjectManager());
+		final Sprite obstacle = new Sprite(pX, pY, pTextureRegion, GameActivity._main.getVertexBufferObjectManager());
 
 		this.attachChild(obstacle);
 		
