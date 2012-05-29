@@ -1,5 +1,7 @@
 package falldowndizzy.pac;
 
+import java.io.IOException;
+
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
@@ -137,44 +139,6 @@ public class Game_Scene extends CameraScene {
 
 	}
 	
-//	private void initPlayerController() {		
-//		
-//		final DigitalOnScreenControl digitalOnScreenControl = new DigitalOnScreenControl(170, GameActivity.CAMERA_HEIGHT - GfxAssets.mOnScreenControlBaseTextureRegion.getHeight(), this.mCamera, GfxAssets.mOnScreenControlBaseTextureRegion, GfxAssets.mOnScreenControlKnobTextureRegion, 0.1f, GameActivity.mVertexBufferObjectManager, new IOnScreenControlListener() {
-//			@Override
-//			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, final float pValueX, final float pValueY) {
-//				if(!isJumping(gamePlayer) && pValueX != 0){
-//					velocity = Vector2Pool.obtain(4 * Math.signum(pValueX), 0); 	
-//					if(pValueX > 0) gamePlayer.GoRight(velocity);
-//						else if(pValueX < 0) gamePlayer.GoLeft(velocity);
-//				}				
-//				else gamePlayer.Stay();
-//				currentX = pValueX;
-//			}
-//
-//		});
-//
-//		digitalOnScreenControl.refreshControlKnobPosition();
-//		this.setChildScene(digitalOnScreenControl);
-//		
-//		
-//		final Sprite JumpBtn = new Sprite(30, GameActivity.CAMERA_HEIGHT - GfxAssets.mOnScreenControlBaseTextureRegion.getHeight(), 50, 50, GfxAssets.mPlayGame, 
-//														GameActivity.mVertexBufferObjectManager){
-//			@Override
-//			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pLocalAreaTouchX, final float pLocalAreaTouchY){
-//				if(pSceneTouchEvent.isActionDown() && !isJumping(gamePlayer)) { 
-//					System.out.println("************** currentX is " + currentX);
-//					velocity = Vector2Pool.obtain(6 * Math.signum(currentX), -12);
-//					gamePlayer.Jump(velocity);
-//					return true;
-//				}
-//				else return false;
-//			}
-//		};
-//		
-//		this.attachChild(JumpBtn);
-//		this.registerTouchArea(JumpBtn);
-//	}	
-	
 	private void playerController() {	
 
 		float currentPosY = gamePlayer.getY();
@@ -233,33 +197,33 @@ public class Game_Scene extends CameraScene {
 	
 	private void addObstacle(final float pX, final float pY) {
 
-//		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity._main.getVertexBufferObjectManager());
-//
-//		this.attachChild(platform);
-//		
-//		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
-//		// set base path
-//		loader.setAssetBasePath("xml/");
-//		
-//		try {
-//		     loader.load(GameActivity._main, this.gamePhysicsWorld, "plat1.xml", platform,
-//					false, false);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		
-//		final Body boxBody = Game_Scene.createObstacleBody(this.goPhysicsWorld, platform, BodyType.StaticBody, WALL_FIXTURE_DEF);
-//		boxBody.setLinearDamping(10);
-//		boxBody.setAngularDamping(10);
-
-//		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
-
-		
-		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity.mVertexBufferObjectManager);
-		final Body boxBody = PhysicsFactory.createBoxBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, PLATO_FIXTURE_DEF);
-		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
+		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity._main.getVertexBufferObjectManager());
 
 		this.attachChild(platform);
+		
+		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
+		// set base path
+		loader.setAssetBasePath("xml/");
+		
+		try {
+		     loader.load(GameActivity._main, this.gamePhysicsWorld, "plat1.xml", platform,
+					false, false);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		final Body boxBody = Game_Scene.createObstacleBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, WALL_FIXTURE_DEF);
+		boxBody.setLinearDamping(10);
+		boxBody.setAngularDamping(10);
+
+		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
+
+		
+//		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity.mVertexBufferObjectManager);
+//		final Body boxBody = PhysicsFactory.createBoxBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, PLATO_FIXTURE_DEF);
+//		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
+//
+//		this.attachChild(platform);
 	
 	}
 		
