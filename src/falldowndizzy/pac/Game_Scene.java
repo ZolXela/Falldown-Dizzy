@@ -11,6 +11,7 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.util.color.Color;
 
 import android.hardware.SensorManager;
@@ -192,6 +193,7 @@ public class Game_Scene extends CameraScene {
 			return true;
 			}
 		return false;
+
 	}
 	
 	

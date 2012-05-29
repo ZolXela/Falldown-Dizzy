@@ -9,6 +9,8 @@ public class MainMenu_Scene extends CameraScene {
 	public MainMenu_Scene() {
 		super(GameActivity._Camera);
 
+		this.setOnAreaTouchTraversalFrontToBack();
+		
 		setBackground(LoadAutoParalaxBg());
         //GfxAssets.mMusic.play();
 
@@ -24,7 +26,9 @@ public class MainMenu_Scene extends CameraScene {
 		};
 		
 		attachChild(_sprite);
-		registerTouchArea(_sprite);
+		this.registerTouchArea(_sprite);
+		
+		this.setTouchAreaBindingOnActionDownEnabled(true);
 	}
 
 	public void Show() {
