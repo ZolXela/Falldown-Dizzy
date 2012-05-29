@@ -6,18 +6,17 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
-import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.util.color.Color;
 
 import android.hardware.SensorManager;
 import android.view.MotionEvent;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
@@ -133,11 +132,8 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(leftOuter);
 		this.attachChild(rightOuter);
 				
-		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2);
+		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, 147, 24, GfxAssets.mPlatform1, this.gamePhysicsWorld, "plat1.xml");
 		
-//		this.addFlare(GameActivity.CAMERA_WIDTH - 57, GameActivity.CAMERA_HEIGHT / 3);
-		
-
 	}
 	
 	private void playerController() {	
@@ -196,8 +192,7 @@ public class Game_Scene extends CameraScene {
 
 	}
 	
-	
-	private void addObstacle(final float pX, final float pY) {
+//	private void addObstacle(final float pX, final float pY) {
 //
 //		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity._main.getVertexBufferObjectManager());
 //
@@ -221,12 +216,29 @@ public class Game_Scene extends CameraScene {
 //		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
 
 		
-		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity.mVertexBufferObjectManager);
-		final Body boxBody = PhysicsFactory.createBoxBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, PLATO_FIXTURE_DEF);
-		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
+//		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity.mVertexBufferObjectManager);
+//		final Body boxBody = PhysicsFactory.createBoxBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, PLATO_FIXTURE_DEF);
+//		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
+//
+//		this.attachChild(platform);
 
-		this.attachChild(platform);
-	
+	private void addObstacle(final float pX, final float pY, float pWidth, float pHeight, ITextureRegion pTextureRegion, PhysicsWorld pPhysicsWorld, String xmlFile ) {
+
+		final Sprite obstacle = new Sprite(pX, pY, pWidth, pHeight, pTextureRegion, GameActivity._main.getVertexBufferObjectManager());
+
+		this.attachChild(obstacle);
+		
+		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
+
+		loader.setAssetBasePath("xml/");
+		
+		try {
+		     loader.load(GameActivity._main, pPhysicsWorld, xmlFile, obstacle,
+					false, false);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 		
     
