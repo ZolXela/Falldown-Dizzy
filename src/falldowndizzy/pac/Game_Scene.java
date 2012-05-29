@@ -136,7 +136,7 @@ public class Game_Scene extends CameraScene {
 		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, 147, 24, GfxAssets.mPlatform1, this.gamePhysicsWorld, "plat1.xml");
 		
 	}
-		
+	
 	private void playerController() {	
 
 		float currentPosY = gamePlayer.getY();
@@ -210,13 +210,7 @@ public class Game_Scene extends CameraScene {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	
-		
-//		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity.mVertexBufferObjectManager);
-//		final Body boxBody = PhysicsFactory.createBoxBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, PLATO_FIXTURE_DEF);
-//		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
-//		this.attachChild(platform);
-	
+
 	}
 		
     
