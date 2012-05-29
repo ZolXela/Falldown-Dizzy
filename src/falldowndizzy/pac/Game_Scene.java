@@ -141,12 +141,13 @@ public class Game_Scene extends CameraScene {
 
 		float currentPosY = gamePlayer.getY();
 		if(GlobalY >= (currentPosY + jumpHeight * 5) && finger == 1) {
-				if((GameActivity.CAMERA_WIDTH / 2) > GlobalX) {			
+			float currentPosX = gamePlayer.getX();
+				if((currentPosX) > GlobalX) {			
 						velocity = Vector2Pool.obtain((-1) * goStep, 0);
 							currentX = velocity.x;
 								gamePlayer.GoLeft(velocity);
 				}
-				else if((GameActivity.CAMERA_WIDTH / 2) < GlobalX){
+				else if((currentPosX + gamePlayer.getWidth()) < GlobalX){
 					velocity = Vector2Pool.obtain(goStep, 0);
 							currentX = velocity.x;
 								gamePlayer.GoRight(velocity);

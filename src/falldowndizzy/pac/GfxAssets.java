@@ -57,9 +57,6 @@ public class GfxAssets {
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/800_480/");
 		
-//		mAutoParallaxBackgroundTexture = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 1024);
-//		
-		
 		mAutoParallaxBackgroundTexture1 = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 1024);
 		mParallaxLayerCloud = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "dizzy_parallax_background_clouds.png", 0, 0);
