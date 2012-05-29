@@ -19,8 +19,8 @@ public class GameActivity extends SimpleBaseGameActivity{
 	// Constants
 	// ===========================================================
 
-	public static final int CAMERA_WIDTH = 320;
-	public static final int CAMERA_HEIGHT = 480;
+	public static final int CAMERA_WIDTH = 480;
+	public static final int CAMERA_HEIGHT = 800;
 	
 	
 	public static MainState _MainState;
@@ -57,7 +57,7 @@ public class GameActivity extends SimpleBaseGameActivity{
 	@Override
 	protected void onCreateResources() {
 		_Engine = this.mEngine;
-		GfxAssets.LoadGFX();
+		GfxAssets.LoadGFX_800_480();
 	}
 
 	@Override
