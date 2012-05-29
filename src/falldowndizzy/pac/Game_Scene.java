@@ -51,8 +51,6 @@ public class Game_Scene extends CameraScene {
 	public static Rectangle leftOuter;
 	public static Rectangle rightOuter;
 	
-//	public float touchX;
-//	public float touchY;
 	public float GlobalX = 30;
 	public float GlobalY;
 	
@@ -71,7 +69,7 @@ public class Game_Scene extends CameraScene {
 		attachChild(gamePlayer);
 		gamePlayer.Stay();
 		
-		this.setTouchAreaBindingOnActionMoveEnabled(true);
+		this.setTouchAreaBindingOnActionDownEnabled(true);
 		gameLoaded = true;
 	}
 
@@ -181,20 +179,18 @@ public class Game_Scene extends CameraScene {
 	private void playerController() {	
 
 		float currentPosY = gamePlayer.getY();
-		if(GlobalY >= (currentPosY - jumpHeight * 15) && finger == 1) {
+		if(GlobalY >= (currentPosY + jumpHeight * 5) && finger == 1) {
 				if((GameActivity.CAMERA_WIDTH / 2) > GlobalX) {			
-					System.out.println("********* should move to the left");
 						velocity = Vector2Pool.obtain((-1) * goStep, 0);
 							currentX = velocity.x;
 								gamePlayer.GoLeft(velocity);
 				}
 				else if((GameActivity.CAMERA_WIDTH / 2) < GlobalX){
 					velocity = Vector2Pool.obtain(goStep, 0);
-						System.out.println("********* should move to the right");
 							currentX = velocity.x;
 								gamePlayer.GoRight(velocity);
 				}
-		} else if((GlobalY < (currentPosY - jumpHeight * 15)) && (GlobalY > (currentPosY - jumpHeight * 30))) {
+		} else if(GlobalY < (currentPosY + jumpHeight * 3)) {
 			velocity = Vector2Pool.obtain(currentX, jumpHeight);
 				gamePlayer.Jump(velocity);
 					GlobalY = GameActivity.CAMERA_HEIGHT;
@@ -208,8 +204,9 @@ public class Game_Scene extends CameraScene {
 		if(gameLoaded && finger <= 2){
 			switch(pSceneTouchEvent.getAction()) {
 				case MotionEvent.ACTION_DOWN:
-					if(finger == 0) 
+					if(finger == 0) {
 						GlobalX = curTouchEvent.getX();
+					}
 					GlobalY = curTouchEvent.getY();
 						finger++;
 							if(!isJumping(gamePlayer)){
@@ -218,13 +215,11 @@ public class Game_Scene extends CameraScene {
 					break;
 				case MotionEvent.ACTION_UP:
 					finger = (finger > 0) ? finger-1 : 0;
-					if(!isJumping(gamePlayer)){
-						if (finger == 1) {
+						if (finger <= 1) {
 							currentX = 0;
 							this.playerController();						
 						}
 						else gamePlayer.Stay();	
-					}
 					break;
 				default:
 					if(!isJumping(gamePlayer) && finger > 0)
