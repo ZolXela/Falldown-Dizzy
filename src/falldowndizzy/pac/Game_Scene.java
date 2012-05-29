@@ -94,10 +94,10 @@ public class Game_Scene extends CameraScene {
 		
 		final AutoParallaxBackgroundXY autoParallaxBackgroundXY = new AutoParallaxBackgroundXY(0, 0, 0, 5);
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerMountains, GameActivity.mVertexBufferObjectManager)));
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, GameActivity.mVertexBufferObjectManager)));	
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTreesBg, GameActivity.mVertexBufferObjectManager)));
-		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, GameActivity.mVertexBufferObjectManager)));
-		
+//		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, GameActivity.mVertexBufferObjectManager)));	
+//		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTreesBg, GameActivity.mVertexBufferObjectManager)));
+//		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, GameActivity.mVertexBufferObjectManager)));
+//		
 		return autoParallaxBackgroundXY;	
 	}
 	
@@ -191,36 +191,6 @@ public class Game_Scene extends CameraScene {
 		return false;
 
 	}
-	
-//	private void addObstacle(final float pX, final float pY) {
-//
-//		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity._main.getVertexBufferObjectManager());
-//
-//		this.attachChild(platform);
-//		
-//		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
-//		// set base path
-//		loader.setAssetBasePath("xml/");
-//		
-//		try {
-//		     loader.load(GameActivity._main, this.gamePhysicsWorld, "plat1.xml", platform,
-//					false, false);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		final Body boxBody = Game_Scene.createObstacleBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, WALL_FIXTURE_DEF);
-//		boxBody.setLinearDamping(10);
-//		boxBody.setAngularDamping(10);
-//
-//		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
-
-		
-//		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity.mVertexBufferObjectManager);
-//		final Body boxBody = PhysicsFactory.createBoxBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, PLATO_FIXTURE_DEF);
-//		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
-//
-//		this.attachChild(platform);
 
 	private void addObstacle(final float pX, final float pY, float pWidth, float pHeight, ITextureRegion pTextureRegion, PhysicsWorld pPhysicsWorld, String xmlFile ) {
 
