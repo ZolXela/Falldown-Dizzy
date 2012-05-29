@@ -43,7 +43,7 @@ public class Game_Scene extends CameraScene {
 	public PhysicsWorld gamePhysicsWorld;
 	private Dizzy gamePlayer;
 	Vector2 velocity;
-	float currentX = 0;
+	
 	private boolean gameLoaded = false;
 	
 	public static Rectangle bottomOuter;
@@ -55,6 +55,7 @@ public class Game_Scene extends CameraScene {
 	public float GlobalY;
 	
 	private int finger = 0;
+	float currentX = 0;
 	private float jumpHeight = -16;
 	private float goStep = 4;
 	

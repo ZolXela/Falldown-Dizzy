@@ -33,9 +33,6 @@ public class Dizzy extends AnimatedSprite {
 		pPhysicsWorld.setContactListener(new ContactListener(){
 			@Override
 			public void beginContact(Contact contact) {
-//				System.out.println("************** what is the body 1??? " + contact.getFixtureA().getBody());
-//				System.out.println("************** what is the body 2??? " + contact.getFixtureB().getBody());
-//				if(contact.getFixtureA().getBody())
 					jumping = false;
 			}
 			@Override
