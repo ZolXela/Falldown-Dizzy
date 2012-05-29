@@ -133,7 +133,7 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(leftOuter);
 		this.attachChild(rightOuter);
 				
-		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, 147, 24, GfxAssets.mPlatform1, this.gamePhysicsWorld, "plat1.xml");
+		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatform1, this.gamePhysicsWorld, "plat1.xml");
 		
 	}
 	
@@ -223,9 +223,9 @@ public class Game_Scene extends CameraScene {
 //
 //		this.attachChild(platform);
 
-	private void addObstacle(final float pX, final float pY, float pWidth, float pHeight, ITextureRegion pTextureRegion, PhysicsWorld pPhysicsWorld, String xmlFile ) {
+	private void addObstacle(final float pX, final float pY, ITextureRegion pTextureRegion, PhysicsWorld pPhysicsWorld, String xmlFile ) {
 
-		final Sprite obstacle = new Sprite(pX, pY, pWidth, pHeight, pTextureRegion, GameActivity._main.getVertexBufferObjectManager());
+		final Sprite obstacle = new Sprite(pX, pY, pTextureRegion, GameActivity._main.getVertexBufferObjectManager());
 
 		this.attachChild(obstacle);
 		
