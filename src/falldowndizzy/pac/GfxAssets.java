@@ -11,9 +11,9 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
-import android.graphics.Color;
 import android.graphics.Typeface;
 
 public class GfxAssets {
@@ -84,7 +84,7 @@ public class GfxAssets {
 		
 		mFontTexture = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 256, 256);
 		mFont = new Font(GameActivity._main.getFontManager(), mFontTexture, Typeface.create(Typeface.DEFAULT,
-				Typeface.BOLD), 40, true, Color.BLACK);
+				Typeface.BOLD), 100, true, Color.PINK);
 		mFontTexture.load();
 	}	
 	

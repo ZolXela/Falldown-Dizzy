@@ -12,7 +12,6 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.util.color.Color;
@@ -82,11 +81,11 @@ public class Game_Scene extends CameraScene {
 				
 		setBackground(this.LoadAutoParallaxBg());		
 		this.initBorders();
+		this.showScore();
 		this.CreateDizzy(30, 50);
 
 		attachChild(gamePlayer);
 		gamePlayer.Stay();
-		this.showScore();
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 		gameLoaded = true;
 	}
@@ -115,7 +114,7 @@ public class Game_Scene extends CameraScene {
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, GameActivity.mVertexBufferObjectManager)));	
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTreesBg, GameActivity.mVertexBufferObjectManager)));
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, GameActivity.mVertexBufferObjectManager)));
-		
+//		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, GameActivity.mVertexBufferObjectManager)));
 		return autoParallaxBackgroundXY;	
 	}
 	
@@ -231,32 +230,34 @@ public class Game_Scene extends CameraScene {
 		
 		this._score = new Text(0, 0, GfxAssets.mFont, String.valueOf(maxScore), GameActivity._main.getVertexBufferObjectManager());
 		// repositioning the score later so we can use the score.getWidth()
-		this._score.setPosition(mCamera.getWidth() - this._score.getWidth() - 5, 5);
+		System.out.println("************* Est' ili net??? " + this._score.getWidth());
+		this._score.setPosition(GameActivity.CAMERA_WIDTH - this._score.getWidth() - 5, 5);
 
-		createSpriteSpawnTimeHandler();
-		this.registerUpdateHandler(detect);
+//		createSpriteSpawnTimeHandler();
+		this.attachChild(_score);
+//		this.registerUpdateHandler(detect);
 
-		restart();
+//		restart();
 	}
 	
-	/** a Time Handler for spawning targets, triggers every 1 second */
-	private void createSpriteSpawnTimeHandler() {
-		TimerHandler spriteTimerHandler;
-		float mEffectSpawnDelay = 1f;
-
-		spriteTimerHandler = new TimerHandler(mEffectSpawnDelay, true,
-				new ITimerCallback() {
-
-					@Override
-					public void onTimePassed(TimerHandler pTimerHandler) {
-						final float pX = 20;
-						final float pY = 20;
-//						addEnemies(pX, pY, GfxAssets.mSpiderTextureRegion, "spider1.xml");
-					}
-				});
-
-		GameActivity._Engine.registerUpdateHandler(spriteTimerHandler);
-	}
+//	/** a Time Handler for spawning targets, triggers every 1 second */
+//	private void createSpriteSpawnTimeHandler() {
+//		TimerHandler spriteTimerHandler;
+//		float mEffectSpawnDelay = 1f;
+//
+//		spriteTimerHandler = new TimerHandler(mEffectSpawnDelay, true,
+//				new ITimerCallback() {
+//
+//					@Override
+//					public void onTimePassed(TimerHandler pTimerHandler) {
+//						final float pX = 20;
+//						final float pY = 20;
+////						addEnemies(pX, pY, GfxAssets.mSpiderTextureRegion, "spider1.xml");
+//					}
+//				});
+//
+//		GameActivity._Engine.registerUpdateHandler(spriteTimerHandler);
+//	}
 	
 	IUpdateHandler detect = new IUpdateHandler() {
 		@Override
