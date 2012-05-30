@@ -193,8 +193,11 @@ public class Game_Scene extends CameraScene {
 		return false;
 
 	}
+<<<<<<< HEAD
 
 	private void addObstacle(final float pX, final float pY, ITextureRegion pTextureRegion, String xmlFile) {
+=======
+>>>>>>> 2cd6ac4374b35b40c532851f35fcc2f347fd28f5
 
 		final Obstacle _obstacle = new Obstacle(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
 		this.attachChild(_obstacle);

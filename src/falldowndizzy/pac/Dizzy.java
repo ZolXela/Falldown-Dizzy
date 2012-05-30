@@ -79,7 +79,7 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public void setAnimation(int begNum, int endNum){
-		this.animate(new long[]{200, 200, 200, 200, 200, 200, 200, 200}, begNum, endNum, true);    
+		this.animate(new long[]{50, 50, 50, 50, 50, 50, 50, 50}, begNum, endNum, true);    
 	}
 	
 
