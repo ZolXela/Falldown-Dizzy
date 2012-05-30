@@ -25,7 +25,6 @@ public class Dizzy extends AnimatedSprite {
 	
 	public Dizzy(final float pX, final float pY, final ITiledTextureRegion pTiledTextureRegion, final VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld mPhysicsWorld) {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
-		this.setSettings();
 		pPhysicsWorld = mPhysicsWorld;
 
 		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
@@ -75,12 +74,8 @@ public class Dizzy extends AnimatedSprite {
 		else if(velocity.x < 0) setAnimation(0, 7);
 		else setAnimation(0, 7);
 		this.DizzyBody.setLinearVelocity(velocity);	
-		this.DizzyBody.setLinearDamping(2.5f);
+//		this.DizzyBody.setLinearDamping(2.5f);
 		Vector2Pool.recycle(velocity);
-	}
-	
-	public void setSettings(){	
-		this.setScaleCenterY(GfxAssets.mPlayer.getHeight());	
 	}
 	
 	public void setAnimation(int begNum, int endNum){

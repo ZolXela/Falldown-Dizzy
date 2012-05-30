@@ -14,9 +14,9 @@ public class MainMenu_Scene extends CameraScene {
 		setBackground(LoadAutoParalaxBg());
         //GfxAssets.mMusic.play();
 
-		final Sprite _sprite = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mPlayGame.getWidth()) / 2, 
-				(GameActivity.CAMERA_HEIGHT- GfxAssets.mPlayGame.getHeight()) / 2,
-					GfxAssets.mPlayGame, GameActivity.mVertexBufferObjectManager) {
+		final Sprite _sprite = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mPlayGameTextureRegion.getWidth()) / 2, 
+				(GameActivity.CAMERA_HEIGHT- GfxAssets.mPlayGameTextureRegion.getHeight()) / 2,
+					GfxAssets.mPlayGameTextureRegion, GameActivity.mVertexBufferObjectManager) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {

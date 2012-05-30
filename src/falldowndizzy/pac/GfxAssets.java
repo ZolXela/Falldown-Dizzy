@@ -22,11 +22,12 @@ public class GfxAssets {
 	public static ITextureRegion mParallaxLayerTrees;
 	public static ITextureRegion mParallaxLayerTreesBg;
 	public static ITextureRegion mParallaxLayerCloud;	
-	public static ITextureRegion mPlayGame;
-	public static TiledTextureRegion mPlayer;
-	public static TiledTextureRegion mFlare;
+	public static ITextureRegion mPlayGameTextureRegion;
+	public static TiledTextureRegion mPlayerTextureRegion;
+	public static TiledTextureRegion mFlareTextureRegion;
+	public static TiledTextureRegion mSpiderTextureRegion;
 	
-	public static ITextureRegion mPlatform1;
+	public static ITextureRegion mPlatformTextureRegion1;
 	
 	
 	public static Music mMusic;	
@@ -62,9 +63,10 @@ public class GfxAssets {
 				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "dizzy_parallax_background_clouds.png", 0, 0);
 		mParallaxLayerMountains = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "dizzy_parallax_background_layer_back.png", 0, 151);
-		mPlayGame = BitmapTextureAtlasTextureRegionFactory
+		mPlayGameTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "play_game_bt.png", 481, 151);
-		mPlayer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "player_d.png", 0, 952, 8, 1);
+		mPlayerTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "player_d.png", 0, 952, 8, 1);
+//		mSpiderTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "target.png", 0, 0, 3, 1);
 		mAutoParallaxBackgroundTexture1.load();
 		
 		mAutoParallaxBackgroundTexture2 = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 1024);
@@ -72,7 +74,7 @@ public class GfxAssets {
 				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "dizzy_parallax_background_layer_back_trees.png", 0, 0);
 		mParallaxLayerTrees = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "dizzy_parallax_background_layer_trees.png", 481, 0);
-		mPlatform1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "plat1.png", 801, 0);
+		mPlatformTextureRegion1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "plat1.png", 0, 801);
 		mAutoParallaxBackgroundTexture2.load();
 		
 	}	

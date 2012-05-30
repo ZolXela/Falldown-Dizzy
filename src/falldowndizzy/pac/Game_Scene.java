@@ -1,7 +1,5 @@
 package falldowndizzy.pac;
 
-import java.io.IOException;
-
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
@@ -11,6 +9,7 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.util.color.Color;
 
 import android.hardware.SensorManager;
@@ -56,8 +55,8 @@ public class Game_Scene extends CameraScene {
 	
 	private int finger = 0;
 	float currentX = 0;
-	private float jumpHeight = -16;
-	private float goStep = 4;
+	private float jumpHeight = -18;
+	private float goStep = 5;
 	
 	public Game_Scene(){
 		super(GameActivity._Camera);
@@ -104,7 +103,7 @@ public class Game_Scene extends CameraScene {
 	
 	public void CreateDizzy(float pX, float pY){
 		gamePlayer = new Dizzy(pX, pY, 
-				GfxAssets.mPlayer, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
+				GfxAssets.mPlayerTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 	}
 		
 	private boolean isJumping(Dizzy player){	
@@ -133,8 +132,8 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(leftOuter);
 		this.attachChild(rightOuter);
 				
-		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatform1, this.gamePhysicsWorld, "plat1.xml");
-		
+		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatformTextureRegion1, "plat1.xml");
+		this.addEnemies(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mSpiderTextureRegion, "spider1.xml");
 	}
 	
 	private void playerController() {	
@@ -181,7 +180,8 @@ public class Game_Scene extends CameraScene {
 							currentX = 0;
 							this.playerController();						
 						}
-						else gamePlayer.Stay();	
+						else
+							gamePlayer.Stay();	
 					break;
 				default:
 					if(!isJumping(gamePlayer) && finger > 0)
@@ -193,57 +193,22 @@ public class Game_Scene extends CameraScene {
 		return false;
 
 	}
-	
-//	private void addObstacle(final float pX, final float pY) {
-//
-//		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity._main.getVertexBufferObjectManager());
-//
-//		this.attachChild(platform);
-//		
-//		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
-//		// set base path
-//		loader.setAssetBasePath("xml/");
-//		
-//		try {
-//		     loader.load(GameActivity._main, this.gamePhysicsWorld, "plat1.xml", platform,
-//					false, false);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		final Body boxBody = Game_Scene.createObstacleBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, WALL_FIXTURE_DEF);
-//		boxBody.setLinearDamping(10);
-//		boxBody.setAngularDamping(10);
-//
-//		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
 
-		
-//		final Sprite platform = new Sprite(pX, pY, 147, 24, GfxAssets.mPlatform1, GameActivity.mVertexBufferObjectManager);
-//		final Body boxBody = PhysicsFactory.createBoxBody(this.gamePhysicsWorld, platform, BodyType.StaticBody, PLATO_FIXTURE_DEF);
-//		this.gamePhysicsWorld.registerPhysicsConnector(new PhysicsConnector(platform, boxBody, true, true));
-//
-//		this.attachChild(platform);
+	private void addObstacle(final float pX, final float pY, ITextureRegion pTextureRegion, String xmlFile) {
 
-	private void addObstacle(final float pX, final float pY, ITextureRegion pTextureRegion, PhysicsWorld pPhysicsWorld, String xmlFile ) {
-
-		final Sprite obstacle = new Sprite(pX, pY, pTextureRegion, GameActivity._main.getVertexBufferObjectManager());
-
-		this.attachChild(obstacle);
-		
-		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
-
-		loader.setAssetBasePath("xml/");
-		
-		try {
-		     loader.load(GameActivity._main, pPhysicsWorld, xmlFile, obstacle,
-					false, false);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		final Obstacle _obstacle = new Obstacle(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
+		this.attachChild(_obstacle);
 
 	}
 	
-	    
+	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion, String xmlFile) {
+
+		final SpiderEnemy _obstacle = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
+		this.attachChild(_obstacle);
+
+	}    
+	
+	
 //	private void addFlare(final float pX, final float pY) {
 //		final AnimatedSprite flare = new AnimatedSprite(pX, pY, GfxAssets.mFlare, GameActivity._main.getVertexBufferObjectManager());
 //		
