@@ -1,13 +1,18 @@
 package falldowndizzy.pac;
 
+import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.util.color.Color;
@@ -35,21 +40,29 @@ public class Game_Scene extends CameraScene {
 	public static final short MASKBITS_PLATO = CATEGORYBIT_PLAYER;  // Missing: CATEGORYBIT_PLAYER
 	public static final short MASKBITS_PLAYER = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO;// Missing: CATEGORYBIT_PLATO
 
+	/* FixtureDefs for Dizzy, borders and obstacles */
 	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.1f, 0.0f, 1.0f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
 	public static final FixtureDef PLATO_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.2f, 0.0f, 1.0f, false, CATEGORYBIT_PLATO, MASKBITS_PLATO, (short)0);
 	public static final FixtureDef PLAYER_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.8f, false, CATEGORYBIT_PLAYER, MASKBITS_PLAYER, (short)0);
 	
+	/* Basic fields */
 	public PhysicsWorld gamePhysicsWorld;
 	private Dizzy gamePlayer;
 	Vector2 velocity;
 	
 	private boolean gameLoaded = false;
 	
+	/**
+	 * Screen borders
+	 */
 	public static Rectangle bottomOuter;
 	public static Rectangle topOuter;
 	public static Rectangle leftOuter;
 	public static Rectangle rightOuter;
 	
+	/**
+	 * Fields implementing Dizzy's moving ability
+	 */
 	public float GlobalX = 30;
 	public float GlobalY;
 	
@@ -57,6 +70,11 @@ public class Game_Scene extends CameraScene {
 	float currentX = 0;
 	private float jumpHeight = -18;
 	private float goStep = 5;
+
+	/* Fields for Dizzy's score */
+	private Text _score;
+	private final int maxScore = 10;
+	private int hitCount;
 	
 	public Game_Scene(){
 		super(GameActivity._Camera);
@@ -68,7 +86,7 @@ public class Game_Scene extends CameraScene {
 
 		attachChild(gamePlayer);
 		gamePlayer.Stay();
-		
+		this.showScore();
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 		gameLoaded = true;
 	}
@@ -133,7 +151,7 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(rightOuter);
 				
 		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatformTextureRegion1, "plat1.xml");
-		this.addEnemies(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mSpiderTextureRegion, "spider1.xml");
+		
 	}
 	
 	private void playerController() {	
@@ -178,7 +196,8 @@ public class Game_Scene extends CameraScene {
 					finger = (finger > 0) ? finger-1 : 0;
 						if (finger <= 1) {
 							currentX = 0;
-							this.playerController();						
+							if(!isJumping(gamePlayer))
+								this.playerController();						
 						}
 						else
 							gamePlayer.Stay();	
@@ -193,12 +212,9 @@ public class Game_Scene extends CameraScene {
 		return false;
 
 	}
-<<<<<<< HEAD
 
 	private void addObstacle(final float pX, final float pY, ITextureRegion pTextureRegion, String xmlFile) {
-=======
->>>>>>> 2cd6ac4374b35b40c532851f35fcc2f347fd28f5
-
+	
 		final Obstacle _obstacle = new Obstacle(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
 		this.attachChild(_obstacle);
 
@@ -211,7 +227,67 @@ public class Game_Scene extends CameraScene {
 
 	}    
 	
+	private void showScore(){
+		
+		this._score = new Text(0, 0, GfxAssets.mFont, String.valueOf(maxScore), GameActivity._main.getVertexBufferObjectManager());
+		// repositioning the score later so we can use the score.getWidth()
+		this._score.setPosition(mCamera.getWidth() - this._score.getWidth() - 5, 5);
+
+		createSpriteSpawnTimeHandler();
+		this.registerUpdateHandler(detect);
+
+		restart();
+	}
 	
+	/** a Time Handler for spawning targets, triggers every 1 second */
+	private void createSpriteSpawnTimeHandler() {
+		TimerHandler spriteTimerHandler;
+		float mEffectSpawnDelay = 1f;
+
+		spriteTimerHandler = new TimerHandler(mEffectSpawnDelay, true,
+				new ITimerCallback() {
+
+					@Override
+					public void onTimePassed(TimerHandler pTimerHandler) {
+						final float pX = 20;
+						final float pY = 20;
+//						addEnemies(pX, pY, GfxAssets.mSpiderTextureRegion, "spider1.xml");
+					}
+				});
+
+		GameActivity._Engine.registerUpdateHandler(spriteTimerHandler);
+	}
+	
+	IUpdateHandler detect = new IUpdateHandler() {
+		@Override
+		public void reset() {
+		}
+
+		@Override
+		public void onUpdate(float pSecondsElapsed) {
+
+		}
+	};
+
+	/** to restart the game and clear the whole screen */
+	public void restart() {
+
+		GameActivity._main.runOnUpdateThread(new Runnable() {
+
+			@Override
+			// to safely detach and re-attach the sprites
+			public void run() {
+				Game_Scene.this.detachChildren();
+				Game_Scene.this.attachChild(gamePlayer);
+				Game_Scene.this.attachChild(Game_Scene.this._score);
+			}
+		});
+
+		// resetting everything
+		hitCount = 0;
+		this._score.setText(String.valueOf(hitCount));
+
+	}
 //	private void addFlare(final float pX, final float pY) {
 //		final AnimatedSprite flare = new AnimatedSprite(pX, pY, GfxAssets.mFlare, GameActivity._main.getVertexBufferObjectManager());
 //		

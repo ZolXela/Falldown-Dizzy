@@ -6,17 +6,22 @@ import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
+import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.util.debug.Debug;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
+
 public class GfxAssets {
 	
 	public static BitmapTextureAtlas mAutoParallaxBackgroundTexture;
 	public static BitmapTextureAtlas mAutoParallaxBackgroundTexture1;
 	public static BitmapTextureAtlas mAutoParallaxBackgroundTexture2;
+	public static BitmapTextureAtlas mFontTexture;
 	
 	public static ITextureRegion mParallaxLayerMountains;
 	public static ITextureRegion mParallaxLayerTrees;
@@ -28,7 +33,7 @@ public class GfxAssets {
 	public static TiledTextureRegion mSpiderTextureRegion;
 	
 	public static ITextureRegion mPlatformTextureRegion1;
-	
+	public static Font mFont;
 	
 	public static Music mMusic;	
 	public static Sound mJump, mGameOver, mGetGoods, mNightmare;
@@ -77,6 +82,10 @@ public class GfxAssets {
 		mPlatformTextureRegion1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "plat1.png", 0, 801);
 		mAutoParallaxBackgroundTexture2.load();
 		
+		mFontTexture = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 256, 256);
+		mFont = new Font(GameActivity._main.getFontManager(), mFontTexture, Typeface.create(Typeface.DEFAULT,
+				Typeface.BOLD), 40, true, Color.BLACK);
+		mFontTexture.load();
 	}	
 	
 
