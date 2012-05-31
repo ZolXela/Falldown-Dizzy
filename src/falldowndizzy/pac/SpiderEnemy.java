@@ -51,6 +51,11 @@ public class SpiderEnemy extends AnimatedSprite {
 				killed = contact.isEnabled() ? true : false;				
 			}
 		});
+		
+//		target = 
+		mTargetsPool.obtainPoolItem();
+		this.setPosition(pX, pY);
+		this.animate(300);
 	}
 
 	public class TargetsPool extends GenericPool<AnimatedSprite> {

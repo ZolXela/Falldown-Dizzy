@@ -81,7 +81,6 @@ public class Game_Scene extends CameraScene {
 				
 		setBackground(this.LoadAutoParallaxBg());		
 		this.initBorders();
-		this.showScore();
 		this.CreateDizzy(30, 50);
 
 		attachChild(gamePlayer);
@@ -150,6 +149,7 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(rightOuter);
 				
 		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatformTextureRegion1, "plat1.xml");
+		this.showScore();
 		
 	}
 	
@@ -221,8 +221,8 @@ public class Game_Scene extends CameraScene {
 	
 	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion, String xmlFile) {
 
-		final SpiderEnemy _obstacle = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
-		this.attachChild(_obstacle);
+		final SpiderEnemy _spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
+		this.attachChild(_spiderEnemy);
 
 	}    
 	
@@ -239,25 +239,6 @@ public class Game_Scene extends CameraScene {
 
 //		restart();
 	}
-	
-//	/** a Time Handler for spawning targets, triggers every 1 second */
-//	private void createSpriteSpawnTimeHandler() {
-//		TimerHandler spriteTimerHandler;
-//		float mEffectSpawnDelay = 1f;
-//
-//		spriteTimerHandler = new TimerHandler(mEffectSpawnDelay, true,
-//				new ITimerCallback() {
-//
-//					@Override
-//					public void onTimePassed(TimerHandler pTimerHandler) {
-//						final float pX = 20;
-//						final float pY = 20;
-////						addEnemies(pX, pY, GfxAssets.mSpiderTextureRegion, "spider1.xml");
-//					}
-//				});
-//
-//		GameActivity._Engine.registerUpdateHandler(spriteTimerHandler);
-//	}
 	
 	IUpdateHandler detect = new IUpdateHandler() {
 		@Override
