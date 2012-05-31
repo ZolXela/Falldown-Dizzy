@@ -2,10 +2,8 @@ package falldowndizzy.pac;
 
 import java.util.LinkedList;
 
-import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
@@ -47,7 +45,7 @@ public class Game_Scene extends CameraScene {
 	
 	/* Basic fields */
 	public PhysicsWorld gamePhysicsWorld;
-	private Dizzy gamePlayer;
+	public static Dizzy gamePlayer;
 	Vector2 velocity;
 	
 	private boolean gameLoaded = false;
@@ -73,10 +71,12 @@ public class Game_Scene extends CameraScene {
 
 	/* Fields for Dizzy's score */
 	private Text _score;
-	private final int maxScore = 10;
+	private final int maxScore = 30;
 	private int hitCount;
 	
-	private LinkedList<AnimatedSprite> spiderLL;
+	private LinkedList<SpiderEnemy> spiderLL;
+	private LinkedList<Obstacle> platformLL;
+	
 	
 	public Game_Scene(){
 		super(GameActivity._Camera);
@@ -122,7 +122,7 @@ public class Game_Scene extends CameraScene {
 	
 	public void CreateDizzy(float pX, float pY){
 		gamePlayer = new Dizzy(pX, pY, 
-				GfxAssets.mPlayerTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
+				GfxAssets.mPlayerJRTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 	}
 		
 	private boolean isJumping(Dizzy player){	
@@ -153,8 +153,8 @@ public class Game_Scene extends CameraScene {
 				
 		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatformTextureRegion1, "plat1.xml");
 		this.showScore();
-		spiderLL = new LinkedList<AnimatedSprite>();
-		
+		spiderLL = new LinkedList<SpiderEnemy>();
+//		spiderLL.add(object)
 	}
 	
 	private void playerController() {	
@@ -223,9 +223,9 @@ public class Game_Scene extends CameraScene {
 
 	}
 	
-	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion, String xmlFile) {
+	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion, String xmlFile, float pos) {
 
-		final SpiderEnemy _spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
+		final SpiderEnemy _spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile, pos);
 		this.attachChild(_spiderEnemy);
 
 	}    
@@ -233,28 +233,12 @@ public class Game_Scene extends CameraScene {
 	private void showScore(){
 		
 		this._score = new Text(0, 0, GfxAssets.mFont, String.valueOf(maxScore), GameActivity._main.getVertexBufferObjectManager());
-		// repositioning the score later so we can use the score.getWidth()
 		this._score.setPosition(GameActivity.CAMERA_WIDTH - this._score.getWidth() - 70, 20);
 
-//		createSpriteSpawnTimeHandler();
 		_score.setScale(2);
 		_score.setScaleCenterY(0);
 		this.attachChild(_score);
-//		this.registerUpdateHandler(detect);
-
-//		restart();
 	}
-	
-	IUpdateHandler detect = new IUpdateHandler() {
-		@Override
-		public void reset() {
-		}
-
-		@Override
-		public void onUpdate(float pSecondsElapsed) {
-
-		}
-	};
 
 	/** to restart the game and clear the whole screen */
 	public void restart() {
