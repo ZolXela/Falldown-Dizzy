@@ -1,10 +1,11 @@
 package falldowndizzy.pac;
 
+import java.util.LinkedList;
+
 import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
+import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
@@ -74,6 +75,8 @@ public class Game_Scene extends CameraScene {
 	private Text _score;
 	private final int maxScore = 10;
 	private int hitCount;
+	
+	private LinkedList<AnimatedSprite> spiderLL;
 	
 	public Game_Scene(){
 		super(GameActivity._Camera);
@@ -150,6 +153,7 @@ public class Game_Scene extends CameraScene {
 				
 		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatformTextureRegion1, "plat1.xml");
 		this.showScore();
+		spiderLL = new LinkedList<AnimatedSprite>();
 		
 	}
 	
@@ -230,10 +234,11 @@ public class Game_Scene extends CameraScene {
 		
 		this._score = new Text(0, 0, GfxAssets.mFont, String.valueOf(maxScore), GameActivity._main.getVertexBufferObjectManager());
 		// repositioning the score later so we can use the score.getWidth()
-		System.out.println("************* Est' ili net??? " + this._score.getWidth());
-		this._score.setPosition(GameActivity.CAMERA_WIDTH - this._score.getWidth() - 5, 5);
+		this._score.setPosition(GameActivity.CAMERA_WIDTH - this._score.getWidth() - 70, 20);
 
 //		createSpriteSpawnTimeHandler();
+		_score.setScale(2);
+		_score.setScaleCenterY(0);
 		this.attachChild(_score);
 //		this.registerUpdateHandler(detect);
 
