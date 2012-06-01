@@ -84,7 +84,7 @@ public class GfxAssets {
 		
 		mFontTexture = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 256, 256);
 		mFont = new Font(GameActivity._main.getFontManager(), mFontTexture, Typeface.create(Typeface.DEFAULT,
-				Typeface.BOLD), 10, true, Color.PINK);
+				Typeface.BOLD), 40, true, Color.PINK);
 		mFontTexture.load();
 	}	
 	
