@@ -1,7 +1,5 @@
 package falldowndizzy.pac;
 
-import java.util.Random;
-
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
