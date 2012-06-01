@@ -32,7 +32,7 @@ public class Dizzy extends AnimatedSprite {
 		pPhysicsWorld.setContactListener(new ContactListener(){
 			@Override
 			public void beginContact(Contact contact) {
-					jumping = false;
+				jumping = false;	
 			}
 			@Override
 			public void endContact(Contact contact)
@@ -53,13 +53,13 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public void Stay(){		
-//		setAnimation(0, 7);
-		this.stopAnimation(0);
+		setAnimation(16, 23);
+//		this.stopAnimation(0);
 		this.DizzyBody.setLinearVelocity(0, 0);	
 	}
 	
 	public void GoLeft(Vector2 velocity){		
-		setAnimation(0, 7);
+		setAnimation(8, 15);
 		this.DizzyBody.setLinearVelocity(velocity);	
 		Vector2Pool.recycle(velocity);
 	}
@@ -71,16 +71,16 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public void Jump(Vector2 velocity){
-		if(velocity.x > 0) setAnimation(0, 7);
-		else if(velocity.x < 0) setAnimation(0, 7);
-		else setAnimation(0, 7);
+		if(velocity.x > 0) setAnimation(32, 39);
+		else if(velocity.x < 0) setAnimation(24, 31);
+		else setAnimation(16, 23);
 		this.DizzyBody.setLinearVelocity(velocity);	
-//		this.DizzyBody.setLinearDamping(2.5f);
 		Vector2Pool.recycle(velocity);
+		this.stopAnimation();
 	}
 	
 	public void setAnimation(int begNum, int endNum){
-		this.animate(new long[]{90, 90, 100, 100, 100, 100, 90, 90}, begNum, endNum, true);    
+		this.animate(new long[]{100, 100, 100, 100, 100, 100, 100, 100}, begNum, endNum, true);    
 	}
 	
 

@@ -31,9 +31,7 @@ public class GfxAssets {
 	public static ITextureRegion mParallaxLayerCloud;	
 	public static ITextureRegion mPlayGameTextureRegion;
 	
-	public static TiledTextureRegion mPlayerStayTextureRegion;
-	public static TiledTextureRegion mPlayerJRTextureRegion;
-	public static TiledTextureRegion mPlayerJLTextureRegion;
+	public static TiledTextureRegion mPlayerTextureRegion;
 	
 	public static TiledTextureRegion mFlareTextureRegion;
 	public static TiledTextureRegion mSpiderTextureRegion;
@@ -75,6 +73,11 @@ public class GfxAssets {
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/800_480/");
 		
+		mAutoParallaxBackgroundTexture = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 512);
+		mPlayerTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "player_d_all.png", 0, 0, 8, 5);
+		mAutoParallaxBackgroundTexture.load();
+		
 		mAutoParallaxBackgroundTexture1 = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 1024);
 		mParallaxLayerCloud = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "dizzy_parallax_background_clouds.png", 0, 0);
@@ -82,14 +85,8 @@ public class GfxAssets {
 				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "dizzy_parallax_background_layer_back.png", 0, 150);
 		mPlayGameTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "play_game_bt.png", 900, 0);
-		mPlayerStayTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "player_d.png", 480, 150, 8, 1);
-		mPlayerJRTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "player_d_jump_right.png", 480, 210, 8, 1);
-		mPlayerJLTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "player_d_jump_left.png", 480, 270, 8, 1);
 		mStrawberryTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "strawberry.png", 0, 951);
+				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "strawberry.png", 0, 950);
 		mAppleTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "apple.png", 0, 990);
 		mBananaTextureRegion = BitmapTextureAtlasTextureRegionFactory
@@ -99,11 +96,12 @@ public class GfxAssets {
 //		mSpiderTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "target.png", 0, 0, 3, 1);
 		mAutoParallaxBackgroundTexture1.load();
 		
+		mGoodsArray = new ArrayList<TextureRegion>();
 		mGoodsArray.add(mStrawberryTextureRegion);
 		mGoodsArray.add(mAppleTextureRegion);
 		mGoodsArray.add(mBananaTextureRegion);	
 		mGoodsArray.add(mCherryTextureRegion);
-		
+	
 		
 		mAutoParallaxBackgroundTexture2 = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 1024);
 		mParallaxLayerTreesBg = BitmapTextureAtlasTextureRegionFactory
