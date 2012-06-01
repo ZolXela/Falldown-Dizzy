@@ -53,7 +53,8 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public void Stay(){		
-		setAnimation(0, 7);
+//		setAnimation(0, 7);
+		this.stopAnimation(0);
 		this.DizzyBody.setLinearVelocity(0, 0);	
 	}
 	
@@ -79,7 +80,7 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public void setAnimation(int begNum, int endNum){
-		this.animate(new long[]{50, 50, 50, 50, 50, 50, 50, 50}, begNum, endNum, true);    
+		this.animate(new long[]{90, 90, 100, 100, 100, 100, 90, 90}, begNum, endNum, true);    
 	}
 	
 
