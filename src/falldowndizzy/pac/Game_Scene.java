@@ -27,6 +27,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class Game_Scene extends CameraScene {
 	
+	public static Game_Scene _curGameScene;
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -39,7 +40,7 @@ public class Game_Scene extends CameraScene {
 	/* And what should collide with what. */
 	public static final short MASKBITS_WALL = CATEGORYBIT_WALL |  CATEGORYBIT_PLAYER;
 	public static final short MASKBITS_PLATO = CATEGORYBIT_PLAYER;  // Missing: CATEGORYBIT_PLAYER
-	public static final short MASKBITS_PLAYER = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO;// Missing: CATEGORYBIT_PLATO
+	public static final short MASKBITS_PLAYER = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO |  CATEGORYBIT_PLAYER;// Missing: CATEGORYBIT_PLATO
 
 	/* FixtureDefs for Dizzy, borders and obstacles */
 	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.1f, 0.0f, 1.0f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
@@ -70,10 +71,10 @@ public class Game_Scene extends CameraScene {
 	private int finger = 0;
 	float currentX = 0;
 	private float jumpHeight = -18;
-	private float goStep = 5;
+	private float goStep = 7;
 
 	/* Fields for Dizzy's score */
-	private Text _score;
+	public static Text _score;
 	private final static int maxScore = 30;
 	public static int curScore = maxScore;
 	private int hitCount;
@@ -104,8 +105,8 @@ public class Game_Scene extends CameraScene {
 		gamePlayer.Stay();
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 
-		
 		gameLoaded = true;
+		
 	}
 
 	public void Show(){
@@ -138,7 +139,7 @@ public class Game_Scene extends CameraScene {
 	
 	public void CreateDizzy(float pX, float pY){
 		gamePlayer = new Dizzy(pX, pY, 
-				GfxAssets.mPlayerStayTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
+				GfxAssets.mPlayerTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 	}
 		
 	private boolean isJumping(Dizzy player){	
@@ -169,7 +170,7 @@ public class Game_Scene extends CameraScene {
 				
 		this.addObstacles(GfxAssets.mPlatformTextureRegion1, "plat1.xml", 1);
 //		this.addEnemies(100, -10, GfxAssets.mSpiderTextureRegion, "enemy.xml", 0, spidersQuantity);
-		addGoods(GameActivity.CAMERA_HEIGHT, GameActivity.CAMERA_WIDTH, GfxAssets.mGoodsArray, fruitsQuantity);
+		addGoods(GameActivity.CAMERA_HEIGHT, GameActivity.CAMERA_WIDTH, GfxAssets.mGoodsArray, fruitsQuantity + 3);
 		
 		this.showScore();
 //		spiderLL.add(object)
@@ -200,6 +201,7 @@ public class Game_Scene extends CameraScene {
 			
 	@Override
 	public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
+		_curGameScene = this;
 		final TouchEvent curTouchEvent = pSceneTouchEvent;
 		if(gameLoaded && finger <= 2){
 			switch(pSceneTouchEvent.getAction()) {
@@ -263,15 +265,13 @@ public class Game_Scene extends CameraScene {
 	
 	private void addGoods(float pY, final float obstWidth, ArrayList<TextureRegion> mGoodTextureRegion, int amount) {
 		float pX;
-		//,0, GameActivity.CAMERA_HEIGHT / 2 - platformLL.get(0).getHeight() - 2
 		Random random = new Random();
 		GoodFruit _goodFruit;
-		TextureRegion curFruitTR = mGoodTextureRegion.get(random.nextInt(mGoodTextureRegion.size()));
-		curFruitTR = GfxAssets.mStrawberryTextureRegion;
+		TextureRegion curFruitTR;
 		while(amount > 0) {
-			pX = obstWidth / 2 * (random.nextFloat() + 1);
-			pY -= curFruitTR.getHeight();			
-			_goodFruit = new GoodFruit(pX, pY, curFruitTR, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
+			curFruitTR = mGoodTextureRegion.get(random.nextInt(mGoodTextureRegion.size()));
+			pX = (obstWidth - curFruitTR.getWidth()) * random.nextFloat();
+			_goodFruit = new GoodFruit(pX, pY - curFruitTR.getHeight(), curFruitTR, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 			this.attachChild(_goodFruit);
 			goodsLL.add(_goodFruit);
 			amount--;
@@ -282,8 +282,8 @@ public class Game_Scene extends CameraScene {
 	
 	private void showScore(){
 		
-		this._score = new Text(0, 0, GfxAssets.mFont, String.valueOf(maxScore), GameActivity._main.getVertexBufferObjectManager());
-		this._score.setPosition(GameActivity.CAMERA_WIDTH - this._score.getWidth() - 70, 20);
+		_score = new Text(0, 0, GfxAssets.mFont, String.valueOf(maxScore), GameActivity._main.getVertexBufferObjectManager());
+		_score.setPosition(GameActivity.CAMERA_WIDTH - _score.getWidth() - 70, 20);
 
 		_score.setScale(2);
 		_score.setScaleCenterY(0);
@@ -300,13 +300,13 @@ public class Game_Scene extends CameraScene {
 			public void run() {
 				Game_Scene.this.detachChildren();
 				Game_Scene.this.attachChild(gamePlayer);
-				Game_Scene.this.attachChild(Game_Scene.this._score);
+				Game_Scene.this.attachChild(Game_Scene._score);
 			}
 		});
 
 		// resetting everything
 		hitCount = 0;
-		this._score.setText(String.valueOf(hitCount));
+		_score.setText(String.valueOf(hitCount));
 
 	}
 	

@@ -4,6 +4,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -14,13 +15,12 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-
-
 public class GoodFruit extends Sprite {
 
-	private PhysicsWorld mPhysicsWorld;
+	public PhysicsWorld mPhysicsWorld;
 	public Body GoodBody;
 	public static GoodFruit mGood;
+	
 	
 	public GoodFruit(final float pX, final float pY, final ITextureRegion pTextureRegion, final VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld){
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
@@ -28,32 +28,40 @@ public class GoodFruit extends Sprite {
 		mPhysicsWorld = pPhysicsWorld;
 		mGood = this;
 		
-		GoodBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		GoodBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, GoodBody, true, false));	
-		
-	}
-	
-	public void setContactListener(){
-		
-		this.mPhysicsWorld.setContactListener(new ContactListener(){
+		mPhysicsWorld.setContactListener(new ContactListener(){
+
 			@Override
 			public void beginContact(Contact contact) {
-//				Game_Scene.curScore--;
+				if (contact.isEnabled()) {
+					Game_Scene._curGameScene.detachChild(mGood);
+					Game_Scene._score.setText(String.valueOf(--Game_Scene.curScore));
+				}	
 			}
+
 			@Override
-			public void endContact(Contact contact)
-			{
-//				Game_Scene.detachChild(mGood);
+			public void endContact(Contact contact) {
+				// TODO Auto-generated method stub
+				
 			}
+
 			@Override
 			public void preSolve(Contact contact, Manifold oldManifold) {
+				// TODO Auto-generated method stub
 				
 			}
+
 			@Override
-			public void postSolve(Contact contact, ContactImpulse impulse) {		
-				
+			public void postSolve(Contact contact, ContactImpulse impulse) {
+				// TODO Auto-generated method stub
+//				if (contact.isEnabled()) {
+//					Game_Scene._curGameScene.detachChild(mGood);
+//					Game_Scene._score.setText(String.valueOf(--Game_Scene.curScore));
+//				}
 			}
+			
 		});
-		
 	}
+
 }
