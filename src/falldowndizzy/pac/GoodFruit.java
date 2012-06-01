@@ -24,7 +24,7 @@ public class GoodFruit extends Sprite {
 	
 	public GoodFruit(final float pX, final float pY, final ITextureRegion pTextureRegion, final VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld){
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		
+
 		mPhysicsWorld = pPhysicsWorld;
 		mGood = this;
 		
@@ -38,7 +38,7 @@ public class GoodFruit extends Sprite {
 		this.mPhysicsWorld.setContactListener(new ContactListener(){
 			@Override
 			public void beginContact(Contact contact) {
-				Game_Scene.curScore--;
+//				Game_Scene.curScore--;
 			}
 			@Override
 			public void endContact(Contact contact)

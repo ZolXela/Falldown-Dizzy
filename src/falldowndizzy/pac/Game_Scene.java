@@ -1,6 +1,8 @@
 package falldowndizzy.pac;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
@@ -13,6 +15,7 @@ import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.color.Color;
 
 import android.hardware.SensorManager;
@@ -80,7 +83,7 @@ public class Game_Scene extends CameraScene {
 	private LinkedList<GoodFruit> goodsLL;
 	
 	private int obstacleQuantity = 3;
-	private int fruitsQuantity = 30;
+	private int fruitsQuantity = 3;
 	private int spidersQuantity = 2;
 	
 	public Game_Scene(){
@@ -88,16 +91,19 @@ public class Game_Scene extends CameraScene {
 		this.setGamePhysicsWorld();
 				
 		setBackground(this.LoadAutoParallaxBg());		
+		
+		
+		platformLL = new LinkedList<Obstacle>();
+		spiderLL = new LinkedList<SpiderEnemy>();
+		goodsLL = new LinkedList<GoodFruit>();
+		
 		this.initBorders();
 		this.CreateDizzy(30, 50);
 
 		attachChild(gamePlayer);
 		gamePlayer.Stay();
 		this.setTouchAreaBindingOnActionDownEnabled(true);
-		
-		platformLL = new LinkedList<Obstacle>();
-		spiderLL = new LinkedList<SpiderEnemy>();
-		goodsLL = new LinkedList<GoodFruit>();
+
 		
 		gameLoaded = true;
 	}
@@ -132,7 +138,7 @@ public class Game_Scene extends CameraScene {
 	
 	public void CreateDizzy(float pX, float pY){
 		gamePlayer = new Dizzy(pX, pY, 
-				GfxAssets.mPlayerJRTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
+				GfxAssets.mPlayerStayTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 	}
 		
 	private boolean isJumping(Dizzy player){	
@@ -161,9 +167,9 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(leftOuter);
 		this.attachChild(rightOuter);
 				
-		this.addObstacles(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatformTextureRegion1, "plat1.xml", obstacleQuantity);
+		this.addObstacles(GfxAssets.mPlatformTextureRegion1, "plat1.xml", 1);
 //		this.addEnemies(100, -10, GfxAssets.mSpiderTextureRegion, "enemy.xml", 0, spidersQuantity);
-//		this.addGoods(0, 0, pTextureRegion, pos, fruitsQuantity);
+		addGoods(GameActivity.CAMERA_HEIGHT, GameActivity.CAMERA_WIDTH, GfxAssets.mGoodsArray, fruitsQuantity);
 		
 		this.showScore();
 //		spiderLL.add(object)
@@ -228,13 +234,16 @@ public class Game_Scene extends CameraScene {
 
 	}
 
-	private void addObstacles(final float pX, final float pY, ITextureRegion pTextureRegion, String xmlFile, int amount) {
-	
+	private void addObstacles(ITextureRegion pTextureRegion, String xmlFile, int amount) {
+		float pX, pY;
 		Obstacle _obstacle;
 		while(amount > 0) {
+			pX = 0;
+			pY = GameActivity.CAMERA_HEIGHT / 2;
 			_obstacle = new Obstacle(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
 			this.attachChild(_obstacle);
 			platformLL.add(_obstacle);
+			this.addGoods(pY, _obstacle.getWidth(), GfxAssets.mGoodsArray, fruitsQuantity);
 			amount--;
 		}
 
@@ -252,11 +261,17 @@ public class Game_Scene extends CameraScene {
 
 	}    
 	
-	private void addGoods(final float pX, final float pY, ITiledTextureRegion pTextureRegion, float pos, int amount) {
-
+	private void addGoods(float pY, final float obstWidth, ArrayList<TextureRegion> mGoodTextureRegion, int amount) {
+		float pX;
+		//,0, GameActivity.CAMERA_HEIGHT / 2 - platformLL.get(0).getHeight() - 2
+		Random random = new Random();
 		GoodFruit _goodFruit;
+		TextureRegion curFruitTR = mGoodTextureRegion.get(random.nextInt(mGoodTextureRegion.size()));
+		curFruitTR = GfxAssets.mStrawberryTextureRegion;
 		while(amount > 0) {
-			_goodFruit = new GoodFruit(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
+			pX = obstWidth / 2 * (random.nextFloat() + 1);
+			pY -= curFruitTR.getHeight();			
+			_goodFruit = new GoodFruit(pX, pY, curFruitTR, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 			this.attachChild(_goodFruit);
 			goodsLL.add(_goodFruit);
 			amount--;
