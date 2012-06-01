@@ -71,12 +71,17 @@ public class Game_Scene extends CameraScene {
 
 	/* Fields for Dizzy's score */
 	private Text _score;
-	private final int maxScore = 30;
+	private final static int maxScore = 30;
+	public static int curScore = maxScore;
 	private int hitCount;
 	
 	private LinkedList<SpiderEnemy> spiderLL;
 	private LinkedList<Obstacle> platformLL;
+	private LinkedList<GoodFruit> goodsLL;
 	
+	private int obstacleQuantity = 3;
+	private int fruitsQuantity = 30;
+	private int spidersQuantity = 2;
 	
 	public Game_Scene(){
 		super(GameActivity._Camera);
@@ -89,6 +94,11 @@ public class Game_Scene extends CameraScene {
 		attachChild(gamePlayer);
 		gamePlayer.Stay();
 		this.setTouchAreaBindingOnActionDownEnabled(true);
+		
+		platformLL = new LinkedList<Obstacle>();
+		spiderLL = new LinkedList<SpiderEnemy>();
+		goodsLL = new LinkedList<GoodFruit>();
+		
 		gameLoaded = true;
 	}
 
@@ -151,9 +161,11 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(leftOuter);
 		this.attachChild(rightOuter);
 				
-		this.addObstacle(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatformTextureRegion1, "plat1.xml");
+		this.addObstacles(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatformTextureRegion1, "plat1.xml", obstacleQuantity);
+//		this.addEnemies(100, -10, GfxAssets.mSpiderTextureRegion, "enemy.xml", 0, spidersQuantity);
+//		this.addGoods(0, 0, pTextureRegion, pos, fruitsQuantity);
+		
 		this.showScore();
-		spiderLL = new LinkedList<SpiderEnemy>();
 //		spiderLL.add(object)
 	}
 	
@@ -216,19 +228,42 @@ public class Game_Scene extends CameraScene {
 
 	}
 
-	private void addObstacle(final float pX, final float pY, ITextureRegion pTextureRegion, String xmlFile) {
+	private void addObstacles(final float pX, final float pY, ITextureRegion pTextureRegion, String xmlFile, int amount) {
 	
-		final Obstacle _obstacle = new Obstacle(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
-		this.attachChild(_obstacle);
+		Obstacle _obstacle;
+		while(amount > 0) {
+			_obstacle = new Obstacle(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
+			this.attachChild(_obstacle);
+			platformLL.add(_obstacle);
+			amount--;
+		}
 
 	}
 	
-	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion, String xmlFile, float pos) {
+	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion, String xmlFile, float pos, int amount) {
 
-		final SpiderEnemy _spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile, pos);
-		this.attachChild(_spiderEnemy);
+		SpiderEnemy _spiderEnemy;
+		while(amount > 0) {
+			_spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile, pos);
+			this.attachChild(_spiderEnemy);
+			spiderLL.add(_spiderEnemy);
+			amount--;
+		}
 
 	}    
+	
+	private void addGoods(final float pX, final float pY, ITiledTextureRegion pTextureRegion, float pos, int amount) {
+
+		GoodFruit _goodFruit;
+		while(amount > 0) {
+			_goodFruit = new GoodFruit(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
+			this.attachChild(_goodFruit);
+			goodsLL.add(_goodFruit);
+			amount--;
+		}
+
+	}   
+	
 	
 	private void showScore(){
 		
@@ -259,6 +294,7 @@ public class Game_Scene extends CameraScene {
 		this._score.setText(String.valueOf(hitCount));
 
 	}
+	
 //	private void addFlare(final float pX, final float pY) {
 //		final AnimatedSprite flare = new AnimatedSprite(pX, pY, GfxAssets.mFlare, GameActivity._main.getVertexBufferObjectManager());
 //		
