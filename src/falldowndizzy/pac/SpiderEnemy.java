@@ -59,7 +59,7 @@ public class SpiderEnemy extends AnimatedSprite {
 			}
 		});
 		
-		this.collidesWith(Game_Scene.gamePlayer);
+		this.collidesWith(Game_Scene._curGameScene.gamePlayer);
 		this.setPosition(pX, pY);
 		this.animate(300);
 		curEnemy = this;

@@ -21,23 +21,31 @@ public class Dizzy extends AnimatedSprite {
 	public Body DizzyBody;
 	public boolean jumping = false;
 	
-	PhysicsWorld pPhysicsWorld;
+	PhysicsWorld mPhysicsWorld;
 	
-	public Dizzy(final float pX, final float pY, final ITiledTextureRegion pTiledTextureRegion, final VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld mPhysicsWorld) {
+	public Dizzy(final float pX, final float pY, final ITiledTextureRegion pTiledTextureRegion, final VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld) {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
-		pPhysicsWorld = mPhysicsWorld;
+		mPhysicsWorld = pPhysicsWorld;
 
-		DizzyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
-		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
-		pPhysicsWorld.setContactListener(new ContactListener(){
+		DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		DizzyBody.setUserData("player");
+		mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
+		mPhysicsWorld.setContactListener(new ContactListener(){
 			@Override
 			public void beginContact(Contact contact) {
-				jumping = false;	
+				System.out.println("********** Data A: " + contact.getFixtureA().getDensity());
+				System.out.println("********** Data B: " + contact.getFixtureB().getDensity());
+//				if(contact.getFixtureA().getDensity() != 0.1 || contact.getFixtureB().getDensity() != 0.1)
+					jumping = false;	
+				System.out.println("********** Dizzy's not jumping");
 			}
 			@Override
 			public void endContact(Contact contact)
 			{
-				jumping = true;
+					System.out.println("********** Dizzy's jumping");
+//					if(contact.getFixtureA().getDensity() != 0.1 || contact.getFixtureB().getDensity() != 0.1)
+					jumping = true;
+				
 			}
 			@Override
 			public void preSolve(Contact contact, Manifold oldManifold) {
@@ -46,26 +54,24 @@ public class Dizzy extends AnimatedSprite {
 			}
 			@Override
 			public void postSolve(Contact contact, ContactImpulse impulse) {
-				jumping = contact.isEnabled() ? false : true;				
+				jumping = (contact.isEnabled())? false : true;				
 			}
 		});
 
 	}
 	
 	public void Stay(){		
+//		this.stopAnimation();
 		setAnimation(16, 23);
-//		this.stopAnimation(0);
 		this.DizzyBody.setLinearVelocity(0, 0);	
 	}
 	
 	public void GoLeft(Vector2 velocity){		
-		setAnimation(8, 15);
 		this.DizzyBody.setLinearVelocity(velocity);	
 		Vector2Pool.recycle(velocity);
 	}
 	
 	public void GoRight(Vector2 velocity){	
-		setAnimation(0, 7);
 		this.DizzyBody.setLinearVelocity(velocity);	
 		Vector2Pool.recycle(velocity);
 	}
@@ -76,13 +82,36 @@ public class Dizzy extends AnimatedSprite {
 		else setAnimation(16, 23);
 		this.DizzyBody.setLinearVelocity(velocity);	
 		Vector2Pool.recycle(velocity);
-		this.stopAnimation();
 	}
 	
 	public void setAnimation(int begNum, int endNum){
-		this.animate(new long[]{100, 100, 100, 100, 100, 100, 100, 100}, begNum, endNum, true);    
+		this.animate(new long[]{90, 90, 100, 100, 100, 100, 90, 90}, begNum, endNum, true);    
 	}
 	
-
+	private boolean onBeforePositionChanged(){
+		
+//		int enemyListSize = Game_Scene._curGameScene.spiderLL.size();
+//		for(int i = 0; i < enemyListSize; i++)
+//			if(this.collidesWith(Game_Scene._curGameScene.spiderLL.get(i)))
+//			{
+//				Game_Scene._curGameScene.callbackCollisionEnemy();
+//				return false;
+//			}
+		if(Game_Scene.goodsLL != null)
+			for(int i = 0; i < Game_Scene.goodsLL.size(); i++) {
+				if(this.collidesWith(Game_Scene.goodsLL.get(i))) {
+					Game_Scene._curGameScene.callbackCollisionGoods(i);
+					return false;
+				}			
+			}
+		return true;
+	}
+	
+	@Override
+	protected void onManagedUpdate(final float pSecondsElapsed) {
+		super.onManagedUpdate(pSecondsElapsed);
+		onBeforePositionChanged();
+	}
+	
 }
 

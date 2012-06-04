@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
@@ -36,11 +37,12 @@ public class Game_Scene extends CameraScene {
 	public static final short CATEGORYBIT_WALL = 1;
 	public static final short CATEGORYBIT_PLATO = 2;
 	public static final short CATEGORYBIT_PLAYER = 4;
+	
 
 	/* And what should collide with what. */
-	public static final short MASKBITS_WALL = CATEGORYBIT_WALL |  CATEGORYBIT_PLAYER;
+	public static final short MASKBITS_WALL = CATEGORYBIT_WALL | CATEGORYBIT_PLAYER;
 	public static final short MASKBITS_PLATO = CATEGORYBIT_PLAYER;  // Missing: CATEGORYBIT_PLAYER
-	public static final short MASKBITS_PLAYER = CATEGORYBIT_WALL  |  CATEGORYBIT_PLATO |  CATEGORYBIT_PLAYER;// Missing: CATEGORYBIT_PLATO
+	public static final short MASKBITS_PLAYER = CATEGORYBIT_WALL | CATEGORYBIT_PLATO;// Missing: CATEGORYBIT_PLATO
 
 	/* FixtureDefs for Dizzy, borders and obstacles */
 	public static final FixtureDef WALL_FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.1f, 0.0f, 1.0f, false, CATEGORYBIT_WALL, MASKBITS_WALL, (short)0);
@@ -49,10 +51,11 @@ public class Game_Scene extends CameraScene {
 	
 	/* Basic fields */
 	public PhysicsWorld gamePhysicsWorld;
-	public static Dizzy gamePlayer;
+	public Dizzy gamePlayer;
 	Vector2 velocity;
 	
 	private boolean gameLoaded = false;
+	private boolean isGameFinished = false;
 	
 	/**
 	 * Screen borders
@@ -77,22 +80,23 @@ public class Game_Scene extends CameraScene {
 	public static Text _score;
 	private final static int maxScore = 30;
 	public static int curScore = maxScore;
-	private int hitCount;
 	
-	private LinkedList<SpiderEnemy> spiderLL;
+	public static LinkedList<SpiderEnemy> spiderLL;
 	private LinkedList<Obstacle> platformLL;
-	private LinkedList<GoodFruit> goodsLL;
+	public static LinkedList<GoodFruit> goodsLL;
 	
 	private int obstacleQuantity = 3;
 	private int fruitsQuantity = 3;
 	private int spidersQuantity = 2;
 	
+	
+	
 	public Game_Scene(){
+	
 		super(GameActivity._Camera);
 		this.setGamePhysicsWorld();
 				
-		setBackground(this.LoadAutoParallaxBg());		
-		
+		setBackground(this.LoadAutoParallaxBg());	
 		
 		platformLL = new LinkedList<Obstacle>();
 		spiderLL = new LinkedList<SpiderEnemy>();
@@ -100,13 +104,28 @@ public class Game_Scene extends CameraScene {
 		
 		this.initBorders();
 		this.CreateDizzy(30, 50);
-
 		attachChild(gamePlayer);
 		gamePlayer.Stay();
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 
 		gameLoaded = true;
+		this.registerUpdateHandler(gamePhysicsWorld);
+		this.registerUpdateHandler(new IUpdateHandler(){
+
+			@Override
+			public void onUpdate(float pSecondsElapsed) {
+				// TODO Auto-generated method stub
+				
+			
+			}
+
+			@Override
+			public void reset() {
+				// TODO Auto-generated method stub
+				
+			}
 		
+		});
 	}
 
 	public void Show(){
@@ -122,7 +141,6 @@ public class Game_Scene extends CameraScene {
 	private void setGamePhysicsWorld(){
 
 		gamePhysicsWorld = new FixedStepPhysicsWorld(100, new Vector2(0, SensorManager.GRAVITY_EARTH * 5), true, 8, 1);	
-		this.registerUpdateHandler(gamePhysicsWorld);
 		
 	}
 	
@@ -133,7 +151,6 @@ public class Game_Scene extends CameraScene {
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(5.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerCloud, GameActivity.mVertexBufferObjectManager)));	
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTreesBg, GameActivity.mVertexBufferObjectManager)));
 		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, GameActivity.mVertexBufferObjectManager)));
-//		autoParallaxBackgroundXY.attachParallaxEntityXY(new AutoParallaxBackgroundXY.ParallaxEntityXY(0.0f, 0.0f, new Sprite(0, 0, GfxAssets.mParallaxLayerTrees, GameActivity.mVertexBufferObjectManager)));
 		return autoParallaxBackgroundXY;	
 	}
 	
@@ -176,6 +193,25 @@ public class Game_Scene extends CameraScene {
 //		spiderLL.add(object)
 	}
 	
+	private boolean rightSet = false;
+	private boolean leftSet = false;
+	private boolean upSet = false;
+	
+	private void setRight(){
+		gamePlayer.setAnimation(0, 7);
+		rightSet = true;
+	}
+	
+	private void setLeft(){
+		gamePlayer.setAnimation(8, 15);
+		leftSet = true;
+	}
+
+	private void setUp(){
+		gamePlayer.stopAnimation();
+	}
+
+	
 	private void playerController() {	
 
 		float currentPosY = gamePlayer.getY();
@@ -184,19 +220,28 @@ public class Game_Scene extends CameraScene {
 				if((currentPosX) > GlobalX) {			
 						velocity = Vector2Pool.obtain((-1) * goStep, 0);
 							currentX = velocity.x;
+							if(!leftSet) setLeft();
 								gamePlayer.GoLeft(velocity);
+								rightSet = false;
+								upSet = false;
 				}
 				else if((currentPosX + gamePlayer.getWidth()) < GlobalX){
 					velocity = Vector2Pool.obtain(goStep, 0);
 							currentX = velocity.x;
+							if(!rightSet) setRight();
 								gamePlayer.GoRight(velocity);
+								leftSet = false;
+								upSet = false;
 				}
 		} else if(GlobalY < (currentPosY + jumpHeight * 3)) {
+			if(!upSet) setUp();
 			velocity = Vector2Pool.obtain(currentX, jumpHeight);
 				gamePlayer.Jump(velocity);
 					GlobalY = GameActivity.CAMERA_HEIGHT;
+					rightSet = false;
+					leftSet = false;
 		}
-		else gamePlayer.Stay();
+
 	}	
 			
 	@Override
@@ -211,19 +256,22 @@ public class Game_Scene extends CameraScene {
 					}
 					GlobalY = curTouchEvent.getY();
 						finger++;
-							if(!isJumping(gamePlayer)){
+							if(!isJumping(gamePlayer)){								
 								this.playerController();
 							}
 					break;
 				case MotionEvent.ACTION_UP:
 					finger = (finger > 0) ? finger-1 : 0;
-						if (finger <= 1) {
-							currentX = 0;
+					currentX = 0;
+						if (finger == 1) {						
 							if(!isJumping(gamePlayer))
 								this.playerController();						
 						}
-						else
+						else {
 							gamePlayer.Stay();	
+							rightSet = false;
+							leftSet = false;
+						}
 					break;
 				default:
 					if(!isJumping(gamePlayer) && finger > 0)
@@ -305,9 +353,6 @@ public class Game_Scene extends CameraScene {
 		});
 
 		// resetting everything
-		hitCount = 0;
-		_score.setText(String.valueOf(hitCount));
-
 	}
 	
 //	private void addFlare(final float pX, final float pY) {
@@ -317,6 +362,20 @@ public class Game_Scene extends CameraScene {
 //
 //		this.attachChild(flare);
 //	}
+		
+	public void callbackCollisionGoods(int i){
+		goodsLL.get(i).setCollision();
+		this.detachChild(goodsLL.get(i));
+		_score.setText(String.valueOf(--Game_Scene.curScore));
+		goodsLL.remove(i);
+		
+	}
+	
+	public void callbackCollisionEnemy(){
+		//restart 
+
+		this.isGameFinished = true;
+	}
 	
 }
 
