@@ -33,18 +33,12 @@ public class Dizzy extends AnimatedSprite {
 		mPhysicsWorld.setContactListener(new ContactListener(){
 			@Override
 			public void beginContact(Contact contact) {
-				System.out.println("********** Data A: " + contact.getFixtureA().getDensity());
-				System.out.println("********** Data B: " + contact.getFixtureB().getDensity());
-//				if(contact.getFixtureA().getDensity() != 0.1 || contact.getFixtureB().getDensity() != 0.1)
-					jumping = false;	
-				System.out.println("********** Dizzy's not jumping");
+				jumping = false;	
 			}
 			@Override
 			public void endContact(Contact contact)
 			{
-					System.out.println("********** Dizzy's jumping");
-//					if(contact.getFixtureA().getDensity() != 0.1 || contact.getFixtureB().getDensity() != 0.1)
-					jumping = true;
+				jumping = true;
 				
 			}
 			@Override
@@ -61,7 +55,6 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public void Stay(){		
-//		this.stopAnimation();
 		setAnimation(16, 23);
 		this.DizzyBody.setLinearVelocity(0, 0);	
 	}

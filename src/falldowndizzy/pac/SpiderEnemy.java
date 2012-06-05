@@ -39,27 +39,7 @@ public class SpiderEnemy extends AnimatedSprite {
 		
 		EnemyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, EnemyBody, true, false));	
-		pPhysicsWorld.setContactListener(new ContactListener(){
-			@Override
-			public void beginContact(Contact contact) {
-				killed = false;
-			}
-			@Override
-			public void endContact(Contact contact)
-			{
-			}
-			@Override
-			public void preSolve(Contact contact, Manifold oldManifold) {
-				
-				
-			}
-			@Override
-			public void postSolve(Contact contact, ContactImpulse impulse) {
-				killed = contact.isEnabled() ? true : false;				
-			}
-		});
 		
-		this.collidesWith(Game_Scene._curGameScene.gamePlayer);
 		this.setPosition(pX, pY);
 		this.animate(300);
 		curEnemy = this;

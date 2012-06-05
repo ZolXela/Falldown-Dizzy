@@ -110,22 +110,7 @@ public class Game_Scene extends CameraScene {
 
 		gameLoaded = true;
 		this.registerUpdateHandler(gamePhysicsWorld);
-		this.registerUpdateHandler(new IUpdateHandler(){
 
-			@Override
-			public void onUpdate(float pSecondsElapsed) {
-				// TODO Auto-generated method stub
-				
-			
-			}
-
-			@Override
-			public void reset() {
-				// TODO Auto-generated method stub
-				
-			}
-		
-		});
 	}
 
 	public void Show(){
@@ -190,7 +175,7 @@ public class Game_Scene extends CameraScene {
 		addGoods(GameActivity.CAMERA_HEIGHT, GameActivity.CAMERA_WIDTH, GfxAssets.mGoodsArray, fruitsQuantity + 3);
 		
 		this.showScore();
-//		spiderLL.add(object)
+		
 	}
 	
 	private boolean rightSet = false;
@@ -215,31 +200,34 @@ public class Game_Scene extends CameraScene {
 	private void playerController() {	
 
 		float currentPosY = gamePlayer.getY();
-		if(GlobalY >= (currentPosY + jumpHeight * 5) && finger == 1) {
-			float currentPosX = gamePlayer.getX();
-				if((currentPosX) > GlobalX) {			
-						velocity = Vector2Pool.obtain((-1) * goStep, 0);
-							currentX = velocity.x;
-							if(!leftSet) setLeft();
-								gamePlayer.GoLeft(velocity);
-								rightSet = false;
-								upSet = false;
-				}
-				else if((currentPosX + gamePlayer.getWidth()) < GlobalX){
-					velocity = Vector2Pool.obtain(goStep, 0);
-							currentX = velocity.x;
-							if(!rightSet) setRight();
-								gamePlayer.GoRight(velocity);
-								leftSet = false;
-								upSet = false;
-				}
+		if(GlobalY >= (currentPosY + jumpHeight * 5)) {
+			if (finger == 1) {
+				float currentPosX = gamePlayer.getX();
+					if((currentPosX) > GlobalX) {			
+							velocity = Vector2Pool.obtain((-1) * goStep, 0);
+								currentX = velocity.x;
+								if(!leftSet) setLeft();
+									gamePlayer.GoLeft(velocity);
+									rightSet = upSet = false;
+					}
+					else if((currentPosX + gamePlayer.getWidth()) < GlobalX){
+						velocity = Vector2Pool.obtain(goStep, 0);
+								currentX = velocity.x;
+								if(!rightSet) setRight();
+									gamePlayer.GoRight(velocity);
+									leftSet = upSet = false;
+					}
+			} else {
+				gamePlayer.Stay();
+				rightSet = leftSet = upSet = false;
+			}
+			
 		} else if(GlobalY < (currentPosY + jumpHeight * 3)) {
 			if(!upSet) setUp();
 			velocity = Vector2Pool.obtain(currentX, jumpHeight);
 				gamePlayer.Jump(velocity);
 					GlobalY = GameActivity.CAMERA_HEIGHT;
-					rightSet = false;
-					leftSet = false;
+					rightSet = leftSet = false;
 		}
 
 	}	
@@ -269,8 +257,7 @@ public class Game_Scene extends CameraScene {
 						}
 						else {
 							gamePlayer.Stay();	
-							rightSet = false;
-							leftSet = false;
+							rightSet = leftSet = upSet = false;
 						}
 					break;
 				default:
@@ -280,11 +267,16 @@ public class Game_Scene extends CameraScene {
 			}
 			return true;
 			}
+		else {
+			gamePlayer.Stay();
+			rightSet = leftSet = upSet = false;
+		}
 		return false;
 
 	}
 
 	private void addObstacles(ITextureRegion pTextureRegion, String xmlFile, int amount) {
+	
 		float pX, pY;
 		Obstacle _obstacle;
 		while(amount > 0) {
@@ -312,6 +304,7 @@ public class Game_Scene extends CameraScene {
 	}    
 	
 	private void addGoods(float pY, final float obstWidth, ArrayList<TextureRegion> mGoodTextureRegion, int amount) {
+	
 		float pX;
 		Random random = new Random();
 		GoodFruit _goodFruit;
@@ -324,18 +317,16 @@ public class Game_Scene extends CameraScene {
 			goodsLL.add(_goodFruit);
 			amount--;
 		}
-
+	
 	}   
 	
 	
-	private void showScore(){
+	private void showScore(){		
 		
 		_score = new Text(0, 0, GfxAssets.mFont, String.valueOf(maxScore), GameActivity._main.getVertexBufferObjectManager());
 		_score.setPosition(GameActivity.CAMERA_WIDTH - _score.getWidth() - 70, 20);
-
-		_score.setScale(2);
-		_score.setScaleCenterY(0);
-		this.attachChild(_score);
+		this.attachChild(_score);		
+		
 	}
 
 	/** to restart the game and clear the whole screen */
