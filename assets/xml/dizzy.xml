@@ -3,51 +3,69 @@
 <bodydef version="1.0">
     <bodies numBodies="1">
 
-        <body name="player" dynamic="true" numFixtures="1">
+        <body name="player_d_all" dynamic="true" numFixtures="4">
 
             <fixture
-                density="0"
-                friction="0.5"
-                restitution="0.5"
-                filter_categoryBits="7"
-                filter_groupIndex="4"
+                density="2"
+                friction="0"
+                restitution="0"
+                filter_categoryBits="1"
+                filter_groupIndex="0"
                 filter_maskBits="65535"
                 isSensor="false"
-                type="POLYGON"
-                numPolygons="2"
+                type="CIRCLE"
+                numPolygons=""
                 >
 
+                <circle r="10.000" x="-290.000" y="160.000"/>
 
-                <polygon numVertexes="5">
+            </fixture>
 
-                    <vertex x="4.0000" y="-57.0000" />
+            <fixture
+                density="2"
+                friction="0"
+                restitution="0"
+                filter_categoryBits="1"
+                filter_groupIndex="0"
+                filter_maskBits="65535"
+                isSensor="false"
+                type="CIRCLE"
+                numPolygons=""
+                >
 
-                    <vertex x="7.0000" y="-54.0000" />
+                <circle r="10.000" x="-290.000" y="160.000"/>
 
-                    <vertex x="6.0000" y="-48.0000" />
+            </fixture>
 
-                    <vertex x="-5.0000" y="-47.0000" />
+            <fixture
+                density="2"
+                friction="0"
+                restitution="0"
+                filter_categoryBits="1"
+                filter_groupIndex="0"
+                filter_maskBits="65535"
+                isSensor="false"
+                type="CIRCLE"
+                numPolygons=""
+                >
 
-                    <vertex x="-4.0000" y="-57.0000" />
+                <circle r="10.000" x="-290.000" y="160.000"/>
 
-                </polygon>
+            </fixture>
 
-                <polygon numVertexes="6">
+            <fixture
+                density="2"
+                friction="0"
+                restitution="0"
+                filter_categoryBits="1"
+                filter_groupIndex="0"
+                filter_maskBits="65535"
+                isSensor="false"
+                type="CIRCLE"
+                numPolygons=""
+                >
 
-                    <vertex x="-5.0000" y="-32.0000" />
-
-                    <vertex x="-9.0000" y="-45.0000" />
-
-                    <vertex x="-5.0000" y="-47.0000" />
-
-                    <vertex x="6.0000" y="-48.0000" />
-
-                    <vertex x="9.0000" y="-43.0000" />
-
-                    <vertex x="5.0000" y="-32.0000" />
-
-                </polygon>
-
+                <circle r="26.000" x="-245.000" y="2.000"/>
 
             </fixture>
 

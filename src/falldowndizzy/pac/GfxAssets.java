@@ -43,6 +43,8 @@ public class GfxAssets {
 	public static ArrayList<TextureRegion> mGoodsArray;
 	
 	public static ITextureRegion mPlatformTextureRegion1;
+	public static ITextureRegion mPlatformLongTextureRegion;
+	public static ITextureRegion mPlatform2TextureRegion;
 	public static Font mFont;
 	
 	public static Music mMusic;	
@@ -89,6 +91,10 @@ public class GfxAssets {
 				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "dizzy_parallax_background_layer_trees.png", 480, 0);
 		mPlatformTextureRegion1 = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "plat1.png", 0, 800);
+		mPlatformLongTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "bridge_long.png", 0, 825);	
+		mPlatform2TextureRegion =  BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "bridge_2.png", 0, 872);
 		mAutoParallaxBackgroundTexture2.load();
 		
 		mFont = FontFactory
