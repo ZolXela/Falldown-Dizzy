@@ -38,8 +38,7 @@ public class Dizzy extends AnimatedSprite {
 			@Override
 			public void endContact(Contact contact)
 			{
-				jumping = true;
-				
+				jumping = true;	
 			}
 			@Override
 			public void preSolve(Contact contact, Manifold oldManifold) {

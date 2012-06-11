@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
@@ -74,7 +73,7 @@ public class Game_Scene extends CameraScene {
 	private int finger = 0;
 	float currentX = 0;
 	private float jumpHeight = -18;
-	private float goStep = 7;
+	private float goStep = 5;
 
 	/* Fields for Dizzy's score */
 	public static Text _score;
