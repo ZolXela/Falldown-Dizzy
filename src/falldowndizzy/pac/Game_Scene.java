@@ -104,6 +104,8 @@ public class Game_Scene extends CameraScene {
 		this.initBorders();
 		this.CreateDizzy(30, 50);
 		attachChild(gamePlayer);
+		this.initObstacles();
+		
 		gamePlayer.Stay();
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 
@@ -169,11 +171,23 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(leftOuter);
 		this.attachChild(rightOuter);
 				
-		this.addObstacles(GfxAssets.mPlatformTextureRegion1, "plat1.xml", 1);
+//		this.addObstacles(GfxAssets.mPlatformTextureRegion1, "plat1.xml", 1);
 //		this.addEnemies(100, -10, GfxAssets.mSpiderTextureRegion, "enemy.xml", 0, spidersQuantity);
-		addGoods(GameActivity.CAMERA_HEIGHT, GameActivity.CAMERA_WIDTH, GfxAssets.mGoodsArray, fruitsQuantity + 3);
+//		addGoods(GameActivity.CAMERA_HEIGHT, GameActivity.CAMERA_WIDTH, GfxAssets.mGoodsArray, fruitsQuantity + 3);
 		
 		this.showScore();
+		
+	}
+	
+	private void initObstacles(){
+		
+		this.addObstacles(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatformTextureRegion1, "plat1.xml", 1);	
+		this.addObstacles(0, 753 ,GfxAssets.mPlatformLongTextureRegion, "bridge_long.xml", 2);
+		this.addObstacles(300, 650, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
+		this.addObstacles(0, 550, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 4);
+		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 5);
+	//	addGoods(GameActivity.CAMERA_HEIGHT, GameActivity.CAMERA_WIDTH, GfxAssets.mGoodsArray, fruitsQuantity + 3);	
+		
 		
 	}
 	
@@ -274,19 +288,16 @@ public class Game_Scene extends CameraScene {
 
 	}
 
-	private void addObstacles(ITextureRegion pTextureRegion, String xmlFile, int amount) {
+	private void addObstacles(float pX, float pY, ITextureRegion pTextureRegion, String xmlFile, int amount) {
 	
-		float pX, pY;
 		Obstacle _obstacle;
-		while(amount > 0) {
-			pX = 0;
-			pY = GameActivity.CAMERA_HEIGHT / 2;
+	//	while(amount > 0) {
 			_obstacle = new Obstacle(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
 			this.attachChild(_obstacle);
 			platformLL.add(_obstacle);
-			this.addGoods(pY, _obstacle.getWidth(), GfxAssets.mGoodsArray, fruitsQuantity);
-			amount--;
-		}
+		//	this.addGoods(pY, _obstacle.getWidth(), GfxAssets.mGoodsArray, fruitsQuantity);
+	//		amount--;
+	//	}
 
 	}
 	

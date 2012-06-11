@@ -14,7 +14,7 @@ public class MainMenu_Scene extends CameraScene {
 		this.setOnAreaTouchTraversalFrontToBack();
 		
 		setBackground(LoadAutoParalaxBg());
-        //GfxAssets.mMusic.play();
+        GfxAssets.mMusic.play();
 		final Sprite _sprite = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 
 				(GameActivity.CAMERA_HEIGHT- GfxAssets.mMenuBtnTextureRegion.getHeight()) / 2,
 					GfxAssets.mMenuBtnTextureRegion, GameActivity.mVertexBufferObjectManager) {
@@ -26,7 +26,7 @@ public class MainMenu_Scene extends CameraScene {
 			}
 		};
 		
-		final Text _menuTitle = new Text(0, 0, GfxAssets.mFont, "MENU", GameActivity._main.getVertexBufferObjectManager());
+		final Text _menuTitle = new Text(0, 0, GfxAssets.mFont, "START", GameActivity._main.getVertexBufferObjectManager());
 		_menuTitle.setPosition((_sprite.getWidth() - _menuTitle.getWidth()) / 2 + 15, (_sprite.getHeight() - _menuTitle.getWidth()) / 2 + 30);
 		_menuTitle.setColor(Color.BLACK);
 		_menuTitle.setScale(0.9f);
