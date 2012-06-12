@@ -183,7 +183,7 @@ public class Game_Scene extends CameraScene {
 		this.addObstacles(0, 550, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 4);
 		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
 		this.addGoodFixedPos(300, 40, GfxAssets.mBananaTextureRegion);
-		this.addEnemies(100, 0, GfxAssets.mSpiderTextureRegion, "enemy.xml", 0);
+		this.addEnemies(330, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion, "spider.xml", 0);
 		
 	}
 	
