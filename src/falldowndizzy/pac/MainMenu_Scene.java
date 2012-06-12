@@ -14,7 +14,7 @@ public class MainMenu_Scene extends CameraScene {
 		this.setOnAreaTouchTraversalFrontToBack();
 		
 		setBackground(LoadAutoParalaxBg());
-        GfxAssets.mMusic.play();
+     //   GfxAssets.mMusic.play();
 		final Sprite _sprite = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 
 				(GameActivity.CAMERA_HEIGHT- GfxAssets.mMenuBtnTextureRegion.getHeight()) / 2,
 					GfxAssets.mMenuBtnTextureRegion, GameActivity.mVertexBufferObjectManager) {
