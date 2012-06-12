@@ -170,8 +170,6 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(topOuter);
 		this.attachChild(leftOuter);
 		this.attachChild(rightOuter);
-				
-//		this.addEnemies(100, -10, GfxAssets.mSpiderTextureRegion, "enemy.xml", 0, spidersQuantity);
 		
 		this.showScore();
 		
@@ -185,6 +183,7 @@ public class Game_Scene extends CameraScene {
 		this.addObstacles(0, 550, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 4);
 		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
 		this.addGoodFixedPos(300, 40, GfxAssets.mBananaTextureRegion);
+		this.addEnemies(100, 0, GfxAssets.mSpiderTextureRegion, "enemy.xml", 0);
 		
 	}
 	
@@ -296,15 +295,12 @@ public class Game_Scene extends CameraScene {
 			this.addGoods(pY, _obstacle.getX(), width, GfxAssets.mGoodsArray, fruitsQuantity);
 	}
 	
-	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion, String xmlFile, float pos, int amount) {
+	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion, String xmlFile, float pos) {
 
 		SpiderEnemy _spiderEnemy;
-		while(amount > 0) {
-			_spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile, pos);
-			this.attachChild(_spiderEnemy);
-			spiderLL.add(_spiderEnemy);
-			amount--;
-		}
+		_spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile, pos);
+		this.attachChild(_spiderEnemy);
+		spiderLL.add(_spiderEnemy);
 
 	}    
 	

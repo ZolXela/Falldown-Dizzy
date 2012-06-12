@@ -15,8 +15,7 @@ public class MainMenu_Scene extends CameraScene {
 		
 		setBackground(LoadAutoParalaxBg());
      //   GfxAssets.mMusic.play();
-		final Sprite _sprite = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 
-				(GameActivity.CAMERA_HEIGHT- GfxAssets.mMenuBtnTextureRegion.getHeight()) / 2,
+		final Sprite _spriteStart = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 200,
 					GfxAssets.mMenuBtnTextureRegion, GameActivity.mVertexBufferObjectManager) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -27,13 +26,32 @@ public class MainMenu_Scene extends CameraScene {
 		};
 		
 		final Text _menuTitle = new Text(0, 0, GfxAssets.mFont, "START", GameActivity._main.getVertexBufferObjectManager());
-		_menuTitle.setPosition((_sprite.getWidth() - _menuTitle.getWidth()) / 2 + 15, (_sprite.getHeight() - _menuTitle.getWidth()) / 2 + 30);
+		_menuTitle.setPosition((_spriteStart.getWidth() - _menuTitle.getWidth()) / 2 + 15, (_spriteStart.getHeight() - _menuTitle.getWidth()) / 2 + 30);
 		_menuTitle.setColor(Color.BLACK);
 		_menuTitle.setScale(0.9f);
-		_sprite.attachChild(_menuTitle);	
+		_spriteStart.attachChild(_menuTitle);	
 		
-		attachChild(_sprite);
-		this.registerTouchArea(_sprite);
+		attachChild(_spriteStart);
+		this.registerTouchArea(_spriteStart);
+		
+		final Sprite _spriteLevel = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mLevelBtnTextureRegion.getWidth()) / 2, 400,
+					GfxAssets.mLevelBtnTextureRegion, GameActivity.mVertexBufferObjectManager) {
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
+					float pTouchAreaLocalX, float pTouchAreaLocalY) {
+				MainState.ShowGameScene();
+				return true;
+			}
+		};
+		
+		final Text _levelTitle = new Text(0, 0, GfxAssets.mFont, "LEVEL", GameActivity._main.getVertexBufferObjectManager());
+		_levelTitle.setPosition((_spriteLevel.getWidth() - _levelTitle.getWidth()) / 2 + 15, (_spriteLevel.getHeight() - _levelTitle.getWidth()) / 2 + 30);
+		_levelTitle.setColor(Color.BLACK);
+		_levelTitle.setScale(0.9f);
+		_spriteLevel.attachChild(_levelTitle);	
+		
+		attachChild(_spriteLevel);
+		this.registerTouchArea(_spriteLevel);
 		
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 	}

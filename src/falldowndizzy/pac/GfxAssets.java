@@ -30,6 +30,7 @@ public class GfxAssets {
 	public static ITextureRegion mParallaxLayerTreesBg;
 	public static ITextureRegion mParallaxLayerCloud;	
 	public static ITextureRegion mMenuBtnTextureRegion;
+	public static ITextureRegion mLevelBtnTextureRegion;
 	
 	public static TiledTextureRegion mPlayerTextureRegion;
 	
@@ -66,6 +67,8 @@ public class GfxAssets {
 				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "dizzy_parallax_background_layer_back.png", 0, 150);
 		mMenuBtnTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "button_menu.png", 480, 150);
+		mLevelBtnTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "square_button.png", 68, 950);
 		mStrawberryTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "strawberry.png", 0, 950);
 		mAppleTextureRegion = BitmapTextureAtlasTextureRegionFactory
