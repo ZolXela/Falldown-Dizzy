@@ -95,11 +95,11 @@ public class GfxAssets {
 		mPlatformTextureRegion1 = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "plat1.png", 0, 800);
 		mPlatformLongTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "bridge_long.png", 0, 825);	
+				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "bridge_long.png", 0, 847);	
 		mPlatform2TextureRegion =  BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "bridge_2.png", 147, 800);
 		mSpiderTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "spider.png", 381, 800, 12, 1);
+				.createTiledFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "spider.png", 480, 800, 12, 1);
 		mAutoParallaxBackgroundTexture2.load();
 		
 		mFont = FontFactory

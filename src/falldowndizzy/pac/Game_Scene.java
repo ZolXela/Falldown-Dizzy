@@ -177,12 +177,12 @@ public class Game_Scene extends CameraScene {
 	
 	private void initObstacles(){
 		
+		this.addGoodFixedPos(300, 40, GfxAssets.mBananaTextureRegion);
 		this.addObstacles(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatformTextureRegion1, "plat1.xml", 1);	
 		this.addObstacles(0, 753 ,GfxAssets.mPlatformLongTextureRegion, "bridge_long.xml", 5);
 		this.addObstacles(300, 650, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 2);
 		this.addObstacles(0, 550, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 4);
 		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
-		this.addGoodFixedPos(300, 40, GfxAssets.mBananaTextureRegion);
 		this.addEnemies(330, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion, "spider.xml", 0);
 		
 	}
@@ -288,11 +288,11 @@ public class Game_Scene extends CameraScene {
 	
 		Obstacle _obstacle;
 			_obstacle = new Obstacle(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
-			this.attachChild(_obstacle);
 			platformLL.add(_obstacle);
 			_obstacle.setIgnoreUpdate(true);
 			float width = (_obstacle.getX() + _obstacle.getWidth() < GameActivity.CAMERA_WIDTH) ? _obstacle.getWidth() : GameActivity.CAMERA_WIDTH - _obstacle.getX();
 			this.addGoods(pY, _obstacle.getX(), width, GfxAssets.mGoodsArray, fruitsQuantity);
+			this.attachChild(_obstacle);
 	}
 	
 	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion, String xmlFile, float pos) {

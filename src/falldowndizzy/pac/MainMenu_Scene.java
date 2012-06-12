@@ -34,24 +34,24 @@ public class MainMenu_Scene extends CameraScene {
 		attachChild(_spriteStart);
 		this.registerTouchArea(_spriteStart);
 		
-		final Sprite _spriteLevel = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mLevelBtnTextureRegion.getWidth()) / 2, 400,
-					GfxAssets.mLevelBtnTextureRegion, GameActivity.mVertexBufferObjectManager) {
-			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				MainState.ShowGameScene();
-				return true;
-			}
-		};
-		
-		final Text _levelTitle = new Text(0, 0, GfxAssets.mFont, "LEVEL", GameActivity._main.getVertexBufferObjectManager());
-		_levelTitle.setPosition((_spriteLevel.getWidth() - _levelTitle.getWidth()) / 2 + 15, (_spriteLevel.getHeight() - _levelTitle.getWidth()) / 2 + 30);
-		_levelTitle.setColor(Color.BLACK);
-		_levelTitle.setScale(0.9f);
-		_spriteLevel.attachChild(_levelTitle);	
-		
-		attachChild(_spriteLevel);
-		this.registerTouchArea(_spriteLevel);
+//		final Sprite _spriteLevel = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mLevelBtnTextureRegion.getWidth()) / 2, 400,
+//					GfxAssets.mLevelBtnTextureRegion, GameActivity.mVertexBufferObjectManager) {
+//			@Override
+//			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
+//					float pTouchAreaLocalX, float pTouchAreaLocalY) {
+//				MainState.ShowLevelScene();
+//				return true;
+//			}
+//		};
+//		
+//		final Text _levelTitle = new Text(0, 0, GfxAssets.mFont, "LEVEL", GameActivity._main.getVertexBufferObjectManager());
+//		_levelTitle.setPosition((_spriteLevel.getWidth() - _levelTitle.getWidth()) / 2 + 15, (_spriteLevel.getHeight() - _levelTitle.getWidth()) / 2 + 30);
+//		_levelTitle.setColor(Color.BLACK);
+//		_levelTitle.setScale(0.9f);
+//		_spriteLevel.attachChild(_levelTitle);	
+//		
+//		attachChild(_spriteLevel);
+//		this.registerTouchArea(_spriteLevel);
 		
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 	}

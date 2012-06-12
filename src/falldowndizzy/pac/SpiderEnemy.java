@@ -32,21 +32,21 @@ public class SpiderEnemy extends AnimatedSprite {
 			VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld, String xmlFile, float defaultHeight) {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
 		mPhysicsWorld = pPhysicsWorld;
-		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
-		loader.setAssetBasePath("xml/");
-		try {
-		     loader.load(GameActivity._main, mPhysicsWorld, xmlFile, this,
-					false, false);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		final PhysicsEditorLoader loader = new PhysicsEditorLoader();
+//		loader.setAssetBasePath("xml/");
+//		try {
+//		     loader.load(GameActivity._main, mPhysicsWorld, xmlFile, this,
+//					false, false);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 		
-//		mDefaultHeight = defaultHeight;
-//		
-//		EnemyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
-//		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, EnemyBody, true, false));	
-//		
+		mDefaultHeight = defaultHeight;
+		
+		EnemyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, EnemyBody, true, false));	
+		
 //		this.setPosition(pX, pY);
 
 		this.setAnimation(0, 11);
