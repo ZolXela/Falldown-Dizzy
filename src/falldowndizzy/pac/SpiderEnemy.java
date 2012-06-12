@@ -12,10 +12,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
 
 
 public class SpiderEnemy extends AnimatedSprite {
@@ -34,7 +30,6 @@ public class SpiderEnemy extends AnimatedSprite {
 			VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld mPhysicsWorld, String xmlFile, float defaultHeight) {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
 		pPhysicsWorld = mPhysicsWorld;
-		contactArea = this.getWidth();
 		mDefaultHeight = defaultHeight;
 		
 		EnemyBody = PhysicsFactory.createCircleBody(pPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
@@ -54,6 +49,7 @@ public class SpiderEnemy extends AnimatedSprite {
 		@Override
 		public void onUpdate(float pSecondsElapsed) {
 			SpiderEnemy.curEnemy.setHeight(getNewHeight());
+			SpiderEnemy.curEnemy.createSpriteTimeHandler();
 		}
 	};
 

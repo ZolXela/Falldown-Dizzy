@@ -1,5 +1,6 @@
 package falldowndizzy.pac;
 
+import com.crittercism.app.Crittercism;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
@@ -33,6 +34,7 @@ public class GameActivity extends SimpleBaseGameActivity{
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
+		Crittercism.init(getApplicationContext(), "4fd602dec8f9742459000005");
 		_main = this;
 		_Camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		final EngineOptions opt = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED,
@@ -58,6 +60,7 @@ public class GameActivity extends SimpleBaseGameActivity{
 	protected void onCreateResources() {
 		_Engine = this.mEngine;
 		GfxAssets.LoadGFX_800_480();
+		GfxAssets.LoadMFX();
 	}
 
 	@Override
