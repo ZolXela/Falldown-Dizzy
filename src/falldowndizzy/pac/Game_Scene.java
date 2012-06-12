@@ -72,8 +72,8 @@ public class Game_Scene extends CameraScene {
 	
 	private int finger = 0;
 	float currentX = 0;
-	private float jumpHeight = -18;
-	private float goStep = 5;
+	private float jumpHeight = -20;
+	private float goStep = 7;
 
 	/* Fields for Dizzy's score */
 	public static Text _score;
@@ -83,11 +83,6 @@ public class Game_Scene extends CameraScene {
 	public static LinkedList<SpiderEnemy> spiderLL;
 	private LinkedList<Obstacle> platformLL;
 	public static LinkedList<GoodFruit> goodsLL;
-	
-	private int obstacleQuantity = 3;
-	private int fruitsQuantity = 3;
-	private int spidersQuantity = 2;
-	
 	
 	
 	public Game_Scene(){
@@ -126,7 +121,7 @@ public class Game_Scene extends CameraScene {
 	
 	private void setGamePhysicsWorld(){
 
-		gamePhysicsWorld = new FixedStepPhysicsWorld(100, new Vector2(0, SensorManager.GRAVITY_EARTH * 5), true, 8, 1);	
+		gamePhysicsWorld = new FixedStepPhysicsWorld(120, new Vector2(0, SensorManager.GRAVITY_EARTH * 5), true, 8, 1);	
 		
 	}
 	
@@ -161,6 +156,11 @@ public class Game_Scene extends CameraScene {
 		PhysicsFactory.createBoxBody(this.gamePhysicsWorld, leftOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
 		PhysicsFactory.createBoxBody(this.gamePhysicsWorld, rightOuter, BodyType.StaticBody, WALL_FIXTURE_DEF);
 			
+		bottomOuter.setIgnoreUpdate(true);
+		topOuter.setIgnoreUpdate(true);
+		leftOuter.setIgnoreUpdate(true);
+		rightOuter.setIgnoreUpdate(true);
+		
 		bottomOuter.setColor(Color.BLACK);
 		topOuter.setColor(Color.BLACK);
 		leftOuter.setColor(Color.BLACK);
@@ -171,9 +171,7 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(leftOuter);
 		this.attachChild(rightOuter);
 				
-//		this.addObstacles(GfxAssets.mPlatformTextureRegion1, "plat1.xml", 1);
 //		this.addEnemies(100, -10, GfxAssets.mSpiderTextureRegion, "enemy.xml", 0, spidersQuantity);
-//		addGoods(GameActivity.CAMERA_HEIGHT, GameActivity.CAMERA_WIDTH, GfxAssets.mGoodsArray, fruitsQuantity + 3);
 		
 		this.showScore();
 		
@@ -182,12 +180,11 @@ public class Game_Scene extends CameraScene {
 	private void initObstacles(){
 		
 		this.addObstacles(0, GameActivity.CAMERA_HEIGHT / 2, GfxAssets.mPlatformTextureRegion1, "plat1.xml", 1);	
-		this.addObstacles(0, 753 ,GfxAssets.mPlatformLongTextureRegion, "bridge_long.xml", 2);
-		this.addObstacles(300, 650, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
+		this.addObstacles(0, 753 ,GfxAssets.mPlatformLongTextureRegion, "bridge_long.xml", 5);
+		this.addObstacles(300, 650, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 2);
 		this.addObstacles(0, 550, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 4);
-		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 5);
-	//	addGoods(GameActivity.CAMERA_HEIGHT, GameActivity.CAMERA_WIDTH, GfxAssets.mGoodsArray, fruitsQuantity + 3);	
-		
+		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
+		this.addGoodFixedPos(300, 40, GfxAssets.mBananaTextureRegion);
 		
 	}
 	
@@ -288,17 +285,15 @@ public class Game_Scene extends CameraScene {
 
 	}
 
-	private void addObstacles(float pX, float pY, ITextureRegion pTextureRegion, String xmlFile, int amount) {
+	private void addObstacles(float pX, float pY, ITextureRegion pTextureRegion, String xmlFile, int fruitsQuantity) {
 	
 		Obstacle _obstacle;
-	//	while(amount > 0) {
 			_obstacle = new Obstacle(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
 			this.attachChild(_obstacle);
 			platformLL.add(_obstacle);
-		//	this.addGoods(pY, _obstacle.getWidth(), GfxAssets.mGoodsArray, fruitsQuantity);
-	//		amount--;
-	//	}
-
+			_obstacle.setIgnoreUpdate(true);
+			float width = (_obstacle.getX() + _obstacle.getWidth() < GameActivity.CAMERA_WIDTH) ? _obstacle.getWidth() : GameActivity.CAMERA_WIDTH - _obstacle.getX();
+			this.addGoods(pY, _obstacle.getX(), width, GfxAssets.mGoodsArray, fruitsQuantity);
 	}
 	
 	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion, String xmlFile, float pos, int amount) {
@@ -313,22 +308,28 @@ public class Game_Scene extends CameraScene {
 
 	}    
 	
-	private void addGoods(float pY, final float obstWidth, ArrayList<TextureRegion> mGoodTextureRegion, int amount) {
+	private void addGoods(float pY, final float obstX, final float obstWidth, ArrayList<TextureRegion> mGoodTextureRegion, int amount) {
 	
 		float pX;
 		Random random = new Random();
-		GoodFruit _goodFruit;
 		TextureRegion curFruitTR;
 		while(amount > 0) {
 			curFruitTR = mGoodTextureRegion.get(random.nextInt(mGoodTextureRegion.size()));
-			pX = (obstWidth - curFruitTR.getWidth()) * random.nextFloat();
-			_goodFruit = new GoodFruit(pX, pY - curFruitTR.getHeight(), curFruitTR, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
-			this.attachChild(_goodFruit);
-			goodsLL.add(_goodFruit);
+			pX = obstX + (obstWidth - curFruitTR.getWidth()) * random.nextFloat();
+			this.addGoodFixedPos(pX, pY, curFruitTR);
 			amount--;
 		}
 	
 	}   
+	
+	private void addGoodFixedPos(float pX, float pY, TextureRegion curFruitTR) {
+		
+		GoodFruit _goodFruit;
+		_goodFruit = new GoodFruit(pX, pY - curFruitTR.getHeight(), curFruitTR, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
+		this.attachChild(_goodFruit);
+		goodsLL.add(_goodFruit);
+	
+	}
 	
 	
 	private void showScore(){		
@@ -364,11 +365,25 @@ public class Game_Scene extends CameraScene {
 //		this.attachChild(flare);
 //	}
 		
-	public void callbackCollisionGoods(int i){
-		goodsLL.get(i).setCollision();
-		this.detachChild(goodsLL.get(i));
-		_score.setText(String.valueOf(--Game_Scene.curScore));
-		goodsLL.remove(i);
+	public void callbackCollisionGoods(final int i){
+		
+		GameActivity._main.runOnUpdateThread(new Runnable() {
+		    @Override
+		    public void run() {
+				goodsLL.get(i).setCollision();
+				MainState._Game_Scene.detachChild(goodsLL.get(i));
+				_score.setText(String.valueOf(--Game_Scene.curScore));
+				if(Game_Scene.curScore == 0){
+					isGameFinished = true ;
+					finishGame();
+				}
+				goodsLL.remove(i);
+		    }
+		});
+		
+	}
+	
+	private void finishGame(){
 		
 	}
 	

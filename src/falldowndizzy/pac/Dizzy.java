@@ -1,7 +1,5 @@
 package falldowndizzy.pac;
 
-import java.io.IOException;
-
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
