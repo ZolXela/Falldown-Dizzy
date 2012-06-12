@@ -314,11 +314,11 @@
             </fixture>
 
             <fixture
-                density="2"
-                friction="0"
+                density="0"
+                friction="0.8"
                 restitution="0"
-                filter_categoryBits="1"
-                filter_groupIndex="0"
+                filter_categoryBits="8"
+                filter_groupIndex="4"
                 filter_maskBits="65535"
                 isSensor="false"
                 type="POLYGON"
