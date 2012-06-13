@@ -54,7 +54,6 @@ public class Game_Scene extends CameraScene {
 	Vector2 velocity;
 	
 	private boolean gameLoaded = false;
-	private boolean isGameFinished = false;
 	
 	/**
 	 * Screen borders
@@ -77,6 +76,8 @@ public class Game_Scene extends CameraScene {
 
 	/* Fields for Dizzy's score */
 	public static Text _score;
+	@SuppressWarnings("unused")
+	private int lifeS = 3;
 	private final static int maxScore = 30;
 	public static int curScore = maxScore;
 	
@@ -183,7 +184,7 @@ public class Game_Scene extends CameraScene {
 		this.addObstacles(300, 650, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 2);
 		this.addObstacles(0, 550, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 4);
 		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
-		this.addEnemies(330, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion, "spider.xml", 0);
+		this.addEnemies(400, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion);
 		
 	}
 	
@@ -286,19 +287,18 @@ public class Game_Scene extends CameraScene {
 
 	private void addObstacles(float pX, float pY, ITextureRegion pTextureRegion, String xmlFile, int fruitsQuantity) {
 	
-		Obstacle _obstacle;
-			_obstacle = new Obstacle(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
-			platformLL.add(_obstacle);
-			_obstacle.setIgnoreUpdate(true);
-			float width = (_obstacle.getX() + _obstacle.getWidth() < GameActivity.CAMERA_WIDTH) ? _obstacle.getWidth() : GameActivity.CAMERA_WIDTH - _obstacle.getX();
-			this.addGoods(pY, _obstacle.getX(), width, GfxAssets.mGoodsArray, fruitsQuantity);
-			this.attachChild(_obstacle);
+		Obstacle _obstacle = new Obstacle(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile);
+		platformLL.add(_obstacle);
+		_obstacle.setIgnoreUpdate(true);
+		float width = (_obstacle.getX() + _obstacle.getWidth() < GameActivity.CAMERA_WIDTH) ? _obstacle.getWidth() : GameActivity.CAMERA_WIDTH - _obstacle.getX();
+		this.addGoods(pY, _obstacle.getX(), width, GfxAssets.mGoodsArray, fruitsQuantity);
+		this.attachChild(_obstacle);
+	
 	}
 	
-	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion, String xmlFile, float pos) {
+	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion) {
 
-		SpiderEnemy _spiderEnemy;
-		_spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld, xmlFile, pos);
+		SpiderEnemy _spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 		this.attachChild(_spiderEnemy);
 		spiderLL.add(_spiderEnemy);
 
@@ -320,8 +320,7 @@ public class Game_Scene extends CameraScene {
 	
 	private void addGoodFixedPos(float pX, float pY, TextureRegion curFruitTR) {
 		
-		GoodFruit _goodFruit;
-		_goodFruit = new GoodFruit(pX, pY - curFruitTR.getHeight(), curFruitTR, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
+		GoodFruit _goodFruit = new GoodFruit(pX, pY - curFruitTR.getHeight(), curFruitTR, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 		this.attachChild(_goodFruit);
 		goodsLL.add(_goodFruit);
 	
@@ -344,9 +343,17 @@ public class Game_Scene extends CameraScene {
 			@Override
 			// to safely detach and re-attach the sprites
 			public void run() {
-				Game_Scene.this.detachChildren();
+				MainState._Game_Scene.detachChildren();
+				
+				platformLL.removeAll(platformLL);
+				spiderLL.removeAll(spiderLL);
+				goodsLL.removeAll(goodsLL);
+				
+				Game_Scene.this.initBorders();
 				Game_Scene.this.attachChild(gamePlayer);
-				Game_Scene.this.attachChild(Game_Scene._score);
+				gamePlayer.setPosition(0, 0);
+				_score.setText(String.valueOf(maxScore));
+				Game_Scene.this.initObstacles();
 			}
 		});
 
@@ -370,7 +377,6 @@ public class Game_Scene extends CameraScene {
 				MainState._Game_Scene.detachChild(goodsLL.get(i));
 				_score.setText(String.valueOf(--Game_Scene.curScore));
 				if(Game_Scene.curScore == 0){
-					isGameFinished = true ;
 					finishGame();
 				}
 				goodsLL.remove(i);
@@ -384,9 +390,9 @@ public class Game_Scene extends CameraScene {
 	}
 	
 	public void callbackCollisionEnemy(){
-		//restart 
 
-		this.isGameFinished = true;
+		this.restart();
+		this.lifeS--;
 	}
 	
 }

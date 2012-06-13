@@ -39,12 +39,12 @@ public class MainState extends Scene {
 		_GameState = MAIN_MENU_STATE;
 	}
 	
-//	public static void ShowLevelScene() {
-//		_LevelSelect_Scene.Show();
-//		_Game_Scene.Hide();
-//		_MainMenu_Scene.Hide();
-//		_GameState = SELECT_LEVELS_STATE;
-//	}
+	public static void ShowLevelScene() {
+		_LevelSelect_Scene.Show();
+		_Game_Scene.Hide();
+		_MainMenu_Scene.Hide();
+		_GameState = SELECT_LEVELS_STATE;
+	}
 	
 	
 	@Override
@@ -57,7 +57,9 @@ public class MainState extends Scene {
 		case GAME_RUNNING_STATE:
 			_Game_Scene.onSceneTouchEvent(pSceneTouchEvent);
 			break;
-			
+		case SELECT_LEVELS_STATE:
+			_LevelSelect_Scene.onSceneTouchEvent(pSceneTouchEvent);
+			break;	
 		}
 		return super.onSceneTouchEvent(pSceneTouchEvent);
 	}
@@ -69,6 +71,9 @@ public class MainState extends Scene {
 			GameActivity._main.onDestroy();
 			break;
 		case GAME_RUNNING_STATE:
+			ShowMainScene();
+			break;
+		case SELECT_LEVELS_STATE:
 			ShowMainScene();
 			break;
 		}

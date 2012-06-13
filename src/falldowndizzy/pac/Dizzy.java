@@ -84,13 +84,13 @@ public class Dizzy extends AnimatedSprite {
 	
 	private boolean onBeforePositionChanged(){
 		
-//		int enemyListSize = Game_Scene._curGameScene.spiderLL.size();
-//		for(int i = 0; i < enemyListSize; i++)
-//			if(this.collidesWith(Game_Scene._curGameScene.spiderLL.get(i)))
-//			{
-//				Game_Scene._curGameScene.callbackCollisionEnemy();
-//				return false;
-//			}
+		if(Game_Scene.spiderLL != null){
+			for(int i = 0; i < Game_Scene.spiderLL.size(); i++)
+				if(this.collidesWith(Game_Scene.spiderLL.get(i))){
+					Game_Scene._curGameScene.callbackCollisionEnemy();
+					return false;
+				}
+		}
 		if(Game_Scene.goodsLL != null)
 			for(int i = 0; i < Game_Scene.goodsLL.size(); i++) {
 				if(this.collidesWith(Game_Scene.goodsLL.get(i))) {
