@@ -39,12 +39,12 @@ public class MainState extends Scene {
 		_GameState = MAIN_MENU_STATE;
 	}
 	
-	public static void ShowLevelScene() {
-		_LevelSelect_Scene.Show();
-		_Game_Scene.Hide();
-		_MainMenu_Scene.Hide();
-		_GameState = SELECT_LEVELS_STATE;
-	}
+//	public static void ShowLevelScene() {
+//		_LevelSelect_Scene.Show();
+//		_Game_Scene.Hide();
+//		_MainMenu_Scene.Hide();
+//		_GameState = SELECT_LEVELS_STATE;
+//	}
 	
 	
 	@Override
