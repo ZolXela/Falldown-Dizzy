@@ -1,6 +1,5 @@
 package falldowndizzy.pac;
 
-import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -10,11 +9,10 @@ import org.andengine.util.color.Color;
 public class LevelSelect_Scene extends CameraScene {
 
 	public static int levelID = 1;
-	Camera levelCamera = GameActivity._Camera;
 	
 	public LevelSelect_Scene(){
 		super(GameActivity._Camera);
-		
+		this.setBackgroundEnabled(false);
 		this.setOnAreaTouchTraversalFrontToBack();
 		
 		setBackground(LoadAutoParalaxBg());

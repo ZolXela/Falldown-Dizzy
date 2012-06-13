@@ -75,6 +75,7 @@ public class Dizzy extends AnimatedSprite {
 		else if(velocity.x < 0) setAnimation(24, 31);
 		else setAnimation(16, 23);
 		this.DizzyBody.setLinearVelocity(velocity);	
+		GfxAssets.mJump.play();
 		Vector2Pool.recycle(velocity);
 	}
 	
@@ -84,14 +85,14 @@ public class Dizzy extends AnimatedSprite {
 	
 	private boolean onBeforePositionChanged(){
 		
-		if(Game_Scene.spiderLL != null){
+		if(!Game_Scene.spiderLL.isEmpty()){
 			for(int i = 0; i < Game_Scene.spiderLL.size(); i++)
 				if(this.collidesWith(Game_Scene.spiderLL.get(i))){
 					Game_Scene._curGameScene.callbackCollisionEnemy();
 					return false;
 				}
 		}
-		if(Game_Scene.goodsLL != null)
+		if(!Game_Scene.goodsLL.isEmpty())
 			for(int i = 0; i < Game_Scene.goodsLL.size(); i++) {
 				if(this.collidesWith(Game_Scene.goodsLL.get(i))) {
 					Game_Scene._curGameScene.callbackCollisionGoods(i);
