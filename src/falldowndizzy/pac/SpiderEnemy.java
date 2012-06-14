@@ -1,5 +1,7 @@
 package falldowndizzy.pac;
 
+import org.andengine.entity.modifier.PathModifier;
+import org.andengine.entity.modifier.PathModifier.Path;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -17,7 +19,8 @@ public class SpiderEnemy extends AnimatedSprite {
 	public Body RopeBody;
 	public Body SpiderBody;
 	private PhysicsWorld mPhysicsWorld;
-	public static Sprite rope;
+	public Sprite rope;
+	public Path path;
 	public static float mDefaultHeight;
 	public static float length[] = {0.4096f, 0.5662f, 0.6747f, 0.8313f, 1, 0.9157f, 0.9157f, 1, 0.8313f, 0.6747f, 0.5662f, 0.4096f};
 	
@@ -26,20 +29,25 @@ public class SpiderEnemy extends AnimatedSprite {
 		super(pX, pY + GfxAssets.mRopeTextureRegion.getHeight(), pTiledTextureRegion, pVertexBufferObjectManager);
 		mPhysicsWorld = pPhysicsWorld;
 		
-		SpiderBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		SpiderBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, SpiderBody, true, false));	
 		
-		rope = new Sprite(pX, pY, GfxAssets.mRopeTextureRegion, pVertexBufferObjectManager);
-		rope.setScaleX(2);
+		rope = new Sprite(pX, pY - 7, GfxAssets.mRopeTextureRegion, pVertexBufferObjectManager);
 		mDefaultHeight = rope.getHeight();
 		
 		RopeBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, RopeBody, true, false));	
 		
-		
 		this.setScale(1.5f);
-
-		this.setAnimation(500);
+		
+//		LineJointDef joint = new LineJointDef();
+//		joint.initialize(SpiderBody, RopeBody, new Vector2(this.getX(), this.getY()),  new Vector2(this.getX() + this.getWidth() / 2, 0));
+//		joint.enableMotor = true;
+		
+		this.setPosition(100, 50);
+		
+		
+		this.setAnimation(300);
 
 	}
 	
@@ -52,17 +60,26 @@ public class SpiderEnemy extends AnimatedSprite {
 			@Override
 			public void onAnimationStarted(AnimatedSprite pAnimatedSprite,
 					int pInitialLoopCount) {
+				System.out.println(">>>>>> before " + (rope.getY() + rope.getHeight()));
 				rope.setHeight(mDefaultHeight * SpiderEnemy.length[0]);
-//				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getX() + rope.getHeight());
-//				SpiderBody.setLinearVelocity(0, -20);				
+				System.out.println(">>>>>> after " + (rope.getY() + rope.getHeight()));
+				path = new Path(5).to(rope.getX(), rope.getY() + rope.getHeight());
+//				pAnimatedSprite.dispose();
+//				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getY() + rope.getHeight());
+//				pAnimatedSprite.registerEntityModifier(new PathModifier(300, new Path(20)));
+				pAnimatedSprite.registerEntityModifier(new PathModifier(10, path));
 			}
 
 			@Override
 			public void onAnimationFrameChanged(AnimatedSprite pAnimatedSprite,
 					int pOldFrameIndex, int pNewFrameIndex) {
+				System.out.println(">>>>>> before " + (rope.getY() + rope.getHeight()));
 				rope.setHeight(mDefaultHeight * SpiderEnemy.length[pNewFrameIndex]);
-//				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getX() + rope.getHeight());
-//				SpiderBody.setLinearVelocity(0, -20);
+				System.out.println(">>>>>> after " + (rope.getY() + rope.getHeight()));
+//				pAnimatedSprite.dispose();
+//				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getY() + rope.getHeight());
+//				pAnimatedSprite.setY(rope.getY() + rope.getHeight());
+//				pAnimatedSprite.registerEntityModifier(new PathModifier(10, path.to(rope.getX(), rope.getY() + rope.getHeight())));
 			}
 
 			@Override
