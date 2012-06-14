@@ -53,6 +53,7 @@ public class SpiderEnemy extends AnimatedSprite {
 			public void onAnimationStarted(AnimatedSprite pAnimatedSprite,
 					int pInitialLoopCount) {
 				rope.setHeight(mDefaultHeight * SpiderEnemy.length[0]);
+				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getX() + rope.getHeight());
 				
 			}
 
@@ -60,6 +61,7 @@ public class SpiderEnemy extends AnimatedSprite {
 			public void onAnimationFrameChanged(AnimatedSprite pAnimatedSprite,
 					int pOldFrameIndex, int pNewFrameIndex) {
 				rope.setHeight(mDefaultHeight * SpiderEnemy.length[pNewFrameIndex]);
+				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getX() + rope.getHeight());
 				
 			}
 
