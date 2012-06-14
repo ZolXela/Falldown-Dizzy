@@ -22,6 +22,7 @@ public class MainState extends Scene {
 		
 		attachChild(_MainMenu_Scene);
 		attachChild(_Game_Scene);
+		attachChild(_LevelSelect_Scene);
 		ShowMainScene();
 	}
 	

@@ -37,6 +37,8 @@ public class GfxAssets {
 	public static TiledTextureRegion mFlareTextureRegion;
 	public static TiledTextureRegion mSpiderTextureRegion;
 	
+	public static ITextureRegion mRopeTextureRegion;
+	
 	public static TextureRegion mStrawberryTextureRegion;
 	public static TextureRegion mAppleTextureRegion;
 	public static TextureRegion mBananaTextureRegion;
@@ -77,7 +79,6 @@ public class GfxAssets {
 				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "banana.png", 30, 951);
 		mCherryTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "cherry.png", 30, 985);
-//		mSpiderTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "target.png", 0, 0, 3, 1);
 		mAutoParallaxBackgroundTexture1.load();
 		
 		mGoodsArray = new ArrayList<TextureRegion>();
@@ -100,11 +101,13 @@ public class GfxAssets {
 				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "bridge_2.png", 147, 800);
 		mSpiderTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "spider.png", 480, 800, 12, 1);
+		mRopeTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "bridge_2.png", 147, 800);
 		mAutoParallaxBackgroundTexture2.load();
 		
 		mFont = FontFactory
 				.create(GameActivity._main.getFontManager(), GameActivity._Engine.getTextureManager(), 256, 256, Typeface
-						.create(Typeface.DEFAULT, Typeface.BOLD), 40, true, Color.MAGENTA);
+						.create(Typeface.DEFAULT, Typeface.BOLD), 40, true, Color.BLACK);
 		mFont.load();
 		
 	}	

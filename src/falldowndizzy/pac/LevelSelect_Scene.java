@@ -4,7 +4,6 @@ import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.util.color.Color;
 
 public class LevelSelect_Scene extends CameraScene {
 
@@ -16,11 +15,10 @@ public class LevelSelect_Scene extends CameraScene {
 		this.setOnAreaTouchTraversalFrontToBack();
 		
 		setBackground(this.LoadAutoParalaxBg());
-//		GfxAssets.mMusic.play();
 		initLevelTable(levelID);
-//		final Text ni = new Text(170, 500, GfxAssets.mFont, "NOT IMPLEMENTED YET", GameActivity.mVertexBufferObjectManager);
+		final Text ni = new Text(70, 500, GfxAssets.mFont, "NOT IMPLEMENTED YET", GameActivity.mVertexBufferObjectManager);
 //		ni.setColor(Color.WHITE);
-//		this.attachChild(ni);
+		this.attachChild(ni);
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 	}
 	
@@ -47,8 +45,7 @@ public class LevelSelect_Scene extends CameraScene {
 		};
 		
 		final Text _menuTitle = new Text(0, 0, GfxAssets.mFont, String.valueOf(level), GameActivity._main.getVertexBufferObjectManager());
-		_menuTitle.setPosition((_spriteLevel.getWidth() - _menuTitle.getWidth()) / 2 + 15, (_spriteLevel.getHeight() - _menuTitle.getWidth()) / 2 + 30);
-		_menuTitle.setColor(Color.BLACK);
+		_menuTitle.setPosition((_spriteLevel.getWidth() - _menuTitle.getWidth()) / 2 - 5, (_spriteLevel.getHeight() - _menuTitle.getWidth()) / 2 - 7);
 		_menuTitle.setScale(0.9f);
 		_spriteLevel.attachChild(_menuTitle);	
 		

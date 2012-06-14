@@ -11,6 +11,7 @@ import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
+import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -90,5 +91,11 @@ public class GameActivity extends SimpleBaseGameActivity{
 		super.onDestroy();
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	}
+	
 	
 }

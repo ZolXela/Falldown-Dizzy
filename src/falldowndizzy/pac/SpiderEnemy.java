@@ -23,17 +23,17 @@ public class SpiderEnemy extends AnimatedSprite {
 	
 	public SpiderEnemy(float pX, float pY, ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld) {
-		super(pX, pY + GfxAssets.mSpiderTextureRegion.getHeight(), pTiledTextureRegion, pVertexBufferObjectManager);
+		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
 		mPhysicsWorld = pPhysicsWorld;
 		
 		SpiderBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, SpiderBody, true, false));	
 		
-		rope = new Sprite(pX, pY, GfxAssets.mSpiderTextureRegion, pVertexBufferObjectManager);
-		mDefaultHeight = rope.getHeight();
-		
-		RopeBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
-		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, RopeBody, true, false));	
+//		rope = new Sprite(pX, pY, GfxAssets.mSpiderTextureRegion, pVertexBufferObjectManager);
+//		mDefaultHeight = rope.getHeight();
+//		
+//		RopeBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
+//		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, RopeBody, true, false));	
 		
 		
 		this.setScale(1.8f);
