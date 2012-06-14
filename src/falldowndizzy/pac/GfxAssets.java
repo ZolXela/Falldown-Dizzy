@@ -79,6 +79,8 @@ public class GfxAssets {
 				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "banana.png", 30, 951);
 		mCherryTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "cherry.png", 30, 985);
+		mRopeTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "rope.png", 900, 0);
 		mAutoParallaxBackgroundTexture1.load();
 		
 		mGoodsArray = new ArrayList<TextureRegion>();
@@ -101,8 +103,6 @@ public class GfxAssets {
 				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "bridge_2.png", 147, 800);
 		mSpiderTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "spider_wr.png", 381, 800, 12, 1);
-		mRopeTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "rope.png", 0, 894);
 		mAutoParallaxBackgroundTexture2.load();
 		
 		mFont = FontFactory

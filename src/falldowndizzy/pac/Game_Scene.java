@@ -300,6 +300,7 @@ public class Game_Scene extends CameraScene {
 
 		SpiderEnemy _spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
 		this.attachChild(_spiderEnemy);
+		this.attachChild(_spiderEnemy.rope);
 		spiderLL.add(_spiderEnemy);
 
 	}    
@@ -354,8 +355,8 @@ public class Game_Scene extends CameraScene {
 				goodsLL.removeAll(goodsLL);
 				
 				Game_Scene.this.initBorders();
+//				gamePlayer.
 				Game_Scene.this.attachChild(gamePlayer);
-				gamePlayer.setPosition(0, 0);
 				_score.setText(String.valueOf(maxScore));
 				Game_Scene.this.initObstacles();
 			}
