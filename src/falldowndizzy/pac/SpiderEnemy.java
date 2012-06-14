@@ -26,7 +26,7 @@ public class SpiderEnemy extends AnimatedSprite {
 		super(pX, pY + GfxAssets.mRopeTextureRegion.getHeight(), pTiledTextureRegion, pVertexBufferObjectManager);
 		mPhysicsWorld = pPhysicsWorld;
 		
-		SpiderBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		SpiderBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, SpiderBody, true, false));	
 		
 		rope = new Sprite(pX, pY, GfxAssets.mRopeTextureRegion, pVertexBufferObjectManager);
@@ -37,9 +37,9 @@ public class SpiderEnemy extends AnimatedSprite {
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, RopeBody, true, false));	
 		
 		
-		this.setScale(1.8f);
+		this.setScale(1.5f);
 
-		this.setAnimation(200);
+		this.setAnimation(500);
 
 	}
 	
@@ -53,16 +53,16 @@ public class SpiderEnemy extends AnimatedSprite {
 			public void onAnimationStarted(AnimatedSprite pAnimatedSprite,
 					int pInitialLoopCount) {
 				rope.setHeight(mDefaultHeight * SpiderEnemy.length[0]);
-				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getX() + rope.getHeight());
-				
+//				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getX() + rope.getHeight());
+//				SpiderBody.setLinearVelocity(0, -20);				
 			}
 
 			@Override
 			public void onAnimationFrameChanged(AnimatedSprite pAnimatedSprite,
 					int pOldFrameIndex, int pNewFrameIndex) {
 				rope.setHeight(mDefaultHeight * SpiderEnemy.length[pNewFrameIndex]);
-				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getX() + rope.getHeight());
-				
+//				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getX() + rope.getHeight());
+//				SpiderBody.setLinearVelocity(0, -20);
 			}
 
 			@Override
