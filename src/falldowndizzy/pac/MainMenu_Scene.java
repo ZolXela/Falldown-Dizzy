@@ -15,6 +15,7 @@ public class MainMenu_Scene extends CameraScene {
 		
 		setBackground(LoadAutoParalaxBg());
      //   GfxAssets.mMusic.play();
+		
 		final Sprite _spriteStart = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 200,
 					GfxAssets.mMenuBtnTextureRegion, GameActivity.mVertexBufferObjectManager) {
 			@Override
@@ -33,6 +34,8 @@ public class MainMenu_Scene extends CameraScene {
 		
 		attachChild(_spriteStart);
 		this.registerTouchArea(_spriteStart);
+		
+		
 		
 		final Sprite _spriteLevel = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 400,
 					GfxAssets.mMenuBtnTextureRegion, GameActivity.mVertexBufferObjectManager) {

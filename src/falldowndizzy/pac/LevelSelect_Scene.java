@@ -12,10 +12,10 @@ public class LevelSelect_Scene extends CameraScene {
 	
 	public LevelSelect_Scene(){
 		super(GameActivity._Camera);
-		this.setBackgroundEnabled(false);
+		
 		this.setOnAreaTouchTraversalFrontToBack();
 		
-		setBackground(LoadAutoParalaxBg());
+		setBackground(this.LoadAutoParalaxBg());
 //		GfxAssets.mMusic.play();
 		initLevelTable(levelID);
 //		final Text ni = new Text(170, 500, GfxAssets.mFont, "NOT IMPLEMENTED YET", GameActivity.mVertexBufferObjectManager);
@@ -33,7 +33,7 @@ public class LevelSelect_Scene extends CameraScene {
 		setVisible(false);
 		setIgnoreUpdate(true);
 	}
-
+	
 	private void initLevelTable(int level){
 		
 		final Sprite _spriteLevel = new Sprite(50, 200,
