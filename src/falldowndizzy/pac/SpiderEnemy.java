@@ -23,17 +23,18 @@ public class SpiderEnemy extends AnimatedSprite {
 	
 	public SpiderEnemy(float pX, float pY, ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld) {
-		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
+		super(pX, pY + GfxAssets.mRopeTextureRegion.getHeight(), pTiledTextureRegion, pVertexBufferObjectManager);
 		mPhysicsWorld = pPhysicsWorld;
 		
 		SpiderBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, SpiderBody, true, false));	
 		
-//		rope = new Sprite(pX, pY, GfxAssets.mSpiderTextureRegion, pVertexBufferObjectManager);
-//		mDefaultHeight = rope.getHeight();
-//		
-//		RopeBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
-//		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, RopeBody, true, false));	
+		rope = new Sprite(pX, pY, GfxAssets.mRopeTextureRegion, pVertexBufferObjectManager);
+		rope.setScaleX(2);
+		mDefaultHeight = rope.getHeight();
+		
+		RopeBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		pPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, RopeBody, true, false));	
 		
 		
 		this.setScale(1.8f);
@@ -52,6 +53,7 @@ public class SpiderEnemy extends AnimatedSprite {
 			public void onAnimationStarted(AnimatedSprite pAnimatedSprite,
 					int pInitialLoopCount) {
 				rope.setHeight(mDefaultHeight * SpiderEnemy.length[0]);
+				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getX() + rope.getHeight());
 				
 			}
 
@@ -59,6 +61,7 @@ public class SpiderEnemy extends AnimatedSprite {
 			public void onAnimationFrameChanged(AnimatedSprite pAnimatedSprite,
 					int pOldFrameIndex, int pNewFrameIndex) {
 				rope.setHeight(mDefaultHeight * SpiderEnemy.length[pNewFrameIndex]);
+				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getX() + rope.getHeight());
 				
 			}
 
