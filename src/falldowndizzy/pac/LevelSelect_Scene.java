@@ -45,7 +45,7 @@ public class LevelSelect_Scene extends CameraScene {
 		};
 		
 		final Text _menuTitle = new Text(0, 0, GfxAssets.mFont, String.valueOf(level), GameActivity._main.getVertexBufferObjectManager());
-		_menuTitle.setPosition((_spriteLevel.getWidth() - _menuTitle.getWidthScaled()) / 2, (_spriteLevel.getHeight() - _menuTitle.getWidthScaled()) / 2);
+		_menuTitle.setPosition((_spriteLevel.getWidth() - _menuTitle.getWidthScaled()) / 2 - 5, (_spriteLevel.getHeight() - _menuTitle.getWidthScaled()) / 2 - 5);
 		_menuTitle.setScale(0.9f);
 		_spriteLevel.attachChild(_menuTitle);	
 		
