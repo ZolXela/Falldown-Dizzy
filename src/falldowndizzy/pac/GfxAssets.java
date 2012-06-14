@@ -38,6 +38,7 @@ public class GfxAssets {
 	public static TiledTextureRegion mSpiderTextureRegion;
 	
 	public static ITextureRegion mRopeTextureRegion;
+	public static ITextureRegion mLifesTextureRegion;
 	
 	public static TextureRegion mStrawberryTextureRegion;
 	public static TextureRegion mAppleTextureRegion;
@@ -81,6 +82,8 @@ public class GfxAssets {
 				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "cherry.png", 30, 985);
 		mRopeTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "rope.png", 900, 0);
+		mLifesTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "for_sc.png", 480, 323);
 		mAutoParallaxBackgroundTexture1.load();
 		
 		mGoodsArray = new ArrayList<TextureRegion>();

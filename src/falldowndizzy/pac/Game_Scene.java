@@ -299,7 +299,7 @@ public class Game_Scene extends CameraScene {
 	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion) {
 
 		SpiderEnemy _spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
-		this.attachChild(_spiderEnemy);
+//		this.attachChild(_spiderEnemy);
 		this.attachChild(_spiderEnemy.rope);
 		spiderLL.add(_spiderEnemy);
 
@@ -340,6 +340,17 @@ public class Game_Scene extends CameraScene {
 		
 	}
 
+	private void showLifes(){		
+		
+		final Sprite _spriteLifes = new Sprite(50, 200,
+				GfxAssets.mLifesTextureRegion, GameActivity.mVertexBufferObjectManager);
+		_spriteLifes.setPosition(_spriteLifes.getWidth() * 2, 20);
+		this.attachChild(_spriteLifes);
+		
+//		final Sprite dizzyL = new Sprite(0, 0, GfxAssets.mPlayerTextureRegion.setCurrentTileIndex(16), GameActivity.mVertexBufferObjectManager);		
+		
+	}
+	
 	/** to restart the game and clear the whole screen */
 	public void restart() {
 

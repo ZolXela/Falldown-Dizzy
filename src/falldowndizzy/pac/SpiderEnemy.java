@@ -60,26 +60,26 @@ public class SpiderEnemy extends AnimatedSprite {
 			@Override
 			public void onAnimationStarted(AnimatedSprite pAnimatedSprite,
 					int pInitialLoopCount) {
-				System.out.println(">>>>>> before " + (rope.getY() + rope.getHeight()));
 				rope.setHeight(mDefaultHeight * SpiderEnemy.length[0]);
-				System.out.println(">>>>>> after " + (rope.getY() + rope.getHeight()));
 				path = new Path(5).to(rope.getX(), rope.getY() + rope.getHeight());
 //				pAnimatedSprite.dispose();
 //				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getY() + rope.getHeight());
 //				pAnimatedSprite.registerEntityModifier(new PathModifier(300, new Path(20)));
-				pAnimatedSprite.registerEntityModifier(new PathModifier(10, path));
+//				pAnimatedSprite.registerEntityModifier(new PathModifier(10, path));
+				pAnimatedSprite.setY(rope.getY() + rope.getHeight());
+				
 			}
 
 			@Override
 			public void onAnimationFrameChanged(AnimatedSprite pAnimatedSprite,
 					int pOldFrameIndex, int pNewFrameIndex) {
-				System.out.println(">>>>>> before " + (rope.getY() + rope.getHeight()));
 				rope.setHeight(mDefaultHeight * SpiderEnemy.length[pNewFrameIndex]);
-				System.out.println(">>>>>> after " + (rope.getY() + rope.getHeight()));
 //				pAnimatedSprite.dispose();
 //				pAnimatedSprite.setPosition(pAnimatedSprite.getX(), rope.getY() + rope.getHeight());
 //				pAnimatedSprite.setY(rope.getY() + rope.getHeight());
+//				pAnimatedSprite.
 //				pAnimatedSprite.registerEntityModifier(new PathModifier(10, path.to(rope.getX(), rope.getY() + rope.getHeight())));
+				pAnimatedSprite.setY(rope.getY() + rope.getHeight());
 			}
 
 			@Override
