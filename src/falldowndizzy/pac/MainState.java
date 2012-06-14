@@ -9,8 +9,8 @@ import android.view.KeyEvent;
 public class MainState extends Scene {
 	
 	public static MainMenu_Scene _MainMenu_Scene = new MainMenu_Scene();
-	public static Game_Scene _Game_Scene = new Game_Scene();
 	public static LevelSelect_Scene _LevelSelect_Scene = new LevelSelect_Scene();
+	public static Game_Scene _Game_Scene = new Game_Scene();
 	
 	private static int _GameState;
 	
