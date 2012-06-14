@@ -173,7 +173,7 @@ public class Game_Scene extends CameraScene {
 		this.attachChild(rightOuter);
 		
 		this.showScore();
-		
+		this.showLifes();
 	}
 	
 	private void initObstacles(){
@@ -184,7 +184,7 @@ public class Game_Scene extends CameraScene {
 		this.addObstacles(300, 650, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 2);
 		this.addObstacles(0, 550, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 4);
 		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
-		this.addEnemies(400, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion);
+//		this.addEnemies(400, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion);
 		
 	}
 	
@@ -299,7 +299,7 @@ public class Game_Scene extends CameraScene {
 	private void addEnemies(final float pX, final float pY, ITiledTextureRegion pTextureRegion) {
 
 		SpiderEnemy _spiderEnemy = new SpiderEnemy(pX, pY, pTextureRegion, GameActivity.mVertexBufferObjectManager, this.gamePhysicsWorld);
-//		this.attachChild(_spiderEnemy);
+		this.attachChild(_spiderEnemy);
 		this.attachChild(_spiderEnemy.rope);
 		spiderLL.add(_spiderEnemy);
 
@@ -342,12 +342,15 @@ public class Game_Scene extends CameraScene {
 
 	private void showLifes(){		
 		
-		final Sprite _spriteLifes = new Sprite(50, 200,
+		final Sprite _spriteLifes = new Sprite(50, 20,
 				GfxAssets.mLifesTextureRegion, GameActivity.mVertexBufferObjectManager);
-		_spriteLifes.setPosition(_spriteLifes.getWidth() * 2, 20);
 		this.attachChild(_spriteLifes);
-		
-//		final Sprite dizzyL = new Sprite(0, 0, GfxAssets.mPlayerTextureRegion.setCurrentTileIndex(16), GameActivity.mVertexBufferObjectManager);		
+		final float indent = _spriteLifes.getWidth() / 19;
+		for(int i = 0; i < lifeS; i++){
+			final Sprite dizzy = new Sprite(GfxAssets.mDizzyLifesTextureRegion.getWidth() * i + indent * (i + 1), GfxAssets.mLifesTextureRegion.getHeight() / 5,
+					GfxAssets.mDizzyLifesTextureRegion, GameActivity.mVertexBufferObjectManager);
+			_spriteLifes.attachChild(dizzy);
+		}		
 		
 	}
 	

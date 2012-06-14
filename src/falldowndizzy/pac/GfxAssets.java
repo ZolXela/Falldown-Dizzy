@@ -39,6 +39,7 @@ public class GfxAssets {
 	
 	public static ITextureRegion mRopeTextureRegion;
 	public static ITextureRegion mLifesTextureRegion;
+	public static ITextureRegion mDizzyLifesTextureRegion;
 	
 	public static TextureRegion mStrawberryTextureRegion;
 	public static TextureRegion mAppleTextureRegion;
@@ -106,6 +107,8 @@ public class GfxAssets {
 				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "bridge_2.png", 147, 800);
 		mSpiderTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "spider_wr.png", 381, 800, 12, 1);
+		mDizzyLifesTextureRegion =  BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "dizzy_lifes.png", 960, 0);
 		mAutoParallaxBackgroundTexture2.load();
 		
 		mFont = FontFactory
