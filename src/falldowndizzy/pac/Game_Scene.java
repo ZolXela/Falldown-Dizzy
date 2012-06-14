@@ -329,9 +329,12 @@ public class Game_Scene extends CameraScene {
 	
 	private void showScore(){		
 		
+		final Sprite _spriteScore = new Sprite(50, 200,
+				GfxAssets.mLevelBtnTextureRegion, GameActivity.mVertexBufferObjectManager);
+		_spriteScore.setPosition(GameActivity.CAMERA_WIDTH - _spriteScore.getWidth() - 70, 20);
+		this.attachChild(_spriteScore);
 		_score = new Text(0, 0, GfxAssets.mFont, String.valueOf(maxScore), GameActivity._main.getVertexBufferObjectManager());
-		_score.setPosition(GameActivity.CAMERA_WIDTH - _score.getWidth() - 70, 20);
-		this.attachChild(_score);		
+		_spriteScore.attachChild(_score);		
 		
 	}
 

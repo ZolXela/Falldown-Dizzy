@@ -4,7 +4,7 @@ import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.util.color.Color;
+
 
 public class MainMenu_Scene extends CameraScene {
 
@@ -28,7 +28,6 @@ public class MainMenu_Scene extends CameraScene {
 		
 		final Text _menuTitle = new Text(0, 0, GfxAssets.mFont, "START", GameActivity._main.getVertexBufferObjectManager());
 		_menuTitle.setPosition((_spriteStart.getWidth() - _menuTitle.getWidth()) / 2 + 15, (_spriteStart.getHeight() - _menuTitle.getWidth()) / 2 + 30);
-		_menuTitle.setColor(Color.BLACK);
 		_menuTitle.setScale(0.9f);
 		_spriteStart.attachChild(_menuTitle);	
 		
@@ -49,7 +48,6 @@ public class MainMenu_Scene extends CameraScene {
 		
 		final Text _levelTitle = new Text(0, 0, GfxAssets.mFont, "LEVEL", GameActivity._main.getVertexBufferObjectManager());
 		_levelTitle.setPosition((_spriteLevel.getWidth() - _levelTitle.getWidth()) / 2 + 15, (_spriteLevel.getHeight() - _levelTitle.getWidth()) / 2 + 30);
-		_levelTitle.setColor(Color.BLACK);
 		_levelTitle.setScale(0.9f);
 		_spriteLevel.attachChild(_levelTitle);	
 		
