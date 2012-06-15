@@ -33,13 +33,13 @@ public class GoodFruit extends Sprite {
 		mPhysicsWorld.destroyBody(GoodBody);
 	}
 	
-	public void Destructor(){
-		
-		mPhysicsWorld.unregisterPhysicsConnector(mPhysicsConnector);
-		mPhysicsWorld.destroyBody(GoodBody);
-		this.detachSelf();
-		
-	}
+//	public void Destructor(){
+//		
+//		mPhysicsWorld.unregisterPhysicsConnector(mPhysicsConnector);
+//		mPhysicsWorld.destroyBody(GoodBody);
+//		this.detachSelf();
+//		
+//	}
 	
 
 }

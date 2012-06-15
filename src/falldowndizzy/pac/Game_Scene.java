@@ -189,7 +189,7 @@ public class Game_Scene extends CameraScene {
 		this.addObstacles(300, 650, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 2);
 		this.addObstacles(0, 550, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 4);
 		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
-		this.addEnemies(400, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion);
+//		this.addEnemies(400, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion);
 		
 	}
 	
@@ -370,7 +370,8 @@ public class Game_Scene extends CameraScene {
 				
 				Iterator<GoodFruit> itrG = goodsLL.iterator();
 				while(itrG.hasNext()){
-					itrG.next().Destructor();
+//					itrG.next().Destructor();
+					itrG.next().detachSelf();
 					itrG.remove();
 				}	
 				
@@ -382,7 +383,9 @@ public class Game_Scene extends CameraScene {
 				
 				Iterator<SpiderEnemy> itrE = spiderLL.iterator();
 				while(itrE.hasNext()){
-					itrE.next().Destructor();
+			//		itrE.next().Destructor();
+					itrE.next().rope.detachSelf();
+					itrE.next().detachSelf();
 					itrE.remove();
 				}
 				
@@ -392,7 +395,7 @@ public class Game_Scene extends CameraScene {
 				System.gc();			
 		
 				System.out.println(">>> ls " + lifeS);
-				gamePlayer.restart();
+//				gamePlayer.restart();
 				Game_Scene.this.attachChild(gamePlayer);
 				_score.setText(String.valueOf(maxScore));
 				curScore = maxScore;

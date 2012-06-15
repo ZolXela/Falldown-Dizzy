@@ -84,16 +84,16 @@ public class SpiderEnemy extends AnimatedSprite {
 		
 	}
 
-	public void Destructor(){
-		
-		mPhysicsWorld.unregisterPhysicsConnector(mSpPhysicsConnector);
-		mPhysicsWorld.unregisterPhysicsConnector(mRpPhysicsConnector);
-		mPhysicsWorld.destroyBody(SpiderBody);
-		mPhysicsWorld.destroyBody(RopeBody);
-		rope.detachSelf();
-		this.detachSelf();
-		
-	}
+//	public void Destructor(){
+//		
+//		mPhysicsWorld.unregisterPhysicsConnector(mSpPhysicsConnector);
+//		mPhysicsWorld.unregisterPhysicsConnector(mRpPhysicsConnector);
+//		mPhysicsWorld.destroyBody(SpiderBody);
+//		mPhysicsWorld.destroyBody(RopeBody);
+//		rope.detachSelf();
+//		this.detachSelf();
+//		
+//	}
 	
 	
 }
