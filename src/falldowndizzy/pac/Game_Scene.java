@@ -1,6 +1,7 @@
 package falldowndizzy.pac;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -28,6 +29,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 public class Game_Scene extends CameraScene {
 	
 	public static Game_Scene _curGameScene;
+	
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -54,6 +56,7 @@ public class Game_Scene extends CameraScene {
 	Vector2 velocity;
 	
 	private boolean gameLoaded = false;
+
 	
 	/**
 	 * Screen borders
@@ -76,10 +79,11 @@ public class Game_Scene extends CameraScene {
 
 	/* Fields for Dizzy's score */
 	public static Text _score;
-	@SuppressWarnings("unused")
-	private int lifeS = 3;
+	private final static int maxLifes = 3;
+	private int lifeS = maxLifes;
 	private final static int maxScore = 30;
 	public static int curScore = maxScore;
+	Sprite _spriteLifes;
 	
 	public static LinkedList<SpiderEnemy> spiderLL;
 	private LinkedList<Obstacle> platformLL;
@@ -89,6 +93,7 @@ public class Game_Scene extends CameraScene {
 	public Game_Scene(){
 	
 		super(GameActivity._Camera);
+		_curGameScene = this;
 		this.setGamePhysicsWorld();
 				
 		setBackground(this.LoadAutoParallaxBg());	
@@ -184,7 +189,7 @@ public class Game_Scene extends CameraScene {
 		this.addObstacles(300, 650, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 2);
 		this.addObstacles(0, 550, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 4);
 		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
-//		this.addEnemies(400, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion);
+		this.addEnemies(400, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion);
 		
 	}
 	
@@ -244,7 +249,6 @@ public class Game_Scene extends CameraScene {
 			
 	@Override
 	public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
-		_curGameScene = this;
 		final TouchEvent curTouchEvent = pSceneTouchEvent;
 		if(gameLoaded && finger <= 2){
 			switch(pSceneTouchEvent.getAction()) {
@@ -342,7 +346,7 @@ public class Game_Scene extends CameraScene {
 
 	private void showLifes(){		
 		
-		final Sprite _spriteLifes = new Sprite(50, 20,
+		_spriteLifes = new Sprite(50, 20,
 				GfxAssets.mLifesTextureRegion, GameActivity.mVertexBufferObjectManager);
 		this.attachChild(_spriteLifes);
 		final float indent = _spriteLifes.getWidth() / 19;
@@ -362,16 +366,37 @@ public class Game_Scene extends CameraScene {
 			@Override
 			// to safely detach and re-attach the sprites
 			public void run() {
-				MainState._Game_Scene.detachChildren();
+				MainState._Game_Scene.detachChild(gamePlayer);
 				
-				platformLL.removeAll(platformLL);
-				spiderLL.removeAll(spiderLL);
-				goodsLL.removeAll(goodsLL);
+				Iterator<GoodFruit> itrG = goodsLL.iterator();
+				while(itrG.hasNext()){
+					itrG.next().Destructor();
+					itrG.remove();
+				}	
 				
-				Game_Scene.this.initBorders();
-//				gamePlayer.
+				Iterator<Obstacle> itrP = platformLL.iterator();
+				while(itrP.hasNext()){
+					itrP.next().detachSelf();
+					itrP.remove();
+				}
+				
+				Iterator<SpiderEnemy> itrE = spiderLL.iterator();
+				while(itrE.hasNext()){
+					itrE.next().Destructor();
+					itrE.remove();
+				}
+				
+				_spriteLifes.detachChildren();
+				_spriteLifes.detachSelf();
+				_spriteLifes.dispose();
+				System.gc();			
+		
+				System.out.println(">>> ls " + lifeS);
+				gamePlayer.restart();
 				Game_Scene.this.attachChild(gamePlayer);
 				_score.setText(String.valueOf(maxScore));
+				curScore = maxScore;
+				Game_Scene.this.showLifes();
 				Game_Scene.this.initObstacles();
 			}
 		});
@@ -401,17 +426,43 @@ public class Game_Scene extends CameraScene {
 				goodsLL.remove(i);
 		    }
 		});
-		GfxAssets.mGetGoods.play();
+	//	GfxAssets.mGetGoods.play();
 	}
 	
 	private void finishGame(){
+		
+		MainState._Game_Scene.detachChildren();
+		
+		lifeS = 3;
+		
+		platformLL.removeAll(platformLL);
+		spiderLL.removeAll(spiderLL);
+		goodsLL.removeAll(goodsLL);
+		
+		final Sprite gameOver = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 
+				(GameActivity.CAMERA_HEIGHT - GfxAssets.mMenuBtnTextureRegion.getHeight()) / 2 , GfxAssets.mMenuBtnTextureRegion, GameActivity.mVertexBufferObjectManager){
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
+					float pTouchAreaLocalX, float pTouchAreaLocalY) {
+//				restart();
+				MainState.ShowMainScene();
+				return true;
+			}
+		};
+		
+		this.attachChild(gameOver);
+		this.registerTouchArea(gameOver);
 		
 	}
 	
 	public void callbackCollisionEnemy(){
 
-		this.restart();
-		this.lifeS--;
+		if(this.lifeS == 0){ 
+			this.finishGame();
+		} else {
+			this.restart();
+			this.lifeS--;
+		}
 	}
 	
 }

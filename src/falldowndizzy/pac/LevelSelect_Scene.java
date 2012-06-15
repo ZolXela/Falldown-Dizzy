@@ -16,8 +16,7 @@ public class LevelSelect_Scene extends CameraScene {
 		
 		setBackground(this.LoadAutoParalaxBg());
 		initLevelTable(levelID);
-		final Text ni = new Text(70, 500, GfxAssets.mFont, "NOT IMPLEMENTED YET", GameActivity.mVertexBufferObjectManager);
-//		ni.setColor(Color.WHITE);
+		final Text ni = new Text(70, 500, GfxAssets.mFont, "NOT IMPLEMENTED\nYET", GameActivity.mVertexBufferObjectManager);
 		this.attachChild(ni);
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 	}

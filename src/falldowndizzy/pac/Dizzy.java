@@ -22,6 +22,7 @@ public class Dizzy extends AnimatedSprite {
 	public boolean jumping = false;
 	
 	PhysicsWorld mPhysicsWorld;
+	PhysicsConnector mPhysicsConnector;
 	
 	public Dizzy(final float pX, final float pY, final ITiledTextureRegion pTiledTextureRegion, final VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld) {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
@@ -29,7 +30,9 @@ public class Dizzy extends AnimatedSprite {
 
 		DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this.getScaleCenterX() , this.getScaleCenterY(), 25, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		DizzyBody.setUserData("player");
-		mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this, DizzyBody, true, false));	
+		
+		mPhysicsConnector = new PhysicsConnector(this, DizzyBody, true, false);
+		mPhysicsWorld.registerPhysicsConnector(mPhysicsConnector);	
 
 		
 		mPhysicsWorld.setContactListener(new ContactListener(){
@@ -75,7 +78,7 @@ public class Dizzy extends AnimatedSprite {
 		else if(velocity.x < 0) setAnimation(24, 31);
 		else setAnimation(16, 23);
 		this.DizzyBody.setLinearVelocity(velocity);	
-		GfxAssets.mJump.play();
+//		GfxAssets.mJump.play();
 		Vector2Pool.recycle(velocity);
 	}
 	
@@ -92,6 +95,7 @@ public class Dizzy extends AnimatedSprite {
 					return false;
 				}
 		}
+	
 		if(!Game_Scene.goodsLL.isEmpty())
 			for(int i = 0; i < Game_Scene.goodsLL.size(); i++) {
 				if(this.collidesWith(Game_Scene.goodsLL.get(i))) {
@@ -106,6 +110,14 @@ public class Dizzy extends AnimatedSprite {
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
 		onBeforePositionChanged();
+	}
+	
+	public void restart(){
+		mPhysicsWorld.unregisterPhysicsConnector(mPhysicsConnector);
+		mPhysicsWorld.destroyBody(DizzyBody);
+		this.setPosition(30, 50);
+		DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this.getScaleCenterX() , this.getScaleCenterY(), 25, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		mPhysicsWorld.registerPhysicsConnector(mPhysicsConnector);
 	}
 	
 }
