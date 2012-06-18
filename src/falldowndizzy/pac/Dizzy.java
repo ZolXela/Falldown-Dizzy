@@ -39,6 +39,7 @@ public class Dizzy extends AnimatedSprite {
 			@Override
 			public void beginContact(Contact contact) {
 				jumping = false;	
+//				onBeforePositionChanged();
 			}
 			@Override
 			public void endContact(Contact contact)
@@ -112,13 +113,13 @@ public class Dizzy extends AnimatedSprite {
 		onBeforePositionChanged();
 	}
 	
-//	public void restart(){
-//		mPhysicsWorld.unregisterPhysicsConnector(mPhysicsConnector);
-//		mPhysicsWorld.destroyBody(DizzyBody);
-//		this.setPosition(30, 50);
-//		DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this.getScaleCenterX() , this.getScaleCenterY(), 25, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
-//		mPhysicsWorld.registerPhysicsConnector(mPhysicsConnector);
-//	}
+	public void restart(){
+		mPhysicsWorld.unregisterPhysicsConnector(mPhysicsConnector);
+		mPhysicsWorld.destroyBody(DizzyBody);
+		this.setPosition(30, 50);
+		DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this.getScaleCenterX() , this.getScaleCenterY(), 25, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		mPhysicsWorld.registerPhysicsConnector(mPhysicsConnector);
+	}
 	
 }
 
