@@ -38,6 +38,7 @@ public class LevelSelect_Scene extends CameraScene {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
+				MainState._Game_Scene.setMaxLifes();
 				MainState.ShowGameScene();
 				return true;
 			}

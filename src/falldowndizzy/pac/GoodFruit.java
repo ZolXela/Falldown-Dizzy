@@ -17,7 +17,8 @@ public class GoodFruit extends Sprite {
 	public Body GoodBody;
 	
 	
-	public GoodFruit(final float pX, final float pY, final ITextureRegion pTextureRegion, final VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld){
+	public GoodFruit(final float pX, final float pY, final ITextureRegion pTextureRegion, 
+			final VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld){
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 
 		mPhysicsWorld = pPhysicsWorld;

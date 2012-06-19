@@ -8,15 +8,27 @@ import org.andengine.input.touch.TouchEvent;
 
 public class MainMenu_Scene extends CameraScene {
 
+	Sprite _spriteStart;
+	Sprite _spriteLevel;
+	
 	public MainMenu_Scene() {
 		super(GameActivity._Camera);
 
 		this.setOnAreaTouchTraversalFrontToBack();
 		
 		setBackground(LoadAutoParalaxBg());
-     //   GfxAssets.mMusic.play();
+		GfxAssets.mMusic.setVolume(GfxAssets.mMusic.getVolume() / 4);
 		
-		final Sprite _spriteStart = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 200,
+    //    GfxAssets.mMusic.play();
+		setPlayBtn();
+		setLevelBtn();	
+		
+		this.setTouchAreaBindingOnActionDownEnabled(true);
+	}
+	
+	private void setPlayBtn(){
+		
+		_spriteStart = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 200,
 					GfxAssets.mMenuBtnTextureRegion, GameActivity.mVertexBufferObjectManager) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -32,11 +44,11 @@ public class MainMenu_Scene extends CameraScene {
 		_spriteStart.attachChild(_menuTitle);	
 		
 		attachChild(_spriteStart);
-		this.registerTouchArea(_spriteStart);
+	}
+
+	private void setLevelBtn(){
 		
-		
-		
-		final Sprite _spriteLevel = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 400,
+		_spriteLevel = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 400,
 					GfxAssets.mMenuBtnTextureRegion, GameActivity.mVertexBufferObjectManager) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -52,19 +64,20 @@ public class MainMenu_Scene extends CameraScene {
 		_spriteLevel.attachChild(_levelTitle);	
 		
 		attachChild(_spriteLevel);
-		this.registerTouchArea(_spriteLevel);
-		
-		this.setTouchAreaBindingOnActionDownEnabled(true);
 	}
-
+	
 	public void Show() {
 		setVisible(true);
 		setIgnoreUpdate(false);
+		this.registerTouchArea(_spriteStart);
+		this.registerTouchArea(_spriteLevel);
 	}
 
 	public void Hide() {
 		setVisible(false);
-		setIgnoreUpdate(true);
+		this.unregisterTouchArea(_spriteStart);
+		this.unregisterTouchArea(_spriteLevel);
+		setIgnoreUpdate(true);	
 	}
 
 	public AutoParallaxBackgroundXY LoadAutoParalaxBg(){

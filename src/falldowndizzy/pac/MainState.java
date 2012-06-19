@@ -28,7 +28,7 @@ public class MainState extends Scene {
 	
 	public static void ShowGameScene() {
 		_MainMenu_Scene.Hide();
-		_Game_Scene.Show();
+		_Game_Scene.restart();
 		_LevelSelect_Scene.Hide();
 		_GameState = GAME_RUNNING_STATE;
 	}

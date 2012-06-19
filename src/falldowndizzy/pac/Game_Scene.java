@@ -82,12 +82,14 @@ public class Game_Scene extends CameraScene {
 	private final static int maxLifes = 3;
 	private int lifeS = maxLifes;
 	private final static int maxScore = 30;
-	public static int curScore = maxScore;
+	public int curScore = maxScore;
 	Sprite _spriteLifes;
 	
 	public static LinkedList<SpiderEnemy> spiderLL;
 	private LinkedList<Obstacle> platformLL;
 	public static LinkedList<GoodFruit> goodsLL;
+	
+	Sprite gameOverSp;
 	
 	
 	public Game_Scene(){
@@ -95,7 +97,7 @@ public class Game_Scene extends CameraScene {
 		super(GameActivity._Camera);
 		_curGameScene = this;
 		this.setGamePhysicsWorld();
-				
+
 		setBackground(this.LoadAutoParallaxBg());	
 		
 		platformLL = new LinkedList<Obstacle>();
@@ -110,14 +112,19 @@ public class Game_Scene extends CameraScene {
 		gamePlayer.Stay();
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 
-		gameLoaded = true;
 		this.registerUpdateHandler(gamePhysicsWorld);
 
 	}
 
 	public void Show(){
+		gameLoaded = true;
 		setVisible(true);
 		setIgnoreUpdate(false);
+		if(gameOverSp != null){
+			gameOverSp.detachSelf();
+			this.unregisterTouchArea(gameOverSp);
+			System.gc();
+		}	
 	}
 	
 	public void Hide(){
@@ -190,7 +197,7 @@ public class Game_Scene extends CameraScene {
 		this.addObstacles(0, 550, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 4);
 		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
 		this.addEnemies(400, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion);
-		
+//		
 	}
 	
 	private boolean rightSet = false;
@@ -250,40 +257,45 @@ public class Game_Scene extends CameraScene {
 	@Override
 	public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
 		final TouchEvent curTouchEvent = pSceneTouchEvent;
-		if(gameLoaded && finger <= 2){
-			switch(pSceneTouchEvent.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-					if(finger == 0) {
-						GlobalX = curTouchEvent.getX();
-					}
-					GlobalY = curTouchEvent.getY();
-						finger++;
-							if(!isJumping(gamePlayer)){								
-								this.playerController();
+		if(gameLoaded)
+			if(finger <= 2){
+				switch(pSceneTouchEvent.getAction()) {
+					case MotionEvent.ACTION_DOWN:
+						if(finger == 0) {
+							GlobalX = curTouchEvent.getX();
+						}
+						GlobalY = curTouchEvent.getY();
+							finger++;
+								if(!isJumping(gamePlayer)){								
+									this.playerController();
+								}
+						break;
+					case MotionEvent.ACTION_UP:
+						finger = (finger > 0) ? finger-1 : 0;
+						currentX = 0;
+							if (finger == 1) {						
+								if(!isJumping(gamePlayer))
+									this.playerController();						
 							}
-					break;
-				case MotionEvent.ACTION_UP:
-					finger = (finger > 0) ? finger-1 : 0;
-					currentX = 0;
-						if (finger == 1) {						
-							if(!isJumping(gamePlayer))
-								this.playerController();						
-						}
-						else {
-							gamePlayer.Stay();	
-							rightSet = leftSet = upSet = false;
-						}
-					break;
-				default:
-					if(!isJumping(gamePlayer) && finger > 0)
-							this.playerController();
-					break;
+							else {
+								gamePlayer.Stay();	
+								rightSet = leftSet = upSet = false;
+							}
+						break;
+					default:
+						if(!isJumping(gamePlayer) && finger > 0)
+								this.playerController();
+						break;
+				}
+				return false;
 			}
-			return true;
+			else {
+				gamePlayer.Stay();
+				rightSet = leftSet = upSet = false;
 			}
 		else {
-			gamePlayer.Stay();
-			rightSet = leftSet = upSet = false;
+			gameOverSp.onAreaTouched(pSceneTouchEvent, curTouchEvent.getX(), curTouchEvent.getY());
+			//MainState.ShowMainScene();
 		}
 		return false;
 
@@ -360,7 +372,7 @@ public class Game_Scene extends CameraScene {
 	
 	/** to restart the game and clear the whole screen */
 	public void restart() {
-
+		this.Show();
 		GameActivity._main.runOnUpdateThread(new Runnable() {
 
 			@Override
@@ -391,7 +403,6 @@ public class Game_Scene extends CameraScene {
 				_spriteLifes.dispose();
 				System.gc();			
 		
-				System.out.println(">>> ls " + lifeS);
 				gamePlayer.restart();
 				Game_Scene.this.attachChild(gamePlayer);
 				_score.setText(String.valueOf(maxScore));
@@ -412,6 +423,10 @@ public class Game_Scene extends CameraScene {
 //		this.attachChild(flare);
 //	}
 		
+	public void setMaxLifes(){
+		lifeS = maxLifes;
+	}
+	
 	public void callbackCollisionGoods(final int i){
 		
 		GameActivity._main.runOnUpdateThread(new Runnable() {
@@ -419,40 +434,52 @@ public class Game_Scene extends CameraScene {
 		    public void run() {
 				goodsLL.get(i).setCollision();
 				MainState._Game_Scene.detachChild(goodsLL.get(i));
-				_score.setText(String.valueOf(--Game_Scene.curScore));
-				if(Game_Scene.curScore == 0){
+				_score.setText(String.valueOf(--Game_Scene.this.curScore));
+				if(Game_Scene.this.curScore == 0){
 					finishGame();
 				}
 				goodsLL.remove(i);
 		    }
 		});
-	//	GfxAssets.mGetGoods.play();
+		GfxAssets.mGetGoods.play();
 	}
 	
 	private void finishGame(){
 		
-		MainState._Game_Scene.detachChildren();
+		gameLoaded = false;
 		
-		lifeS = 3;
+//		GameActivity._main.
+//		runOnUpdateThread(new Runnable() {
+//		    @Override
+//		    public void run() {
+//				detachChildren();
 		
-		platformLL.removeAll(platformLL);
-		spiderLL.removeAll(spiderLL);
-		goodsLL.removeAll(goodsLL);
-		
-		final Sprite gameOver = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 
+				setMaxLifes();
+				detachChild(gamePlayer);
+
+		gameOverSp = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 
 				(GameActivity.CAMERA_HEIGHT - GfxAssets.mMenuBtnTextureRegion.getHeight()) / 2 , GfxAssets.mMenuBtnTextureRegion, GameActivity.mVertexBufferObjectManager){
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				restart();
+//				restart();
+//				Game_Scene.this.Hide();
 				MainState.ShowMainScene();
 				return true;
 			}
+//			@Override
+			
 		};
 		
-		this.attachChild(gameOver);
-		this.registerTouchArea(gameOver);
+		final Text _gameOverTxt = new Text(0, 0, GfxAssets.mFont, "GAME OVER", GameActivity._main.getVertexBufferObjectManager());
+		_gameOverTxt.setScale(0.9f);
+		_gameOverTxt.setPosition(45, (gameOverSp.getHeight() - _gameOverTxt.getHeightScaled()) / 2);
+		gameOverSp.attachChild(_gameOverTxt);	
 		
+		this.attachChild(gameOverSp);
+		this.registerTouchArea(gameOverSp);
+//		    }
+//		});
 	}
 	
 	public void callbackCollisionEnemy(){
@@ -460,9 +487,10 @@ public class Game_Scene extends CameraScene {
 		if(this.lifeS == 0){ 
 			this.finishGame();
 		} else {
-			this.restart();
 			this.lifeS--;
+			this.restart();		
 		}
+		
 	}
 	
 }

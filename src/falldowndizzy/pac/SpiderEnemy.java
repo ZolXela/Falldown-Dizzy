@@ -20,15 +20,21 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class SpiderEnemy extends AnimatedSprite {
 
+	private PhysicsWorld mPhysicsWorld;
+	
 	public Body RopeBody;
 	public Body SpiderBody;
-	private PhysicsWorld mPhysicsWorld;
-	public Sprite rope;
-	public Path path;
-	public static float mDefaultHeight;
-	public static float length[] = {0.4096f, 0.5662f, 0.6747f, 0.8313f, 1, 0.9157f, 0.9157f, 1, 0.8313f, 0.6747f, 0.5662f, 0.4096f};
+	
 	public PhysicsConnector mSpPhysicsConnector;
 	public PhysicsConnector mRpPhysicsConnector;
+	
+	public Sprite rope;
+	
+	public Path path;
+	
+	public static float mDefaultHeight;
+	public static float length[] = {0.4096f, 0.5662f, 0.6747f, 0.8313f, 1, 0.9157f, 0.9157f, 1, 0.8313f, 0.6747f, 0.5662f, 0.4096f};
+
 	
 	public SpiderEnemy(float pX, float pY, ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld) {
@@ -36,7 +42,7 @@ public class SpiderEnemy extends AnimatedSprite {
 		mPhysicsWorld = pPhysicsWorld;
 		this.setScale(1.2f);
 		
-		SpiderBody = PhysicsFactory.createBoxBody(mPhysicsWorld, SpiderEnemy.this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		SpiderBody = PhysicsFactory.createCircleBody(mPhysicsWorld, SpiderEnemy.this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		mSpPhysicsConnector = new PhysicsConnector(this, SpiderBody, true, false);	
 		mPhysicsWorld.registerPhysicsConnector(mSpPhysicsConnector);	
 		
@@ -46,13 +52,15 @@ public class SpiderEnemy extends AnimatedSprite {
 		mRpPhysicsConnector = new PhysicsConnector(this, RopeBody, true, false);
 		mPhysicsWorld.registerPhysicsConnector(mRpPhysicsConnector);	
 		
-		rope.setHeight(rope.getHeight() * 1.5f);
+		rope.setHeight(rope.getHeight() * 1.2f);
 		mDefaultHeight = rope.getHeight();
 		
-		this.setPosition(100, 50);
-		path = new Path(12).to(pX, pY + mDefaultHeight * length[0]).to(pX, pY + mDefaultHeight * length[1]).to(pX, pY + mDefaultHeight * length[2]).to(pX, pY + mDefaultHeight * length[3]).to(pX, pY + mDefaultHeight * length[4])
-				.to(pX, pY + mDefaultHeight * length[5]).to(pX, pY + mDefaultHeight * length[6]).to(pX, pY + mDefaultHeight * length[7]).to(pX, pY + mDefaultHeight * length[8]).to(pX, pY + mDefaultHeight * length[9]).to(pX, pY + mDefaultHeight * length[10])
-				.to(pX, pY + mDefaultHeight * length[11]);
+		path = new Path(12).to(pX, pY + mDefaultHeight * length[0]).to(pX, pY + mDefaultHeight * length[1])
+						   .to(pX, pY + mDefaultHeight * length[2]).to(pX, pY + mDefaultHeight * length[3])
+						   .to(pX, pY + mDefaultHeight * length[4]).to(pX, pY + mDefaultHeight * length[5])
+						   .to(pX, pY + mDefaultHeight * length[6]).to(pX, pY + mDefaultHeight * length[7])
+						   .to(pX, pY + mDefaultHeight * length[8]).to(pX, pY + mDefaultHeight * length[9])
+						   .to(pX, pY + mDefaultHeight * length[10]).to(pX, pY + mDefaultHeight * length[11]);
 
 		this.registerEntityModifier(new LoopEntityModifier(new PathModifier(4, path, null, new IPathModifierListener() {
             @Override

@@ -24,11 +24,13 @@ public class Dizzy extends AnimatedSprite {
 	PhysicsWorld mPhysicsWorld;
 	PhysicsConnector mPhysicsConnector;
 	
-	public Dizzy(final float pX, final float pY, final ITiledTextureRegion pTiledTextureRegion, final VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld) {
+	public Dizzy(final float pX, final float pY, final ITiledTextureRegion pTiledTextureRegion, 
+			final VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld pPhysicsWorld) {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
 		mPhysicsWorld = pPhysicsWorld;
 
-		DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this.getScaleCenterX() , this.getScaleCenterY(), 25, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this.getScaleCenterX() , this.getScaleCenterY(), 25, 
+				BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		DizzyBody.setUserData("player");
 		
 		mPhysicsConnector = new PhysicsConnector(this, DizzyBody, true, false);
@@ -39,7 +41,7 @@ public class Dizzy extends AnimatedSprite {
 			@Override
 			public void beginContact(Contact contact) {
 				jumping = false;	
-//				onBeforePositionChanged();
+				onBeforePositionChanged();
 			}
 			@Override
 			public void endContact(Contact contact)
@@ -75,11 +77,17 @@ public class Dizzy extends AnimatedSprite {
 	}
 	
 	public void Jump(Vector2 velocity){
-		if(velocity.x > 0) setAnimation(32, 39);
-		else if(velocity.x < 0) setAnimation(24, 31);
-		else setAnimation(16, 23);
+		
+		if(velocity.x > 0) 
+				setAnimation(32, 39);
+			else 
+				if(velocity.x < 0) 
+					setAnimation(24, 31);
+				else 
+					setAnimation(16, 23);
+		
 		this.DizzyBody.setLinearVelocity(velocity);	
-//		GfxAssets.mJump.play();
+		GfxAssets.mJump.play();
 		Vector2Pool.recycle(velocity);
 	}
 	
@@ -107,17 +115,18 @@ public class Dizzy extends AnimatedSprite {
 		return true;
 	}
 	
-	@Override
-	protected void onManagedUpdate(final float pSecondsElapsed) {
-		super.onManagedUpdate(pSecondsElapsed);
-		onBeforePositionChanged();
-	}
+//	@Override
+//	protected void onManagedUpdate(final float pSecondsElapsed) {
+//		super.onManagedUpdate(pSecondsElapsed);
+//		onBeforePositionChanged();
+//	}
 	
 	public void restart(){
 		mPhysicsWorld.unregisterPhysicsConnector(mPhysicsConnector);
 		mPhysicsWorld.destroyBody(DizzyBody);
 		this.setPosition(30, 50);
-		DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this.getScaleCenterX() , this.getScaleCenterY(), 25, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this.getScaleCenterX() , this.getScaleCenterY(), 25, 
+				BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		mPhysicsWorld.registerPhysicsConnector(mPhysicsConnector);
 	}
 	

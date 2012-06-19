@@ -21,71 +21,86 @@ import android.graphics.Typeface;
 
 public class GfxAssets {
 	
-	public static BitmapTextureAtlas mAutoParallaxBackgroundTexture;
-	public static BitmapTextureAtlas mAutoParallaxBackgroundTexture1;
-	public static BitmapTextureAtlas mAutoParallaxBackgroundTexture2;
+	//	Needed texture atlases
+	public static BitmapTextureAtlas mBackgroundTexture;
+	public static BitmapTextureAtlas mBackgroundTexture1;
+	public static BitmapTextureAtlas mBackgroundTexture2;
 	
+	//	Scene's background
 	public static ITextureRegion mParallaxLayerMountains;
 	public static ITextureRegion mParallaxLayerTrees;
 	public static ITextureRegion mParallaxLayerTreesBg;
-	public static ITextureRegion mParallaxLayerCloud;	
+	public static ITextureRegion mParallaxLayerCloud;
+	
+	//	Menu buttons
 	public static ITextureRegion mMenuBtnTextureRegion;
 	public static ITextureRegion mLevelBtnTextureRegion;
 	
+	//	Player
 	public static TiledTextureRegion mPlayerTextureRegion;
 	
+	//	Enemies
 	public static TiledTextureRegion mFlareTextureRegion;
 	public static TiledTextureRegion mSpiderTextureRegion;
-	
 	public static ITextureRegion mRopeTextureRegion;
+	
+	//	Score and lifes
 	public static ITextureRegion mLifesTextureRegion;
 	public static ITextureRegion mDizzyLifesTextureRegion;
 	
+	//	Goods 
 	public static TextureRegion mStrawberryTextureRegion;
 	public static TextureRegion mAppleTextureRegion;
 	public static TextureRegion mBananaTextureRegion;
 	public static TextureRegion mCherryTextureRegion;
 	public static ArrayList<TextureRegion> mGoodsArray;
 	
+	//	Platforms
 	public static ITextureRegion mPlatformTextureRegion1;
 	public static ITextureRegion mPlatformLongTextureRegion;
 	public static ITextureRegion mPlatform2TextureRegion;
+	
+	//	Text font declaration
 	public static Font mFont;
 	
+	//	Playing sounds
 	public static Music mMusic;	
 	public static Sound mJump, mGameOver, mGetGoods, mNightmare;
+	
+	
+	
 	
 	public static void LoadGFX_800_480() {
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/800_480/");
 		
-		mAutoParallaxBackgroundTexture = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 512);
+		mBackgroundTexture = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 512);
 		mPlayerTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(mAutoParallaxBackgroundTexture, GameActivity._main, "player_d_all.png", 0, 0, 8, 5);
-		mAutoParallaxBackgroundTexture.load();
+				.createTiledFromAsset(mBackgroundTexture, GameActivity._main, "player_d_all.png", 0, 0, 8, 5);
+		mBackgroundTexture.load();
 		
-		mAutoParallaxBackgroundTexture1 = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 1024);
+		mBackgroundTexture1 = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 1024);
 		mParallaxLayerCloud = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "dizzy_parallax_background_clouds.png", 0, 0);
+				.createFromAsset(mBackgroundTexture1, GameActivity._main, "dizzy_parallax_background_clouds.png", 0, 0);
 		mParallaxLayerMountains = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "dizzy_parallax_background_layer_back.png", 0, 150);
+				.createFromAsset(mBackgroundTexture1, GameActivity._main, "dizzy_parallax_background_layer_back.png", 0, 150);
 		mMenuBtnTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "button_menu.png", 480, 150);
+				.createFromAsset(mBackgroundTexture1, GameActivity._main, "button_menu.png", 480, 150);
 		mLevelBtnTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "square_button.png", 68, 950);
+				.createFromAsset(mBackgroundTexture1, GameActivity._main, "square_button.png", 68, 950);
 		mStrawberryTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "strawberry.png", 0, 950);
+				.createFromAsset(GfxAssets.mBackgroundTexture1, GameActivity._main, "strawberry.png", 0, 950);
 		mAppleTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "apple.png", 0, 990);
+				.createFromAsset(GfxAssets.mBackgroundTexture1, GameActivity._main, "apple.png", 0, 990);
 		mBananaTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "banana.png", 30, 951);
+				.createFromAsset(GfxAssets.mBackgroundTexture1, GameActivity._main, "banana.png", 30, 951);
 		mCherryTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(GfxAssets.mAutoParallaxBackgroundTexture1, GameActivity._main, "cherry.png", 30, 985);
+				.createFromAsset(GfxAssets.mBackgroundTexture1, GameActivity._main, "cherry.png", 30, 985);
 		mRopeTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "rope.png", 900, 0);
+				.createFromAsset(mBackgroundTexture1, GameActivity._main, "rope.png", 900, 0);
 		mLifesTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture1, GameActivity._main, "for_sc.png", 480, 323);
-		mAutoParallaxBackgroundTexture1.load();
+				.createFromAsset(mBackgroundTexture1, GameActivity._main, "for_sc.png", 480, 323);
+		mBackgroundTexture1.load();
 		
 		mGoodsArray = new ArrayList<TextureRegion>();
 		mGoodsArray.add(mStrawberryTextureRegion);
@@ -94,22 +109,22 @@ public class GfxAssets {
 		mGoodsArray.add(mCherryTextureRegion);
 	
 		
-		mAutoParallaxBackgroundTexture2 = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 1024);
+		mBackgroundTexture2 = new BitmapTextureAtlas(GameActivity._Engine.getTextureManager(), 1024, 1024);
 		mParallaxLayerTreesBg = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "dizzy_parallax_background_layer_back_trees.png", 0, 0);
+				.createFromAsset(mBackgroundTexture2, GameActivity._main, "dizzy_parallax_background_layer_back_trees.png", 0, 0);
 		mParallaxLayerTrees = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "dizzy_parallax_background_layer_trees.png", 480, 0);
+				.createFromAsset(mBackgroundTexture2, GameActivity._main, "dizzy_parallax_background_layer_trees.png", 480, 0);
 		mPlatformTextureRegion1 = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "plat1.png", 0, 800);
+				.createFromAsset(mBackgroundTexture2, GameActivity._main, "plat1.png", 0, 800);
 		mPlatformLongTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "bridge_long.png", 0, 847);	
+				.createFromAsset(mBackgroundTexture2, GameActivity._main, "bridge_long.png", 0, 847);	
 		mPlatform2TextureRegion =  BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "bridge_2.png", 147, 800);
+				.createFromAsset(mBackgroundTexture2, GameActivity._main, "bridge_2.png", 147, 800);
 		mSpiderTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "spider_wr.png", 381, 800, 12, 1);
+				.createTiledFromAsset(mBackgroundTexture2, GameActivity._main, "spider_wr.png", 381, 800, 12, 1);
 		mDizzyLifesTextureRegion =  BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(mAutoParallaxBackgroundTexture2, GameActivity._main, "dizzy_lifes.png", 960, 0);
-		mAutoParallaxBackgroundTexture2.load();
+				.createFromAsset(mBackgroundTexture2, GameActivity._main, "dizzy_lifes.png", 960, 0);
+		mBackgroundTexture2.load();
 		
 		mFont = FontFactory
 				.create(GameActivity._main.getFontManager(), GameActivity._Engine.getTextureManager(), 256, 256, Typeface
