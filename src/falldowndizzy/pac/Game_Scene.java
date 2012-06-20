@@ -55,8 +55,7 @@ public class Game_Scene extends CameraScene {
 	public Dizzy gamePlayer;
 	Vector2 velocity;
 	
-	private boolean gameLoaded = false;
-
+	public boolean gameLoaded = false;
 	
 	/**
 	 * Screen borders
@@ -84,12 +83,12 @@ public class Game_Scene extends CameraScene {
 	private final static int maxScore = 30;
 	public int curScore = maxScore;
 	Sprite _spriteLifes;
+	Sprite gameOverSp;
 	
 	public static LinkedList<SpiderEnemy> spiderLL;
 	private LinkedList<Obstacle> platformLL;
 	public static LinkedList<GoodFruit> goodsLL;
 	
-	Sprite gameOverSp;
 	
 	
 	public Game_Scene(){
@@ -120,11 +119,6 @@ public class Game_Scene extends CameraScene {
 		gameLoaded = true;
 		setVisible(true);
 		setIgnoreUpdate(false);
-		if(gameOverSp != null){
-			gameOverSp.detachSelf();
-			this.unregisterTouchArea(gameOverSp);
-			System.gc();
-		}	
 	}
 	
 	public void Hide(){
@@ -197,7 +191,7 @@ public class Game_Scene extends CameraScene {
 		this.addObstacles(0, 550, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 4);
 		this.addObstacles(300, 450, GfxAssets.mPlatform2TextureRegion, "bridge_2.xml", 3);
 		this.addEnemies(400, 450 + GfxAssets.mPlatform2TextureRegion.getHeight(), GfxAssets.mSpiderTextureRegion);
-//		
+		
 	}
 	
 	private boolean rightSet = false;
@@ -257,7 +251,7 @@ public class Game_Scene extends CameraScene {
 	@Override
 	public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
 		final TouchEvent curTouchEvent = pSceneTouchEvent;
-		if(gameLoaded)
+		if(gameLoaded == true)
 			if(finger <= 2){
 				switch(pSceneTouchEvent.getAction()) {
 					case MotionEvent.ACTION_DOWN:
@@ -294,8 +288,10 @@ public class Game_Scene extends CameraScene {
 				rightSet = leftSet = upSet = false;
 			}
 		else {
+			if(curTouchEvent.getX() >= gameOverSp.getX() && curTouchEvent.getX() <= (gameOverSp.getX() + gameOverSp.getWidth()) &&
+					curTouchEvent.getY() >= gameOverSp.getY() && curTouchEvent.getY() <= (gameOverSp.getY() + gameOverSp.getHeight()))
 			gameOverSp.onAreaTouched(pSceneTouchEvent, curTouchEvent.getX(), curTouchEvent.getY());
-			//MainState.ShowMainScene();
+			
 		}
 		return false;
 
@@ -372,47 +368,41 @@ public class Game_Scene extends CameraScene {
 	
 	/** to restart the game and clear the whole screen */
 	public void restart() {
-		this.Show();
-		GameActivity._main.runOnUpdateThread(new Runnable() {
-
-			@Override
-			// to safely detach and re-attach the sprites
-			public void run() {
-				MainState._Game_Scene.detachChild(gamePlayer);
-				
-				Iterator<GoodFruit> itrG = goodsLL.iterator();
-				while(itrG.hasNext()){
-					itrG.next().Destructor();
-					itrG.remove();
-				}	
-				
-				Iterator<Obstacle> itrP = platformLL.iterator();
-				while(itrP.hasNext()){
-					itrP.next().detachSelf();
-					itrP.remove();
-				}
-				
-				Iterator<SpiderEnemy> itrE = spiderLL.iterator();
-				while(itrE.hasNext()){
-					itrE.next().Destructor();
-					itrE.remove();
-				}
-				
-				_spriteLifes.detachChildren();
-				_spriteLifes.detachSelf();
-				_spriteLifes.dispose();
-				System.gc();			
 		
-				gamePlayer.restart();
-				Game_Scene.this.attachChild(gamePlayer);
-				_score.setText(String.valueOf(maxScore));
-				curScore = maxScore;
-				Game_Scene.this.showLifes();
-				Game_Scene.this.initObstacles();
-			}
-		});
-
-		// resetting everything
+		this.Show();
+		
+		MainState._Game_Scene.detachChild(gamePlayer);
+			
+		Iterator<GoodFruit> itrG = goodsLL.iterator();
+		while(itrG.hasNext()){
+			itrG.next().Destructor();
+			itrG.remove();
+		}	
+				
+		Iterator<Obstacle> itrP = platformLL.iterator();
+		while(itrP.hasNext()){
+			itrP.next().detachSelf();
+			itrP.remove();
+		}
+				
+		Iterator<SpiderEnemy> itrE = spiderLL.iterator();
+		while(itrE.hasNext()){
+			itrE.next().Destructor();
+			itrE.remove();
+		}
+				
+		_spriteLifes.detachChildren();
+		_spriteLifes.detachSelf();
+		_spriteLifes.dispose();
+		System.gc();			
+		
+		gamePlayer.restart();
+		Game_Scene.this.attachChild(gamePlayer);
+		_score.setText(String.valueOf(maxScore));
+		curScore = maxScore;
+		Game_Scene.this.showLifes();
+		Game_Scene.this.initObstacles();
+		
 	}
 	
 //	private void addFlare(final float pX, final float pY) {
@@ -446,29 +436,21 @@ public class Game_Scene extends CameraScene {
 	
 	private void finishGame(){
 		
+		this.detachChild(gamePlayer);
 		gameLoaded = false;
-		
-//		GameActivity._main.
-//		runOnUpdateThread(new Runnable() {
-//		    @Override
-//		    public void run() {
-//				detachChildren();
-		
-				setMaxLifes();
-				detachChild(gamePlayer);
+		setMaxLifes();
 
 		gameOverSp = new Sprite((GameActivity.CAMERA_WIDTH - GfxAssets.mMenuBtnTextureRegion.getWidth()) / 2, 
 				(GameActivity.CAMERA_HEIGHT - GfxAssets.mMenuBtnTextureRegion.getHeight()) / 2 , GfxAssets.mMenuBtnTextureRegion, GameActivity.mVertexBufferObjectManager){
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-//				restart();
-//				Game_Scene.this.Hide();
 				MainState.ShowMainScene();
+				MainState._Game_Scene.detachChild(this);				
+				MainState._Game_Scene.unregisterTouchArea(gameOverSp);
+				System.gc();
 				return true;
 			}
-//			@Override
-			
 		};
 		
 		final Text _gameOverTxt = new Text(0, 0, GfxAssets.mFont, "GAME OVER", GameActivity._main.getVertexBufferObjectManager());
@@ -478,8 +460,7 @@ public class Game_Scene extends CameraScene {
 		
 		this.attachChild(gameOverSp);
 		this.registerTouchArea(gameOverSp);
-//		    }
-//		});
+
 	}
 	
 	public void callbackCollisionEnemy(){

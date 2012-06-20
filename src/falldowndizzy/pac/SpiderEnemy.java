@@ -42,17 +42,19 @@ public class SpiderEnemy extends AnimatedSprite {
 		mPhysicsWorld = pPhysicsWorld;
 		this.setScale(1.2f);
 		
-		SpiderBody = PhysicsFactory.createCircleBody(mPhysicsWorld, SpiderEnemy.this, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
+		SpiderBody = PhysicsFactory.createBoxBody(mPhysicsWorld, SpiderEnemy.this, BodyType.StaticBody, Game_Scene.PLATO_FIXTURE_DEF);
 		mSpPhysicsConnector = new PhysicsConnector(this, SpiderBody, true, false);	
 		mPhysicsWorld.registerPhysicsConnector(mSpPhysicsConnector);	
+		SpiderBody.setUserData("spider");
 		
 		rope = new Sprite(pX, pY - 7, GfxAssets.mRopeTextureRegion, pVertexBufferObjectManager);
 		
 		RopeBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rope, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		mRpPhysicsConnector = new PhysicsConnector(this, RopeBody, true, false);
 		mPhysicsWorld.registerPhysicsConnector(mRpPhysicsConnector);	
+//		RopeBody.setUserData("rope");
 		
-		rope.setHeight(rope.getHeight() * 1.2f);
+		rope.setHeight(rope.getHeight() * 1.5f);
 		mDefaultHeight = rope.getHeight();
 		
 		path = new Path(12).to(pX, pY + mDefaultHeight * length[0]).to(pX, pY + mDefaultHeight * length[1])

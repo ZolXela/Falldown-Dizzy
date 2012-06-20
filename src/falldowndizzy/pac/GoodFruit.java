@@ -24,9 +24,9 @@ public class GoodFruit extends Sprite {
 		mPhysicsWorld = pPhysicsWorld;
 		
 		GoodBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this, BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
-		GoodBody.setUserData("good");
 		mPhysicsConnector = new PhysicsConnector(this, GoodBody, true, false);
 		mPhysicsWorld.registerPhysicsConnector(mPhysicsConnector);	
+		GoodBody.setUserData("good");
 	}
 	
 	public void setCollision(){

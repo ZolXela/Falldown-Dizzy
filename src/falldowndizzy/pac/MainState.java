@@ -28,15 +28,17 @@ public class MainState extends Scene {
 	
 	public static void ShowGameScene() {
 		_MainMenu_Scene.Hide();
-		_Game_Scene.restart();
+		if(_Game_Scene.gameLoaded == true)
+			_Game_Scene.Show();
+			else _Game_Scene.restart();
 		_LevelSelect_Scene.Hide();
 		_GameState = GAME_RUNNING_STATE;
 	}
 	
 	public static void ShowMainScene() {
-		_MainMenu_Scene.Show();
 		_Game_Scene.Hide();
 		_LevelSelect_Scene.Hide();
+		_MainMenu_Scene.Show();
 		_GameState = MAIN_MENU_STATE;
 	}
 	
@@ -47,24 +49,35 @@ public class MainState extends Scene {
 		_GameState = SELECT_LEVELS_STATE;
 	}
 	
-	
+
 	@Override
 	public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
-		switch (_GameState)
-		{
-		case MAIN_MENU_STATE:
-			_MainMenu_Scene.onSceneTouchEvent(pSceneTouchEvent);
-			break;
-		case GAME_RUNNING_STATE:
-			_Game_Scene.onSceneTouchEvent(pSceneTouchEvent);
-			break;
-		case SELECT_LEVELS_STATE:
-			_LevelSelect_Scene.onSceneTouchEvent(pSceneTouchEvent);
-			break;	
-		}
-		return super.onSceneTouchEvent(pSceneTouchEvent);
+		this.onChildSceneTouchEvent(pSceneTouchEvent);
+		return true;
 	}
 
+	@Override
+	public boolean onChildSceneTouchEvent(TouchEvent pSceneTouchEvent) {
+		if(pSceneTouchEvent != null) {
+		switch (_GameState)
+			{
+			case MAIN_MENU_STATE:
+				if(pSceneTouchEvent.isActionDown()) 
+					_MainMenu_Scene.onSceneTouchEvent(pSceneTouchEvent);
+				break;
+			case GAME_RUNNING_STATE:
+				_Game_Scene.onSceneTouchEvent(pSceneTouchEvent);
+				pSceneTouchEvent = null;
+				break;
+			case SELECT_LEVELS_STATE:
+				_LevelSelect_Scene.onSceneTouchEvent(pSceneTouchEvent);
+				break;	
+			}
+		}
+		return true;
+	}
+	
+	
 	public void KeyPressed(int keyCode, KeyEvent event) {
 		switch (_GameState)
 		{

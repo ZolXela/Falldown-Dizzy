@@ -11,6 +11,7 @@ public class MainMenu_Scene extends CameraScene {
 	Sprite _spriteStart;
 	Sprite _spriteLevel;
 	
+	
 	public MainMenu_Scene() {
 		super(GameActivity._Camera);
 
@@ -43,7 +44,6 @@ public class MainMenu_Scene extends CameraScene {
 		_menuTitle.setScale(0.9f);
 		_spriteStart.attachChild(_menuTitle);	
 		
-		attachChild(_spriteStart);
 	}
 
 	private void setLevelBtn(){
@@ -62,22 +62,24 @@ public class MainMenu_Scene extends CameraScene {
 		_levelTitle.setPosition((_spriteLevel.getWidth() - _levelTitle.getWidth()) / 2 + 15, (_spriteLevel.getHeight() - _levelTitle.getWidth()) / 2 + 30);
 		_levelTitle.setScale(0.9f);
 		_spriteLevel.attachChild(_levelTitle);	
-		
-		attachChild(_spriteLevel);
 	}
 	
 	public void Show() {
 		setVisible(true);
-		setIgnoreUpdate(false);
+		attachChild(_spriteStart);
+		attachChild(_spriteLevel);
 		this.registerTouchArea(_spriteStart);
 		this.registerTouchArea(_spriteLevel);
+		setIgnoreUpdate(false);
 	}
 
 	public void Hide() {
 		setVisible(false);
+		setIgnoreUpdate(true);	
 		this.unregisterTouchArea(_spriteStart);
 		this.unregisterTouchArea(_spriteLevel);
-		setIgnoreUpdate(true);	
+		detachChild(_spriteStart);
+		detachChild(_spriteLevel);
 	}
 
 	public AutoParallaxBackgroundXY LoadAutoParalaxBg(){

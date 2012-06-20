@@ -31,17 +31,18 @@ public class Dizzy extends AnimatedSprite {
 
 		DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this.getScaleCenterX() , this.getScaleCenterY(), 25, 
 				BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
-		DizzyBody.setUserData("player");
-		
 		mPhysicsConnector = new PhysicsConnector(this, DizzyBody, true, false);
 		mPhysicsWorld.registerPhysicsConnector(mPhysicsConnector);	
-
+		DizzyBody.setUserData("player");
 		
 		mPhysicsWorld.setContactListener(new ContactListener(){
 			@Override
 			public void beginContact(Contact contact) {
 				jumping = false;	
-				onBeforePositionChanged();
+//				System.out.println(">>>> A " + contact.getFixtureA().getBody().getUserData());
+//				System.out.println(">>>> B " + contact.getFixtureB().getBody().getUserData());
+				
+	//			onBeforePositionChanged();
 			}
 			@Override
 			public void endContact(Contact contact)
@@ -95,39 +96,50 @@ public class Dizzy extends AnimatedSprite {
 		this.animate(new long[]{90, 90, 100, 100, 100, 100, 90, 90}, begNum, endNum, true);    
 	}
 	
-	private boolean onBeforePositionChanged(){
+	private boolean checkCollisionEnemy(){
 		
 		if(!Game_Scene.spiderLL.isEmpty()){
 			for(int i = 0; i < Game_Scene.spiderLL.size(); i++)
 				if(this.collidesWith(Game_Scene.spiderLL.get(i))){
 					Game_Scene._curGameScene.callbackCollisionEnemy();
-					return false;
+					return true;
 				}
 		}
+		return false;
+		
+	}
 	
+	private boolean checkCollisionGoods(){
+		
 		if(!Game_Scene.goodsLL.isEmpty())
 			for(int i = 0; i < Game_Scene.goodsLL.size(); i++) {
 				if(this.collidesWith(Game_Scene.goodsLL.get(i))) {
 					Game_Scene._curGameScene.callbackCollisionGoods(i);
-					return false;
+					return true;
 				}			
 			}
-		return true;
+		return false;
 	}
 	
-//	@Override
-//	protected void onManagedUpdate(final float pSecondsElapsed) {
-//		super.onManagedUpdate(pSecondsElapsed);
-//		onBeforePositionChanged();
-//	}
+	private boolean onBeforePositionChanged(){
+		return (checkCollisionEnemy() || checkCollisionGoods()) ? true:false;
+	}
+	
+	@Override
+	protected void onManagedUpdate(final float pSecondsElapsed) {
+		super.onManagedUpdate(pSecondsElapsed);
+		onBeforePositionChanged();
+	}
 	
 	public void restart(){
+		
 		mPhysicsWorld.unregisterPhysicsConnector(mPhysicsConnector);
 		mPhysicsWorld.destroyBody(DizzyBody);
 		this.setPosition(30, 50);
 		DizzyBody = PhysicsFactory.createCircleBody(mPhysicsWorld, this.getScaleCenterX() , this.getScaleCenterY(), 25, 
 				BodyType.DynamicBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		mPhysicsWorld.registerPhysicsConnector(mPhysicsConnector);
+		
 	}
 	
 }
