@@ -291,7 +291,6 @@ public class Game_Scene extends CameraScene {
 			if(curTouchEvent.getX() >= gameOverSp.getX() && curTouchEvent.getX() <= (gameOverSp.getX() + gameOverSp.getWidth()) &&
 					curTouchEvent.getY() >= gameOverSp.getY() && curTouchEvent.getY() <= (gameOverSp.getY() + gameOverSp.getHeight()))
 			gameOverSp.onAreaTouched(pSceneTouchEvent, curTouchEvent.getX(), curTouchEvent.getY());
-			
 		}
 		return false;
 
@@ -417,18 +416,17 @@ public class Game_Scene extends CameraScene {
 		lifeS = maxLifes;
 	}
 	
-	public void callbackCollisionGoods(final int i){
-		
+	public void callbackCollisionGoods(final GoodFruit good){
+
 		GameActivity._main.runOnUpdateThread(new Runnable() {
 		    @Override
 		    public void run() {
-				goodsLL.get(i).setCollision();
-				MainState._Game_Scene.detachChild(goodsLL.get(i));
+		    	good.Destructor();
 				_score.setText(String.valueOf(--Game_Scene.this.curScore));
 				if(Game_Scene.this.curScore == 0){
 					finishGame();
 				}
-				goodsLL.remove(i);
+				goodsLL.remove(good);
 		    }
 		});
 		GfxAssets.mGetGoods.play();

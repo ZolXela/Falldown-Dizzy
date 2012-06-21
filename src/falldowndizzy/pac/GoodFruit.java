@@ -29,11 +29,6 @@ public class GoodFruit extends Sprite {
 		GoodBody.setUserData("good");
 	}
 	
-	public void setCollision(){
-		mPhysicsWorld.unregisterPhysicsConnector(mPhysicsConnector);	
-		mPhysicsWorld.destroyBody(GoodBody);
-	}
-	
 	public void Destructor(){
 		
 		mPhysicsWorld.unregisterPhysicsConnector(mPhysicsConnector);
@@ -41,6 +36,12 @@ public class GoodFruit extends Sprite {
 		this.detachSelf();
 		
 	}
-	
+
+	@Override
+	protected void onManagedUpdate(final float pSecondsElapsed) {
+		super.onManagedUpdate(pSecondsElapsed);
+		if(this.collidesWith(MainState._Game_Scene.gamePlayer))
+			MainState._Game_Scene.callbackCollisionGoods(this);
+	}
 
 }

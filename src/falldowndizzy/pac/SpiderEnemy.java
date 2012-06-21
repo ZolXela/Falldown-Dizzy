@@ -52,7 +52,6 @@ public class SpiderEnemy extends AnimatedSprite {
 		RopeBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rope, BodyType.StaticBody, Game_Scene.PLAYER_FIXTURE_DEF);
 		mRpPhysicsConnector = new PhysicsConnector(this, RopeBody, true, false);
 		mPhysicsWorld.registerPhysicsConnector(mRpPhysicsConnector);	
-//		RopeBody.setUserData("rope");
 		
 		rope.setHeight(rope.getHeight() * 1.2f);
 		mDefaultHeight = rope.getHeight();
@@ -76,7 +75,7 @@ public class SpiderEnemy extends AnimatedSprite {
                     SpiderEnemy.this.setCurrentTileIndex(pWaypointIndex);
                     rope.setHeight(mDefaultHeight * length[(pWaypointIndex + 1) % 12] + SpiderEnemy.this.getHeightScaled() * 0.45f);
                     if(SpiderEnemy.this.collidesWith(MainState._Game_Scene.gamePlayer))
-                    	MainState._Game_Scene.gamePlayer.checkCollisionEnemy();
+                    	MainState._Game_Scene.callbackCollisionEnemy();
             }
 
             @Override

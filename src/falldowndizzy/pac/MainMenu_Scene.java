@@ -20,7 +20,7 @@ public class MainMenu_Scene extends CameraScene {
 		setBackground(LoadAutoParalaxBg());
 		GfxAssets.mMusic.setVolume(GfxAssets.mMusic.getVolume() / 4);
 		
-    //    GfxAssets.mMusic.play();
+        GfxAssets.mMusic.play();
 		setPlayBtn();
 		setLevelBtn();	
 		
