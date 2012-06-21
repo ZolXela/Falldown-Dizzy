@@ -54,7 +54,7 @@ public class SpiderEnemy extends AnimatedSprite {
 		mPhysicsWorld.registerPhysicsConnector(mRpPhysicsConnector);	
 //		RopeBody.setUserData("rope");
 		
-		rope.setHeight(rope.getHeight() * 1.5f);
+		rope.setHeight(rope.getHeight() * 1.2f);
 		mDefaultHeight = rope.getHeight();
 		
 		path = new Path(12).to(pX, pY + mDefaultHeight * length[0]).to(pX, pY + mDefaultHeight * length[1])
@@ -75,7 +75,8 @@ public class SpiderEnemy extends AnimatedSprite {
             public void onPathWaypointStarted(final PathModifier pPathModifier, final IEntity pEntity, final int pWaypointIndex) {            	   
                     SpiderEnemy.this.setCurrentTileIndex(pWaypointIndex);
                     rope.setHeight(mDefaultHeight * length[(pWaypointIndex + 1) % 12] + SpiderEnemy.this.getHeightScaled() * 0.45f);
-
+                    if(SpiderEnemy.this.collidesWith(MainState._Game_Scene.gamePlayer))
+                    	MainState._Game_Scene.gamePlayer.checkCollisionEnemy();
             }
 
             @Override
